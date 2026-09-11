@@ -1,8 +1,8 @@
-# spairkie.github.io
+# builtbysai.github.io
 
 Personal portfolio for Hans Sai - Systems Administrator building toward security engineering.
 
-**Live site: [spairkie.github.io](https://spairkie.github.io)**
+**Live site: [builtbysai.com](https://builtbysai.com)**
 
 ## What it is
 
