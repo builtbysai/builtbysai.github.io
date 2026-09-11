@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="t d">
+<title id="t">BuiltBySai — Hans Sai portfolio</title>
+<desc id="d">Dark terminal-style hero for the BuiltBySai portfolio: the signature ops-console with whoami and next-role output.</desc>
+<defs>
+<radialGradient id="glow" cx="0.78" cy="0.5" r="0.6">
+<stop offset="0" stop-color="#00ff88" stop-opacity="0.10"/>
+<stop offset="1" stop-color="#00ff88" stop-opacity="0"/>
+</radialGradient>
+<pattern id="scan" width="1200" height="4" patternUnits="userSpaceOnUse">
+<rect width="1200" height="1" y="3" fill="#000000" opacity="0.28"/>
+</pattern>
+<pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+<path d="M48 0H0V48" fill="none" stroke="#123321" stroke-width="1" opacity="0.5"/>
+</pattern>
+</defs>
+<rect x="2" y="2" width="1196" height="626" rx="28" fill="#070b08" stroke="#1d3a26" stroke-width="2"/>
+<rect x="2" y="2" width="1196" height="626" rx="28" fill="url(#grid)" opacity="0.35"/>
+<rect x="2" y="2" width="1196" height="626" rx="28" fill="url(#glow)"/>
+<text x="104" y="112" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="17" letter-spacing="6" fill="#5da872">PERSONAL PORTFOLIO</text>
+<text x="100" y="206" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="92" font-weight="700" letter-spacing="-3" fill="#f2f5f9">Built<tspan fill="#33ff66">By</tspan>Sai</text>
+<text x="106" y="292" font-family="Georgia,'Times New Roman',serif" font-size="38" font-style="italic" fill="#c9d4e2">Systems Administrator,</text>
+<text x="106" y="340" font-family="Georgia,'Times New Roman',serif" font-size="38" font-style="italic" fill="#c9d4e2">building toward <tspan fill="#33ff66" font-style="normal" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="34">security engineering</tspan><tspan fill="#33ff66">.</tspan></text>
+<g font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="17" fill="#8fd49e">
+<rect x="104" y="386" width="172" height="46" rx="23" fill="#0c120d" stroke="#1d3a26"/>
+<text x="132" y="415">Active Secret</text>
+<rect x="292" y="386" width="212" height="46" rx="23" fill="#0c120d" stroke="#1d3a26"/>
+<text x="320" y="415">CompTIA Security+</text>
+<rect x="520" y="386" width="230" height="46" rx="23" fill="#0c120d" stroke="#1d3a26"/>
+<text x="548" y="415">B.S. Cybersecurity</text>
+</g>
+<!-- ops-console terminal -->
+<g>
+<rect x="812" y="120" width="296" height="392" rx="16" fill="#0a0f0c" stroke="#2f5c3a" stroke-width="1.5"/>
+<circle cx="836" cy="148" r="6" fill="#ff5b3a"/><circle cx="858" cy="148" r="6" fill="#ffbf3a"/><circle cx="880" cy="148" r="6" fill="#33ff66"/>
+<text x="902" y="154" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5da872">hans@portfolio: ~/ops-console</text>
+<g font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="16">
+<text x="832" y="200" fill="#33ff66">hans@portfolio:~$ <tspan fill="#e8f0e9">whoami --brief</tspan></text>
+<text x="832" y="228" fill="#8ea0b8">Hans Sai · SysAdmin · Security+</text>
+<text x="832" y="262" fill="#8ea0b8">Active Secret · 1,000+ tickets/yr</text>
+<text x="832" y="300" fill="#33ff66">hans@portfolio:~$ <tspan fill="#e8f0e9">echo $NEXT_ROLE</tspan></text>
+<text x="832" y="328" fill="#e8f0e9">security engineering, applied</text>
+<text x="832" y="366" fill="#33ff66">hans@portfolio:~$ <tspan fill="#e8f0e9">ls projects/</tspan></text>
+<text x="832" y="394" fill="#5da872">NOD/  JotRelay/  siem/  ad-toolkit/</text>
+<text x="832" y="432" fill="#33ff66">hans@portfolio:~$ <tspan fill="#e8f0e9">█</tspan></text>
+</g>
+<rect x="832" y="452" width="66" height="30" rx="6" fill="#10241a" stroke="#1d3a26"/><text x="844" y="472" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="13" fill="#7fb58d">help</text>
+<rect x="906" y="452" width="86" height="30" rx="6" fill="#10241a" stroke="#1d3a26"/><text x="918" y="472" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="13" fill="#7fb58d">projects</text>
+<rect x="1000" y="452" width="72" height="30" rx="6" fill="#10241a" stroke="#1d3a26"/><text x="1012" y="472" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="13" fill="#7fb58d">skills</text>
+</g>
+<text x="106" y="500" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="18" fill="#7fb58d">Hand-built, single-file site — no framework, no build step.</text>
+<text x="106" y="590" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="15" letter-spacing="3" fill="#4a6a54">BUILT BY Hans Sai · BUILTBYSAI.COM</text>
+<rect x="2" y="2" width="1196" height="626" rx="28" fill="url(#scan)"/>
+</svg>

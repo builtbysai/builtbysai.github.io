@@ -1,5 +1,11 @@
 # builtbysai.github.io
 
+<p align="center"><img src="assets/hero.svg" width="800" alt="BuiltBySai hero — Hans Sai, Systems Administrator building toward security engineering"></p>
+
+<p align="center"><img src="assets/hero-screenshot.png" width="800" alt="builtbysai.com hero: headline and interactive ops-console terminal"></p>
+
+<p align="center"><img src="assets/projects-screenshot.png" width="800" alt="builtbysai.com Selected Work section: 3D project carousel"></p>
+
 Personal portfolio for Hans Sai - Systems Administrator building toward security engineering.
 
 **Live site: [builtbysai.com](https://builtbysai.com)**
@@ -20,6 +26,7 @@ favicon.ico / favicon-light.ico   favicon (dark/light theme variants)
 icons/                     favicon/apple-touch-icon/manifest icon set
 headshot.jpeg / headshot-web.webp about-section photo (original + optimized web copy)
 screenshots/               project screenshots used in the Projects section
+assets/                    README visuals: hero.svg + real site screenshots
 certs/                     certification PDFs linked from the Education section
 resume/                    resume PDF linked from the hero
 files/                     vCard, linked from the footer's "Save Contact" button
