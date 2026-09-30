@@ -826,9 +826,11 @@ section:not(:last-of-type)::after{
 .live-embed.active iframe{pointer-events:auto;}
 .live-embed.diploma iframe{height:460px;}
 .live-embed.jotrelay iframe{height:280px;}
+.live-embed.ghostball iframe{height:460px;}
 @media (max-width:760px){
   .live-embed.diploma iframe{height:280px;}
   .live-embed.jotrelay iframe{height:200px;}
+  .live-embed.ghostball iframe{height:280px;}
   .live-embed .lf-hint{display:none;}
 }
 
@@ -1301,7 +1303,7 @@ body.boot-lock{overflow:hidden;}
   <div class="wrap reveal">
     <div class="teaser-head">
       <p class="eyebrow">The proof, before the résumé</p>
-      <a href="#projects" class="teaser-all">See all seven &rarr;</a>
+      <a href="#projects" class="teaser-all">See all nine &rarr;</a>
     </div>
     <div class="teaser-grid">
       <a class="teaser-item stagger-item" href="#proj-siem">
@@ -1418,7 +1420,7 @@ body.boot-lock{overflow:hidden;}
   </div>
 </section>
 
-<section id="projects" class="folio-section" style="--folio-count:8">
+<section id="projects" class="folio-section" style="--folio-count:9">
   <div class="folio-sticky">
     <div class="folio-shell">
       <div class="folio-topline"><h2 class="folio-label">Selected work</h2><div class="folio-progress" aria-hidden="true"><span class="folio-progress-fill" id="folioProgressFill"></span></div><span class="folio-instruction" id="folioInstruction">Scroll · ← → select · ↓ open</span></div>
@@ -1447,9 +1449,12 @@ body.boot-lock{overflow:hidden;}
           <button class="folio-project" id="proj-winlog" type="button" data-index="7" data-title="WinLog Threat Hunter" data-type="Threat hunting" data-stack="Python" data-status="25 tests passing" data-abbr="WL" data-bg="#071316" data-ink="#eafbff" data-accent="#5fc9d8" data-hint="Parses Windows Security/Sysmon events and maps findings to MITRE ATT&amp;CK techniques." style="--card-accent:#5fc9d8;">
             <span class="folio-project-inner"><span class="folio-cover-fallback" style="--cover-bg:#071316;--cover-ink:#eafbff;--cover-accent:#5fc9d8;"><span class="folio-cover-abbr">WL</span></span><span class="folio-project-index">08</span><span class="folio-mobile-label"><span><strong>WinLog Threat Hunter</strong><small>Threat hunting · Python</small></span><span class="folio-mobile-arrow">↗</span></span></span>
           </button>
+          <button class="folio-project" id="proj-ghostball" type="button" data-index="8" data-title="Ghost Ball" data-type="Browser game" data-stack="Vanilla JS / Canvas" data-status="Live demo" data-abbr="GB" data-bg="#0a1c12" data-ink="#eaf3ea" data-accent="#a3d97b" data-hint="A browser pool game built around feel: the speed of your stroke is the speed of the shot." style="--card-accent:#a3d97b;">
+            <span class="folio-project-inner"><span class="folio-cover-fallback" style="--cover-bg:#0a1c12;--cover-ink:#eaf3ea;--cover-accent:#a3d97b;"><span class="folio-cover-abbr">GB</span></span><span class="folio-project-index">09</span><span class="folio-mobile-label"><span><strong>Ghost Ball</strong><small>Browser game &middot; Vanilla JS / Canvas</small></span><span class="folio-mobile-arrow">&nearr;</span></span></span>
+          </button>
         </div></div>
       <div class="folio-caption">
-        <div class="folio-caption-main"><div class="folio-caption-index" id="folioCaptionIndex">01 / 08</div><h3 class="folio-caption-title" id="folioCaptionTitle">Interactive Diploma</h3></div>
+        <div class="folio-caption-main"><div class="folio-caption-index" id="folioCaptionIndex">01 / 09</div><h3 class="folio-caption-title" id="folioCaptionTitle">Interactive Diploma</h3></div>
         <div class="folio-caption-side"><div class="folio-caption-meta"><div class="folio-meta-block"><span class="folio-meta-key">A / Type</span><span class="folio-meta-value" id="folioMetaType">Creative / 3D</span></div><div class="folio-meta-block"><span class="folio-meta-key">B / Stack</span><span class="folio-meta-value" id="folioMetaStack">Three.js</span></div><div class="folio-meta-block"><span class="folio-meta-key">C / Status</span><span class="folio-meta-value" id="folioMetaStatus">Fully interactive</span></div></div><div class="folio-actions"><button class="folio-open" id="folioOpen" type="button">Explore project ↗</button><div class="folio-nav" aria-label="Project navigation"><button id="folioPrev" type="button" aria-label="Previous project">←</button><button id="folioNext" type="button" aria-label="Next project">→</button></div></div></div>
       </div>
     </div>
@@ -1457,10 +1462,10 @@ body.boot-lock{overflow:hidden;}
 </section>
 <div class="folio-detail" id="folioDetail" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="folioDetailTitle" hidden>
   <div class="folio-detail-scroll" id="folioDetailScroll" data-lenis-prevent tabindex="-1">
-    <div class="folio-detail-bar"><span>Selected work</span><span id="folioDetailTopPos">01 / 08</span><button class="folio-detail-close" id="folioDetailClose" type="button">Close ×</button></div>
+    <div class="folio-detail-bar"><span>Selected work</span><span id="folioDetailTopPos">01 / 09</span><button class="folio-detail-close" id="folioDetailClose" type="button">Close ×</button></div>
     <div class="folio-detail-hero"><span class="folio-detail-number" id="folioDetailNumber" aria-hidden="true">01</span><p class="folio-detail-kicker" id="folioDetailKicker">Creative / 3D · Three.js</p><h3 class="folio-detail-title" id="folioDetailTitle">Interactive Diploma</h3><p class="folio-detail-summary" id="folioDetailSummary"></p><div class="folio-detail-meta"><div class="folio-detail-meta-item"><span class="folio-detail-meta-key">A / Type</span><span class="folio-detail-meta-value" id="folioDetailType"></span></div><div class="folio-detail-meta-item"><span class="folio-detail-meta-key">B / Stack</span><span class="folio-detail-meta-value" id="folioDetailStack"></span></div><div class="folio-detail-meta-item"><span class="folio-detail-meta-key">C / Status</span><span class="folio-detail-meta-value" id="folioDetailStatus"></span></div><div class="folio-detail-meta-item"><span class="folio-detail-meta-key">D / Index</span><span class="folio-detail-meta-value" id="folioDetailIndex"></span></div></div></div>
     <div class="folio-detail-media" id="folioDetailMedia"></div><div class="folio-detail-copy" id="folioDetailCopy"></div>
-    <div class="folio-detail-footer"><button id="folioDetailPrev" type="button">← Previous</button><span class="folio-detail-position" id="folioDetailPos">01 / 08</span><button id="folioDetailNext" type="button">Next →</button></div>
+    <div class="folio-detail-footer"><button id="folioDetailPrev" type="button">← Previous</button><span class="folio-detail-position" id="folioDetailPos">01 / 09</span><button id="folioDetailNext" type="button">Next →</button></div>
   </div>
 </div>
 
@@ -1711,6 +1716,37 @@ body.boot-lock{overflow:hidden;}
         </div>
         <div class="feature-links">
           <a href="https://github.com/builtbysai/winlog-threat-hunter" target="_blank" rel="noopener">Source on GitHub</a>
+        </div>
+      </div>
+    </div>
+    <div class="proj-source" data-project="proj-ghostball">
+      <div class="scene-media">
+        <div class="live-embed ghostball">
+          <div class="lf-bar" aria-hidden="true">
+            <span class="terminal-dot red"></span><span class="terminal-dot yellow"></span><span class="terminal-dot green"></span>
+            <span class="lf-title">ghost-ball &middot; live</span>
+            <span class="lf-hint">real game, not a screenshot</span>
+          </div>
+          <iframe src="https://builtbysai.com/Ghost-Ball/" title="Ghost Ball &middot; live pool game" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <div class="lf-overlay" role="button" tabindex="0" aria-label="Activate live Ghost Ball game">
+            <span class="lf-overlay-badge">Click to play</span>
+          </div>
+        </div>
+      </div>
+      <div class="scene-detail-copy">
+        <p class="feature-desc">A browser pool game built around feel: stroke the cue with mouse, finger, or controller stick, and the speed of your stroke is the speed of the shot. Real spin, throw, and cushion physics across five halls from pool's history, a fifteen-rival career Circuit, sixteen trick shots, a daily run, and online tables you host with a six-character code. Vanilla JavaScript on a canvas: no framework, no build step, no accounts.</p>
+        <details class="why">
+          <summary>Why I built this</summary>
+          <p class="why-body">Every pool video game I tried missed the one thing that matters: the stroke. So I built the game around your hand on the cue, kept the physics honest, and left out everything I dislike: no timers pressuring you, nothing for sale, everything you unlock earned by playing.</p>
+        </details>
+        <div class="feature-stats">
+          <span class="chip">Live demo</span>
+          <span class="chip">Online play</span>
+          <span class="chip">Installable PWA</span>
+        </div>
+        <div class="feature-links">
+          <a href="https://builtbysai.com/Ghost-Ball/" target="_blank" rel="noopener">Open live demo</a>
+          <a href="https://github.com/builtbysai/Ghost-Ball" target="_blank" rel="noopener">Source on GitHub</a>
         </div>
       </div>
     </div>
