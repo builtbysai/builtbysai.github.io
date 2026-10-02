@@ -651,75 +651,77 @@ section:not(:last-of-type)::after{
 .lf-overlay-badge svg{width:14px;height:14px;flex-shrink:0;}
 
 
-/* selected work: plain DOM card grid, theme-aware, no scroll-jacking */
-.work-head{display:flex;justify-content:space-between;align-items:flex-end;gap:18px 32px;flex-wrap:wrap;margin-bottom:16px;}
-.work-head .section-head{margin:0;}
-.work-lede{margin:10px 0 0;color:var(--text-dim);font-size:15px;max-width:48ch;}
-.work-filters{display:flex;flex-wrap:wrap;gap:8px;}
-.work-filter{
-  display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:0 14px;cursor:pointer;
-  font-family:var(--font-mono);font-size:12.5px;color:var(--text-dim);background:transparent;
-  border:1px solid var(--line);border-radius:999px;
-  transition:border-color .2s ease,color .2s ease,background .2s ease;
-}
-.work-filter span{color:var(--text-dimmer);font-variant-numeric:tabular-nums;}
-.work-filter:hover{border-color:var(--accent-dim);color:var(--text);}
-.work-filter.is-active{background:var(--accent);border-color:var(--accent);color:var(--on-accent);}
-.work-filter.is-active span{color:inherit;opacity:.75;}
-.work-count{margin:0 0 18px;font-family:var(--font-mono);font-size:12.5px;color:var(--text-dimmer);}
-.work-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;}
-.work-item{min-width:0;}
-.work-item[hidden]{display:none;}
-.work-card{
-  display:flex;flex-direction:column;width:100%;height:100%;padding:0;margin:0;text-align:left;
-  font:inherit;color:inherit;cursor:pointer;overflow:hidden;
-  background:var(--bg-card);border:1px solid var(--line);border-radius:12px;
-  transition:transform .25s var(--ease),border-color .2s ease,box-shadow .25s ease;
-}
-.work-card:hover,.work-card:focus-visible{
-  transform:translateY(-3px);
-  border-color:color-mix(in srgb,var(--card-accent) 65%,var(--line));
-  box-shadow:0 16px 36px -22px color-mix(in srgb,var(--card-accent) 60%,#000);
-}
-.work-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
-.work-cover{position:relative;display:block;aspect-ratio:16/10;overflow:hidden;background:var(--cover-bg,#111);border-bottom:1px solid var(--line);}
-.work-cover img{display:block;width:100%;height:100%;object-fit:cover;object-position:top left;transition:transform .5s var(--ease);}
-.work-card:hover .work-cover img{transform:scale(1.035);}
-.work-art{position:absolute;inset:0;display:block;color:var(--cover-ink);
+/* selected work: 3D coverflow in plain HTML/CSS/JS. No canvas, no scroll-jacking, theme-aware. */
+.work-section{padding-bottom:clamp(36px,5vw,56px);overflow:hidden;}
+.cf{--cf-w:clamp(250px,31vw,420px);--cf-accent:var(--accent);position:relative;}
+.cf::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(48% 60% at 50% 38%,color-mix(in srgb,var(--cf-accent) 15%,transparent),transparent 72%);transition:background .5s ease;}
+.cf-stage{position:relative;height:calc(var(--cf-w) * .8 + 56px);touch-action:pan-y;user-select:none;-webkit-user-select:none;outline:none;}
+.cf-stage.is-dragging{cursor:grabbing;}
+/* no-JS / pre-JS fallback: a swipeable scroll-snap row */
+.cf-track{display:flex;gap:16px;height:100%;align-items:center;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 max(18px,calc(50% - var(--cf-w) / 2));scrollbar-width:none;}
+.cf-track::-webkit-scrollbar{display:none;}
+.cf-card{position:relative;flex:0 0 var(--cf-w);width:var(--cf-w);aspect-ratio:5/4;padding:0;margin:0;overflow:hidden;scroll-snap-align:center;
+  background:var(--cover-bg,#111);border:1px solid var(--line);border-radius:14px;color:#fff;text-align:left;font:inherit;cursor:pointer;
+  box-shadow:0 24px 50px -28px rgba(0,0,0,.7);}
+.cf-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top left;pointer-events:none;}
+.cf-art{position:absolute;inset:0;display:block;color:var(--cover-ink);
   background:
-    radial-gradient(circle at 82% 18%,color-mix(in srgb,var(--cover-accent) 30%,transparent),transparent 56%),
-    linear-gradient(color-mix(in srgb,var(--cover-ink) 7%,transparent) 1px,transparent 1px) 0 0/28px 28px,
-    linear-gradient(90deg,color-mix(in srgb,var(--cover-ink) 7%,transparent) 1px,transparent 1px) 0 0/28px 28px;}
-.work-abbr{position:absolute;left:18px;bottom:16px;font-family:var(--font-display);font-weight:700;font-size:clamp(44px,6vw,64px);line-height:.9;letter-spacing:-.04em;}
-.work-abbr::after{content:"";display:block;width:38px;height:4px;margin-top:10px;background:var(--cover-accent);border-radius:2px;}
-.work-index,.work-live{position:absolute;top:10px;z-index:2;font-family:var(--font-mono);font-size:11.5px;line-height:1;color:#fff;background:rgba(8,10,14,.72);padding:5px 8px;border-radius:5px;backdrop-filter:blur(4px);}
-.work-index{left:10px;}
-.work-live{right:10px;display:inline-flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.06em;}
-.work-live i{width:6px;height:6px;border-radius:50%;background:#3ddc84;}
-.work-body{display:flex;flex-direction:column;gap:6px;flex:1;padding:16px 18px 18px;}
-.work-kicker{font-family:var(--font-mono);font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--text-dimmer);}
-.work-title{font-family:var(--font-display);font-weight:600;font-size:20px;line-height:1.2;letter-spacing:-.01em;color:var(--text);}
-.work-pitch{font-size:14.5px;line-height:1.55;color:var(--text-dim);flex:1;}
-.work-foot{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-top:10px;padding-top:12px;border-top:1px solid var(--line-soft);font-family:var(--font-mono);font-size:12.5px;}
-.work-status{color:var(--text-dim);}
-.work-go{color:var(--accent);white-space:nowrap;transition:transform .2s var(--ease);}
-.work-card:hover .work-go{transform:translateX(3px);}
-@media (max-width:960px){.work-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
-@media (max-width:600px){
-  .work-grid{grid-template-columns:1fr;gap:12px;}
-  .work-card{flex-direction:row;align-items:stretch;}
-  .work-cover{flex:0 0 108px;width:108px;aspect-ratio:auto;min-height:124px;border-bottom:0;border-right:1px solid var(--line);}
-  .work-abbr{left:12px;bottom:12px;font-size:32px;}
-  .work-abbr::after{width:26px;height:3px;margin-top:7px;}
-  .work-index{top:8px;left:8px;font-size:11px;}
-  .work-live{display:none;}
-  .work-body{padding:12px 14px 12px;gap:4px;min-width:0;}
-  .work-title{font-size:17px;}
-  .work-pitch{font-size:13.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex:0 1 auto;}
-  .work-foot{margin-top:auto;padding-top:8px;}
-  .work-go{display:none;}
+    radial-gradient(circle at 82% 18%,color-mix(in srgb,var(--cover-accent) 32%,transparent),transparent 56%),
+    linear-gradient(color-mix(in srgb,var(--cover-ink) 7%,transparent) 1px,transparent 1px) 0 0/30px 30px,
+    linear-gradient(90deg,color-mix(in srgb,var(--cover-ink) 7%,transparent) 1px,transparent 1px) 0 0/30px 30px;}
+.cf-abbr{position:absolute;left:22px;top:20px;font-family:var(--font-display);font-weight:700;font-size:clamp(56px,8vw,96px);line-height:.9;letter-spacing:-.05em;}
+.cf-abbr::after{content:"";display:block;width:44px;height:4px;margin-top:12px;background:var(--cover-accent);border-radius:2px;}
+.cf-shade{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to top,rgba(5,7,10,.88) 0%,rgba(5,7,10,.5) 32%,transparent 62%),rgba(5,7,10,calc(var(--cf-dim,0) * var(--cf-dim-k,1)));}
+:root[data-theme="light"] .cf{--cf-dim-k:.6;}
+.cf-index,.cf-live{position:absolute;top:12px;z-index:2;font-family:var(--font-mono);font-size:11.5px;line-height:1;color:#fff;background:rgba(8,10,14,.72);padding:5px 8px;border-radius:5px;}
+.cf-index{left:12px;}
+.cf-live{right:12px;display:inline-flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.06em;}
+.cf-live i{width:6px;height:6px;border-radius:50%;background:#3ddc84;}
+.cf-label{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:0 18px 16px;display:flex;flex-direction:column;gap:3px;}
+.cf-label strong{font-family:var(--font-display);font-weight:700;font-size:clamp(17px,1.9vw,23px);line-height:1.15;letter-spacing:-.01em;text-shadow:0 1px 12px rgba(0,0,0,.5);}
+.cf-label small{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.82);}
+.cf-card:focus-visible{outline:2px solid var(--accent);outline-offset:4px;}
+/* JS mode: true 3D coverflow */
+.cf.cf-js .cf-stage{perspective:1500px;perspective-origin:50% 45%;cursor:grab;overflow:visible;}
+.cf.cf-js .cf-track{display:block;position:relative;height:100%;overflow:visible;padding:0;transform-style:preserve-3d;}
+.cf.cf-js .cf-card{position:absolute;left:50%;top:50%;flex:none;will-change:transform,opacity;backface-visibility:hidden;-webkit-backface-visibility:hidden;scroll-snap-align:none;
+  transition:border-color .25s ease,box-shadow .35s ease;}
+.cf.cf-js .cf-card.is-active{border-color:color-mix(in srgb,var(--card-accent) 70%,var(--line));
+  box-shadow:0 30px 60px -26px rgba(0,0,0,.75),0 0 0 1px color-mix(in srgb,var(--card-accent) 40%,transparent),0 0 50px -14px color-mix(in srgb,var(--card-accent) 55%,transparent);}
+.cf.cf-js .cf-card:not(.is-active) .cf-label{opacity:.0;}
+.cf.cf-js .cf-card .cf-label{transition:opacity .3s ease;}
+.cf.cf-js .cf-card:not(.is-active) .cf-index,.cf.cf-js .cf-card:not(.is-active) .cf-live{opacity:.0;}
+.cf-caption{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:18px 40px;max-width:900px;margin:8px auto 0;text-align:left;}
+.cf-cap-kicker{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0 0 8px;font-family:var(--font-mono);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-dimmer);}
+.cf-cap-kicker #cfCapIndex{color:var(--accent);}
+.cf-cap-title{margin:0;font-family:var(--font-display);font-weight:700;font-size:clamp(28px,4.2vw,46px);line-height:1.05;letter-spacing:-.03em;color:var(--text);}
+.cf-cap-pitch{margin:10px 0 0;max-width:56ch;font-size:16px;line-height:1.6;color:var(--text-dim);}
+.cf-cap-side{display:flex;flex-direction:column;align-items:flex-end;gap:12px;}
+.cf-cap-status{font-family:var(--font-mono);font-size:12.5px;color:var(--text-dim);border:1px solid var(--line);border-radius:999px;padding:5px 12px;white-space:nowrap;}
+.cf-caption.is-swapping .cf-cap-main,.cf-caption.is-swapping .cf-cap-side{opacity:0;transform:translateY(6px);}
+.cf-cap-main,.cf-cap-side{transition:opacity .22s ease,transform .22s ease;}
+.cf-controls{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:26px;}
+.cf-arrow{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--bg-card);color:var(--text);font-size:18px;cursor:pointer;transition:border-color .2s ease,color .2s ease;}
+.cf-arrow:hover{border-color:var(--accent-dim);color:var(--accent);}
+.cf-arrow:disabled{opacity:.35;cursor:default;border-color:var(--line);color:var(--text);}
+.cf-dots{display:flex;align-items:center;}
+.cf-dot{width:30px;height:44px;padding:0;border:0;background:none;cursor:pointer;display:grid;place-items:center;}
+.cf-dot::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--line);transition:background .25s ease,transform .25s var(--ease);}
+.cf-dot:hover::before{background:var(--text-dimmer);}
+.cf-dot[aria-current="true"]::before{background:var(--cf-accent);transform:scale(1.6);}
+.cf-hint{margin:2px 0 0;text-align:center;font-family:var(--font-mono);font-size:12.5px;color:var(--text-dimmer);}
+@media (max-width:760px){
+  .cf{--cf-w:min(74vw,330px);}
+  .cf-caption{grid-template-columns:1fr;}
+  .cf-cap-side{flex-direction:row-reverse;justify-content:space-between;align-items:center;}
+  .cf-cap-side .cf-open{flex:1;justify-content:center;}
+  .cf-cap-pitch{font-size:15px;}
+  .cf-controls{gap:6px;}
+  .cf-dot{width:24px;}
 }
-
+@media (prefers-reduced-motion:reduce){.cf::before,.cf-cap-main,.cf-cap-side{transition:none;}}
 .folio-detail{position:fixed;inset:0;z-index:320;background:var(--folio-detail-bg,#0a0b0b);color:var(--folio-detail-ink,#e7edf5);visibility:hidden;pointer-events:none;clip-path:inset(100% 0 0 0);-webkit-clip-path:inset(100% 0 0 0);transition:clip-path .72s var(--ease),-webkit-clip-path .72s var(--ease),visibility 0s linear .72s;}
 .folio-detail[hidden]{display:none !important;}.folio-detail.is-open{visibility:visible;pointer-events:auto;clip-path:inset(0);-webkit-clip-path:inset(0);transition:clip-path .72s var(--ease),-webkit-clip-path .72s var(--ease);}
 .folio-detail-scroll{height:100%;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;}
@@ -1097,76 +1099,71 @@ footer p{color:var(--text-dim);max-width:460px;margin:0 auto 24px;}
 
 <section id="projects" class="work-section">
   <div class="wrap reveal">
-    <div class="work-head">
-      <div class="section-head">
-        <p class="eyebrow">Projects</p>
-        <h2>Selected work</h2>
-        <p class="work-lede">Nine things I built outside of work. Open any card for the case study, live demo, and source.</p>
-      </div>
-      <div class="work-filters" role="group" aria-label="Filter projects">
-        <button class="work-filter is-active" type="button" data-filter="all" aria-pressed="true">All <span>9</span></button>
-        <button class="work-filter" type="button" data-filter="security" aria-pressed="false">Security <span>4</span></button>
-        <button class="work-filter" type="button" data-filter="ops" aria-pressed="false">Ops &amp; data <span>2</span></button>
-        <button class="work-filter" type="button" data-filter="web" aria-pressed="false">Web &amp; creative <span>3</span></button>
+    <div class="section-head">
+      <p class="eyebrow">Projects</p>
+      <h2>Selected work</h2>
+    </div>
+  </div>
+  <div class="cf" id="cf" aria-roledescription="carousel" aria-label="Selected work">
+    <div class="cf-stage" id="cfStage">
+      <div class="cf-track" id="cfTrack">
+        <button class="cf-card" id="craft" type="button" data-index="0" data-title="Interactive Diploma" data-type="Creative / 3D" data-stack="Three.js" data-status="Fully interactive" data-abbr="ID" data-bg="#0c0906" data-ink="#f4ecdf" data-accent="#f0b429" data-hint="A full 3D, physically-lit recreation of my actual diploma. It's live. Drag it." style="--card-accent:#f0b429;--cover-bg:#0c0906;--cover-ink:#f4ecdf;--cover-accent:#f0b429">
+          <span class="cf-art" aria-hidden="true"><span class="cf-abbr">ID</span></span><span class="cf-shade" aria-hidden="true"></span><span class="cf-index">01</span><span class="cf-live"><i aria-hidden="true"></i>Live</span>
+          <span class="cf-label"><strong>Interactive Diploma</strong><small>Creative / 3D &middot; Three.js</small></span>
+        </button>
+        <button class="cf-card" id="proj-siem" type="button" data-index="1" data-title="Log Correlator SIEM" data-type="Security tool" data-stack="Python" data-status="25 tests passing" data-abbr="SIEM" data-bg="#081413" data-ink="#eafffb" data-accent="#5eead4" data-thumb="screenshots/log-correlator-siem.webp" data-hint="Correlates sequences of events across two log sources into one incident, not two alerts." style="--card-accent:#5eead4;--cover-bg:#081413;--cover-ink:#eafffb;--cover-accent:#5eead4">
+          <img src="screenshots/log-correlator-siem.webp" alt="" width="1200" height="780" loading="lazy" draggable="false"><span class="cf-shade" aria-hidden="true"></span><span class="cf-index">02</span>
+          <span class="cf-label"><strong>Log Correlator SIEM</strong><small>Security tool &middot; Python</small></span>
+        </button>
+        <button class="cf-card" id="proj-helpdesk" type="button" data-index="2" data-title="Helpdesk Ticket Analytics" data-type="Analytics tool" data-stack="Python" data-status="14 tests passing" data-abbr="HD" data-bg="#e9edf1" data-ink="#141b24" data-accent="#285f8f" data-hint="Turns a raw ticket export into SLA compliance, resolution-time, and volume metrics." style="--card-accent:#285f8f;--cover-bg:#e9edf1;--cover-ink:#141b24;--cover-accent:#285f8f">
+          <span class="cf-art" aria-hidden="true"><span class="cf-abbr">HD</span></span><span class="cf-shade" aria-hidden="true"></span><span class="cf-index">03</span>
+          <span class="cf-label"><strong>Helpdesk Ticket Analytics</strong><small>Analytics tool &middot; Python</small></span>
+        </button>
+        <button class="cf-card" id="proj-ad-auditor" type="button" data-index="3" data-title="AD Security Auditor" data-type="Security tool" data-stack="PowerShell" data-status="Pester tested" data-abbr="AD" data-bg="#0d0b14" data-ink="#efeaff" data-accent="#9d84e8" data-thumb="screenshots/ad-security-auditor.webp" data-hint="Audits Active Directory security posture entirely offline, from exported CSV data." style="--card-accent:#9d84e8;--cover-bg:#0d0b14;--cover-ink:#efeaff;--cover-accent:#9d84e8">
+          <img src="screenshots/ad-security-auditor.webp" alt="" width="1200" height="708" loading="lazy" draggable="false"><span class="cf-shade" aria-hidden="true"></span><span class="cf-index">04</span>
+          <span class="cf-label"><strong>AD Security Auditor</strong><small>Security tool &middot; PowerShell</small></span>
+        </button>
+        <button class="cf-card" id="proj-phishing" type="button" data-index="4" data-title="Phishing Email Analyzer" data-type="Security tool" data-stack="Python" data-status="46 tests passing" data-abbr="PH" data-bg="#160a0d" data-ink="#ffe9ee" data-accent="#e8748c" data-thumb="screenshots/phishing-email-analyzer.webp" data-hint="Statically analyzes raw .eml files for phishing indicators, fully offline." style="--card-accent:#e8748c;--cover-bg:#160a0d;--cover-ink:#ffe9ee;--cover-accent:#e8748c">
+          <img src="screenshots/phishing-email-analyzer.webp" alt="" width="1200" height="678" loading="lazy" draggable="false"><span class="cf-shade" aria-hidden="true"></span><span class="cf-index">05</span>
+          <span class="cf-label"><strong>Phishing Email Analyzer</strong><small>Security tool &middot; Python</small></span>
+        </button>
+        <button class="cf-card" id="proj-jotrelay" type="button" data-index="5" data-title="JotRelay" data-type="Web app" data-stack="JS / Supabase" data-status="Live demo" data-abbr="JR" data-bg="#eef7f1" data-ink="#0c1f15" data-accent="#256f4a" data-hint="Real-time encrypted collaborative notepad with shareable links and an installable PWA." style="--card-accent:#256f4a;--cover-bg:#eef7f1;--cover-ink:#0c1f15;--cover-accent:#256f4a">
+          <span class="cf-art" aria-hidden="true"><span class="cf-abbr">JR</span></span><span class="cf-shade" aria-hidden="true"></span><span class="cf-index">06</span><span class="cf-live"><i aria-hidden="true"></i>Live</span>
+          <span class="cf-label"><strong>JotRelay</strong><small>Web app &middot; JS / Supabase</small></span>
+        </button>
+        <button class="cf-card" id="proj-toolkit" type="button" data-index="6" data-title="AD &amp; Endpoint Automation Toolkit" data-type="Automation" data-stack="PowerShell" data-status="PS 5.1 compatible" data-abbr="EP" data-bg="#170f08" data-ink="#ffe9d1" data-accent="#e2a35c" data-hint="Provisioning, offboarding, and compliance scripts. Every write action supports -WhatIf." style="--card-accent:#e2a35c;--cover-bg:#170f08;--cover-ink:#ffe9d1;--cover-accent:#e2a35c">
+          <span class="cf-art" aria-hidden="true"><span class="cf-abbr">EP</span></span><span class="cf-shade" aria-hidden="true"></span><span class="cf-index">07</span>
+          <span class="cf-label"><strong>AD &amp; Endpoint Automation Toolkit</strong><small>Automation &middot; PowerShell</small></span>
+        </button>
+        <button class="cf-card" id="proj-winlog" type="button" data-index="7" data-title="WinLog Threat Hunter" data-type="Threat hunting" data-stack="Python" data-status="25 tests passing" data-abbr="WL" data-bg="#071316" data-ink="#eafbff" data-accent="#5fc9d8" data-hint="Parses Windows Security/Sysmon events and maps findings to MITRE ATT&amp;CK techniques." style="--card-accent:#5fc9d8;--cover-bg:#071316;--cover-ink:#eafbff;--cover-accent:#5fc9d8">
+          <span class="cf-art" aria-hidden="true"><span class="cf-abbr">WL</span></span><span class="cf-shade" aria-hidden="true"></span><span class="cf-index">08</span>
+          <span class="cf-label"><strong>WinLog Threat Hunter</strong><small>Threat hunting &middot; Python</small></span>
+        </button>
+        <button class="cf-card" id="proj-ghostball" type="button" data-index="8" data-title="Ghost Ball" data-type="Browser game" data-stack="Vanilla JS / Canvas" data-status="Live demo" data-abbr="GB" data-bg="#0a1c12" data-ink="#eaf3ea" data-accent="#a3d97b" data-hint="A browser pool game built around feel: the speed of your stroke is the speed of the shot." style="--card-accent:#a3d97b;--cover-bg:#0a1c12;--cover-ink:#eaf3ea;--cover-accent:#a3d97b">
+          <span class="cf-art" aria-hidden="true"><span class="cf-abbr">GB</span></span><span class="cf-shade" aria-hidden="true"></span><span class="cf-index">09</span><span class="cf-live"><i aria-hidden="true"></i>Live</span>
+          <span class="cf-label"><strong>Ghost Ball</strong><small>Browser game &middot; Vanilla JS / Canvas</small></span>
+        </button>
       </div>
     </div>
-    <p class="work-count" id="workCount" aria-live="polite">Showing all 9 projects</p>
-    <ul class="work-grid" id="workGrid">
-      <li class="work-item" data-cat="web">
-        <button class="work-card" id="craft" type="button" data-index="0" data-title="Interactive Diploma" data-type="Creative / 3D" data-stack="Three.js" data-status="Fully interactive" data-abbr="ID" data-bg="#0c0906" data-ink="#f4ecdf" data-accent="#f0b429" data-hint="A full 3D, physically-lit recreation of my actual diploma. It's live. Drag it." style="--card-accent:#f0b429;--cover-bg:#0c0906;--cover-ink:#f4ecdf;--cover-accent:#f0b429">
-          <span class="work-cover"><span class="work-art" aria-hidden="true"><span class="work-abbr">ID</span></span><span class="work-index">01</span><span class="work-live"><i aria-hidden="true"></i>Live</span></span>
-          <span class="work-body"><span class="work-kicker">Creative / 3D &middot; Three.js</span><span class="work-title">Interactive Diploma</span><span class="work-pitch">A full 3D, physically-lit recreation of my actual diploma. It's live. Drag it.</span><span class="work-foot"><span class="work-status">Fully interactive</span><span class="work-go" aria-hidden="true">Case study &nearr;</span></span></span>
-        </button>
-      </li>
-      <li class="work-item" data-cat="security">
-        <button class="work-card" id="proj-siem" type="button" data-index="1" data-title="Log Correlator SIEM" data-type="Security tool" data-stack="Python" data-status="25 tests passing" data-abbr="SIEM" data-bg="#081413" data-ink="#eafffb" data-accent="#5eead4" data-thumb="screenshots/log-correlator-siem.webp" data-hint="Correlates sequences of events across two log sources into one incident, not two alerts." style="--card-accent:#5eead4;--cover-bg:#081413;--cover-ink:#eafffb;--cover-accent:#5eead4">
-          <span class="work-cover"><img src="screenshots/log-correlator-siem.webp" alt="" width="1200" height="780" loading="lazy"><span class="work-index">02</span></span>
-          <span class="work-body"><span class="work-kicker">Security tool &middot; Python</span><span class="work-title">Log Correlator SIEM</span><span class="work-pitch">Correlates sequences of events across two log sources into one incident, not two alerts.</span><span class="work-foot"><span class="work-status">25 tests passing</span><span class="work-go" aria-hidden="true">Case study &nearr;</span></span></span>
-        </button>
-      </li>
-      <li class="work-item" data-cat="ops">
-        <button class="work-card" id="proj-helpdesk" type="button" data-index="2" data-title="Helpdesk Ticket Analytics" data-type="Analytics tool" data-stack="Python" data-status="14 tests passing" data-abbr="HD" data-bg="#e9edf1" data-ink="#141b24" data-accent="#285f8f" data-hint="Turns a raw ticket export into SLA compliance, resolution-time, and volume metrics." style="--card-accent:#285f8f;--cover-bg:#e9edf1;--cover-ink:#141b24;--cover-accent:#285f8f">
-          <span class="work-cover"><span class="work-art" aria-hidden="true"><span class="work-abbr">HD</span></span><span class="work-index">03</span></span>
-          <span class="work-body"><span class="work-kicker">Analytics tool &middot; Python</span><span class="work-title">Helpdesk Ticket Analytics</span><span class="work-pitch">Turns a raw ticket export into SLA compliance, resolution-time, and volume metrics.</span><span class="work-foot"><span class="work-status">14 tests passing</span><span class="work-go" aria-hidden="true">Case study &nearr;</span></span></span>
-        </button>
-      </li>
-      <li class="work-item" data-cat="security">
-        <button class="work-card" id="proj-ad-auditor" type="button" data-index="3" data-title="AD Security Auditor" data-type="Security tool" data-stack="PowerShell" data-status="Pester tested" data-abbr="AD" data-bg="#0d0b14" data-ink="#efeaff" data-accent="#9d84e8" data-thumb="screenshots/ad-security-auditor.webp" data-hint="Audits Active Directory security posture entirely offline, from exported CSV data." style="--card-accent:#9d84e8;--cover-bg:#0d0b14;--cover-ink:#efeaff;--cover-accent:#9d84e8">
-          <span class="work-cover"><img src="screenshots/ad-security-auditor.webp" alt="" width="1200" height="708" loading="lazy"><span class="work-index">04</span></span>
-          <span class="work-body"><span class="work-kicker">Security tool &middot; PowerShell</span><span class="work-title">AD Security Auditor</span><span class="work-pitch">Audits Active Directory security posture entirely offline, from exported CSV data.</span><span class="work-foot"><span class="work-status">Pester tested</span><span class="work-go" aria-hidden="true">Case study &nearr;</span></span></span>
-        </button>
-      </li>
-      <li class="work-item" data-cat="security">
-        <button class="work-card" id="proj-phishing" type="button" data-index="4" data-title="Phishing Email Analyzer" data-type="Security tool" data-stack="Python" data-status="46 tests passing" data-abbr="PH" data-bg="#160a0d" data-ink="#ffe9ee" data-accent="#e8748c" data-thumb="screenshots/phishing-email-analyzer.webp" data-hint="Statically analyzes raw .eml files for phishing indicators, fully offline." style="--card-accent:#e8748c;--cover-bg:#160a0d;--cover-ink:#ffe9ee;--cover-accent:#e8748c">
-          <span class="work-cover"><img src="screenshots/phishing-email-analyzer.webp" alt="" width="1200" height="678" loading="lazy"><span class="work-index">05</span></span>
-          <span class="work-body"><span class="work-kicker">Security tool &middot; Python</span><span class="work-title">Phishing Email Analyzer</span><span class="work-pitch">Statically analyzes raw .eml files for phishing indicators, fully offline.</span><span class="work-foot"><span class="work-status">46 tests passing</span><span class="work-go" aria-hidden="true">Case study &nearr;</span></span></span>
-        </button>
-      </li>
-      <li class="work-item" data-cat="web">
-        <button class="work-card" id="proj-jotrelay" type="button" data-index="5" data-title="JotRelay" data-type="Web app" data-stack="JS / Supabase" data-status="Live demo" data-abbr="JR" data-bg="#eef7f1" data-ink="#0c1f15" data-accent="#256f4a" data-hint="Real-time encrypted collaborative notepad with shareable links and an installable PWA." style="--card-accent:#256f4a;--cover-bg:#eef7f1;--cover-ink:#0c1f15;--cover-accent:#256f4a">
-          <span class="work-cover"><span class="work-art" aria-hidden="true"><span class="work-abbr">JR</span></span><span class="work-index">06</span><span class="work-live"><i aria-hidden="true"></i>Live</span></span>
-          <span class="work-body"><span class="work-kicker">Web app &middot; JS / Supabase</span><span class="work-title">JotRelay</span><span class="work-pitch">Real-time encrypted collaborative notepad with shareable links and an installable PWA.</span><span class="work-foot"><span class="work-status">Live demo</span><span class="work-go" aria-hidden="true">Case study &nearr;</span></span></span>
-        </button>
-      </li>
-      <li class="work-item" data-cat="ops">
-        <button class="work-card" id="proj-toolkit" type="button" data-index="6" data-title="AD &amp; Endpoint Automation Toolkit" data-type="Automation" data-stack="PowerShell" data-status="PS 5.1 compatible" data-abbr="EP" data-bg="#170f08" data-ink="#ffe9d1" data-accent="#e2a35c" data-hint="Provisioning, offboarding, and compliance scripts. Every write action supports -WhatIf." style="--card-accent:#e2a35c;--cover-bg:#170f08;--cover-ink:#ffe9d1;--cover-accent:#e2a35c">
-          <span class="work-cover"><span class="work-art" aria-hidden="true"><span class="work-abbr">EP</span></span><span class="work-index">07</span></span>
-          <span class="work-body"><span class="work-kicker">Automation &middot; PowerShell</span><span class="work-title">AD &amp; Endpoint Automation Toolkit</span><span class="work-pitch">Provisioning, offboarding, and compliance scripts. Every write action supports -WhatIf.</span><span class="work-foot"><span class="work-status">PS 5.1 compatible</span><span class="work-go" aria-hidden="true">Case study &nearr;</span></span></span>
-        </button>
-      </li>
-      <li class="work-item" data-cat="security">
-        <button class="work-card" id="proj-winlog" type="button" data-index="7" data-title="WinLog Threat Hunter" data-type="Threat hunting" data-stack="Python" data-status="25 tests passing" data-abbr="WL" data-bg="#071316" data-ink="#eafbff" data-accent="#5fc9d8" data-hint="Parses Windows Security/Sysmon events and maps findings to MITRE ATT&amp;CK techniques." style="--card-accent:#5fc9d8;--cover-bg:#071316;--cover-ink:#eafbff;--cover-accent:#5fc9d8">
-          <span class="work-cover"><span class="work-art" aria-hidden="true"><span class="work-abbr">WL</span></span><span class="work-index">08</span></span>
-          <span class="work-body"><span class="work-kicker">Threat hunting &middot; Python</span><span class="work-title">WinLog Threat Hunter</span><span class="work-pitch">Parses Windows Security/Sysmon events and maps findings to MITRE ATT&amp;CK techniques.</span><span class="work-foot"><span class="work-status">25 tests passing</span><span class="work-go" aria-hidden="true">Case study &nearr;</span></span></span>
-        </button>
-      </li>
-      <li class="work-item" data-cat="web">
-        <button class="work-card" id="proj-ghostball" type="button" data-index="8" data-title="Ghost Ball" data-type="Browser game" data-stack="Vanilla JS / Canvas" data-status="Live demo" data-abbr="GB" data-bg="#0a1c12" data-ink="#eaf3ea" data-accent="#a3d97b" data-hint="A browser pool game built around feel: the speed of your stroke is the speed of the shot." style="--card-accent:#a3d97b;--cover-bg:#0a1c12;--cover-ink:#eaf3ea;--cover-accent:#a3d97b">
-          <span class="work-cover"><span class="work-art" aria-hidden="true"><span class="work-abbr">GB</span></span><span class="work-index">09</span><span class="work-live"><i aria-hidden="true"></i>Live</span></span>
-          <span class="work-body"><span class="work-kicker">Browser game &middot; Vanilla JS / Canvas</span><span class="work-title">Ghost Ball</span><span class="work-pitch">A browser pool game built around feel: the speed of your stroke is the speed of the shot.</span><span class="work-foot"><span class="work-status">Live demo</span><span class="work-go" aria-hidden="true">Case study &nearr;</span></span></span>
-        </button>
-      </li>
-    </ul>
+    <div class="wrap">
+      <div class="cf-caption" id="cfCaption" aria-live="polite">
+        <div class="cf-cap-main">
+          <p class="cf-cap-kicker"><span id="cfCapIndex">01 / 09</span><span id="cfCapType"></span></p>
+          <h3 class="cf-cap-title" id="cfCapTitle"></h3>
+          <p class="cf-cap-pitch" id="cfCapPitch"></p>
+        </div>
+        <div class="cf-cap-side">
+          <span class="cf-cap-status" id="cfCapStatus"></span>
+          <button class="btn btn-primary cf-open" id="cfOpen" type="button">Open case study <span aria-hidden="true">&nearr;</span></button>
+        </div>
+      </div>
+      <div class="cf-controls">
+        <button class="cf-arrow" id="cfPrev" type="button" aria-label="Previous project">&larr;</button>
+        <div class="cf-dots" id="cfDots" role="group" aria-label="Choose project"></div>
+        <button class="cf-arrow" id="cfNext" type="button" aria-label="Next project">&rarr;</button>
+      </div>
+      <p class="cf-hint">Drag, swipe, or use the arrow keys. Tap the centre card to open it.</p>
+    </div>
   </div>
 </section>
 <div class="folio-detail" id="folioDetail" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="folioDetailTitle" hidden>
@@ -1685,13 +1682,14 @@ var hsLenis = null;
  
 (function(){
   var root = document.getElementById('projects');
-  var grid = document.getElementById('workGrid');
+  var cf = document.getElementById('cf');
+  var grid = document.getElementById('cfTrack');
   var detail = document.getElementById('folioDetail');
   var sourceWrap = document.getElementById('folioSource');
-  if(!root || !grid || !detail || !sourceWrap) return;
+  if(!root || !cf || !grid || !detail || !sourceWrap) return;
 
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var cards = Array.prototype.slice.call(grid.querySelectorAll('.work-card'));
+  var cards = Array.prototype.slice.call(grid.querySelectorAll('.cf-card'));
   var N = cards.length;
   if(!N) return;
 
@@ -1723,29 +1721,168 @@ var hsLenis = null;
     return -1;
   }
 
-  var filterBtns = Array.prototype.slice.call(root.querySelectorAll('.work-filter'));
-  var countEl = document.getElementById('workCount');
-  function applyFilter(f){
-    var shown = 0;
-    cards.forEach(function(c){
-      var item = c.parentNode;
-      var ok = f === 'all' || item.getAttribute('data-cat') === f;
-      item.hidden = !ok;
-      if(ok) shown++;
-    });
-    filterBtns.forEach(function(b){
-      var on = b.getAttribute('data-filter') === f;
-      b.classList.toggle('is-active',on);
-      b.setAttribute('aria-pressed',on ? 'true' : 'false');
-    });
-    if(countEl) countEl.textContent = f === 'all' ? 'Showing all ' + N + ' projects' : 'Showing ' + shown + ' of ' + N + ' projects';
-  }
-  filterBtns.forEach(function(b){
-    b.addEventListener('click',function(){ applyFilter(b.getAttribute('data-filter')); });
+  /* ---------- coverflow ---------- */
+  var stage = document.getElementById('cfStage');
+  var capBox = document.getElementById('cfCaption');
+  var capIndex = document.getElementById('cfCapIndex');
+  var capType = document.getElementById('cfCapType');
+  var capTitle = document.getElementById('cfCapTitle');
+  var capPitch = document.getElementById('cfCapPitch');
+  var capStatus = document.getElementById('cfCapStatus');
+  var openBtn = document.getElementById('cfOpen');
+  var prevBtn = document.getElementById('cfPrev');
+  var nextBtn = document.getElementById('cfNext');
+  var dotsBox = document.getElementById('cfDots');
+
+  var pos = 0, target = 0, raf = null, activeIndex = -1, cardW = 360;
+  var dragging = false, moved = false, dragX0 = 0, dragPos0 = 0, lastX = 0, lastT = 0, vel = 0, suppressClickUntil = 0;
+  var swapTimer = null;
+
+  var dots = PROJECTS.map(function(p,i){
+    var d = document.createElement('button');
+    d.type = 'button'; d.className = 'cf-dot'; d.setAttribute('aria-label','Show ' + p.title);
+    d.addEventListener('click',function(){ goTo(i); });
+    dotsBox.appendChild(d);
+    return d;
   });
 
-  var activeIndex = 0;
-  var suppressClickUntil = 0;
+  function measure(){ cardW = cards[0].offsetWidth || 360; }
+
+  function layout(){
+    var x0 = cardW * 0.8, step = cardW * 0.3;
+    var narrow = cardW < 300;
+    if(narrow){ x0 = cardW * 0.7; step = cardW * 0.22; }
+    cards.forEach(function(card,i){
+      var d = i - pos, ad = Math.abs(d), sg = d < 0 ? -1 : 1;
+      var near = Math.min(ad,1);
+      var x = sg * (near * x0 + Math.max(0,ad - 1) * step);
+      var z = -near * 150 - Math.max(0,ad - 1) * 50;
+      var ry = -sg * near * (narrow ? 42 : 54);
+      var sc = 1 - Math.min(ad,3) * 0.035;
+      var op = ad > 4.2 ? 0 : 1 - Math.max(0,ad - 1.2) * 0.22;
+      card.style.transform = 'translate(-50%,-50%) translate3d(' + x.toFixed(1) + 'px,0,' + z.toFixed(1) + 'px) rotateY(' + ry.toFixed(2) + 'deg) scale(' + sc.toFixed(3) + ')';
+      card.style.opacity = Math.max(0,op).toFixed(3);
+      card.style.zIndex = String(100 - Math.round(ad * 10));
+      card.style.setProperty('--cf-dim',(near * 0.5).toFixed(3));
+      card.style.visibility = ad > 4.2 ? 'hidden' : 'visible';
+      card.style.pointerEvents = ad > 3.6 ? 'none' : '';
+    });
+    var idx = clamp(Math.round(pos),0,N-1);
+    if(idx !== activeIndex) setActive(idx);
+  }
+
+  function setActive(idx){
+    var first = activeIndex === -1;
+    activeIndex = idx;
+    var p = PROJECTS[idx];
+    cf.style.setProperty('--cf-accent',p.accent);
+    cards.forEach(function(c,i){
+      var on = i === idx;
+      c.classList.toggle('is-active',on);
+      c.tabIndex = on ? 0 : -1;
+      if(on) c.setAttribute('aria-current','true'); else c.removeAttribute('aria-current');
+      c.setAttribute('aria-label',(on ? 'Open case study: ' : 'Show ') + p0(i));
+    });
+    dots.forEach(function(d,i){ d.setAttribute('aria-current',i === idx ? 'true' : 'false'); });
+    if(prevBtn) prevBtn.disabled = idx === 0;
+    if(nextBtn) nextBtn.disabled = idx === N-1;
+    function fill(){
+      capIndex.textContent = pad(idx+1) + ' / ' + pad(N);
+      capType.textContent = p.type + ' · ' + p.stack;
+      capTitle.textContent = p.title;
+      capPitch.textContent = p.hint;
+      capStatus.textContent = p.status;
+      capBox.classList.remove('is-swapping');
+    }
+    clearTimeout(swapTimer);
+    if(first || reduce){ fill(); }
+    else{ capBox.classList.add('is-swapping'); swapTimer = setTimeout(fill,140); }
+  }
+  function p0(i){ return PROJECTS[i].title; }
+
+  function tick(){
+    raf = null;
+    var diff = target - pos;
+    if(Math.abs(diff) < 0.0008){ pos = target; layout(); return; }
+    pos += diff * 0.16;
+    layout();
+    raf = requestAnimationFrame(tick);
+  }
+  function kick(){ if(reduce){ pos = target; layout(); return; } if(!raf) raf = requestAnimationFrame(tick); }
+
+  function goTo(i,instant){
+    target = clamp(Math.round(i),0,N-1);
+    if(instant){ pos = target; layout(); return; }
+    kick();
+  }
+
+  cf.classList.add('cf-js');
+  measure();
+  layout();
+  window.addEventListener('resize',function(){ measure(); layout(); });
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ measure(); layout(); });
+
+  stage.addEventListener('pointerdown',function(e){
+    if(e.pointerType === 'mouse' && e.button !== 0) return;
+    dragging = true; moved = false; dragX0 = lastX = e.clientX; lastT = performance.now(); vel = 0; dragPos0 = pos;
+  });
+  stage.addEventListener('pointermove',function(e){
+    if(!dragging) return;
+    var dx = e.clientX - dragX0;
+    if(!moved && Math.abs(dx) > 6){
+      moved = true;
+      stage.classList.add('is-dragging');
+      try{ stage.setPointerCapture(e.pointerId); }catch(err){}
+    }
+    if(!moved) return;
+    var now = performance.now(), dt = Math.max(1,now - lastT);
+    vel = 0.8 * vel + 0.2 * ((e.clientX - lastX) / dt);
+    lastX = e.clientX; lastT = now;
+    pos = clamp(dragPos0 - dx / (cardW * 0.8),-0.35,N - 0.65);
+    target = pos;
+    layout();
+  });
+  function endDrag(){
+    if(!dragging) return;
+    dragging = false;
+    stage.classList.remove('is-dragging');
+    if(moved){
+      suppressClickUntil = Date.now() + 250;
+      var fling = clamp(-vel * 120 / (cardW * 0.8),-1,1);
+      target = clamp(Math.round(pos + fling),0,N-1);
+      kick();
+    }
+  }
+  stage.addEventListener('pointerup',endDrag);
+  stage.addEventListener('pointercancel',endDrag);
+
+  var wheelAcc = 0, wheelAt = 0;
+  stage.addEventListener('wheel',function(e){
+    if(Math.abs(e.deltaX) <= Math.abs(e.deltaY) || Math.abs(e.deltaX) < 3) return;
+    e.preventDefault();
+    var now = performance.now();
+    if(now - wheelAt > 200) wheelAcc = 0;
+    wheelAt = now; wheelAcc += e.deltaX;
+    if(Math.abs(wheelAcc) > 50){ goTo(target + (wheelAcc > 0 ? 1 : -1)); wheelAcc = 0; }
+  },{passive:false});
+
+  stage.addEventListener('keydown',function(e){
+    var k = e.key, to = null;
+    if(k === 'ArrowRight') to = target + 1;
+    else if(k === 'ArrowLeft') to = target - 1;
+    else if(k === 'Home') to = 0;
+    else if(k === 'End') to = N - 1;
+    if(to === null) return;
+    e.preventDefault();
+    to = clamp(to,0,N-1);
+    goTo(to);
+    cards[to].focus({preventScroll:true});
+  });
+
+  if(prevBtn) prevBtn.addEventListener('click',function(){ goTo(target - 1); });
+  if(nextBtn) nextBtn.addEventListener('click',function(){ goTo(target + 1); });
+  if(openBtn) openBtn.addEventListener('click',function(){ openDetail(activeIndex); });
+
 
   var detailScroll = document.getElementById('folioDetailScroll');
   var detailClose = document.getElementById('folioDetailClose');
@@ -1808,8 +1945,7 @@ var hsLenis = null;
     opts = opts || {};
     index = ((index%N)+N)%N;
     detailGen++;
-    activeIndex = index;
-    if(cards[index].parentNode.hidden) applyFilter('all');
+    goTo(index,true);
     populateDetail(index);
     if(detail.hidden){
       detail.hidden = false;
@@ -1863,8 +1999,21 @@ var hsLenis = null;
   }
 
 
-  cards.forEach(function(card,i){
-    card.addEventListener('click',function(){ openDetail(i); });
+  /* one click handler for the whole stage: resolve the card from the event target, or from geometry
+     when the browser's 3D hit-testing misses a rotated card */
+  stage.addEventListener('click',function(e){
+    if(Date.now() < suppressClickUntil) return;
+    var hit = e.target.closest ? e.target.closest('.cf-card') : null;
+    var i = hit ? cards.indexOf(hit) : -1;
+    if(i === -1 && e.detail !== 0){
+      var order = cards.map(function(c,k){ return k; }).sort(function(x,y){ return Math.abs(x - pos) - Math.abs(y - pos); });
+      for(var n = 0; n < order.length; n++){
+        var r = cards[order[n]].getBoundingClientRect();
+        if(e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom && cards[order[n]].style.visibility !== 'hidden'){ i = order[n]; break; }
+      }
+    }
+    if(i === -1) return;
+    if(i === activeIndex) openDetail(i); else goTo(i);
   });
   if(detailClose) detailClose.addEventListener('click',function(){ closeDetail(); });
   if(detailPrev) detailPrev.addEventListener('click',prevDetail);
