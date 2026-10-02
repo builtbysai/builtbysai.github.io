@@ -724,6 +724,18 @@ section:not(:last-of-type)::after{
 .folio-meta-key{font-size:10px;}.folio-meta-value{font-size:11px;}
 .folio-topline{font-size:11px;}
 @media(max-width:820px){.folio-card-cue{opacity:1;transform:none;font-size:10.5px;padding:6px 9px;}}
+/* ---- light theme for Selected work: follows the site palette instead of staying a black slab ---- */
+:root[data-theme="light"] .folio-section{--folio-bg:var(--bg);--folio-ink:#181c22;--folio-muted:#5d6571;--folio-line:rgba(24,28,34,.22);}
+:root[data-theme="light"] .folio-progress{background:rgba(24,28,34,.16);}
+:root[data-theme="light"] .folio-project-inner{background:var(--bg-card);}
+:root[data-theme="light"] .folio-project:not(.is-active):not(:hover):not(.is-mobile-active) img{filter:grayscale(.75) saturate(.55) brightness(1) contrast(1.02);}
+:root[data-theme="light"] .folio-project:not(.is-active):not(:hover):not(.is-mobile-active) .folio-cover-fallback{filter:grayscale(.7) saturate(.6) brightness(1.04);}
+:root[data-theme="light"] .folio-project:hover .folio-project-inner,:root[data-theme="light"] .folio-project.is-active .folio-project-inner{box-shadow:0 22px 44px -22px rgba(24,28,34,.45);}
+:root[data-theme="light"] .folio-project::before{filter:blur(28px);}
+:root[data-theme="light"] .folio-project:hover::before,:root[data-theme="light"] .folio-project.is-active::before{opacity:.22;}
+:root[data-theme="light"] .folio-nav button:hover{border-color:var(--folio-accent-ink);color:var(--folio-accent-ink);}
+:root[data-theme="light"] .folio-section{--folio-accent-ink:color-mix(in srgb,var(--folio-accent) 50%,#10151c);}
+:root[data-theme="light"] .folio-caption-index,:root[data-theme="light"] .folio-title-btn:hover,:root[data-theme="light"] .folio-title-btn:focus-visible{color:var(--folio-accent-ink);}
 .folio-detail{position:fixed;inset:0;z-index:320;background:var(--folio-detail-bg,#0a0b0b);color:var(--folio-detail-ink,#e7edf5);visibility:hidden;pointer-events:none;clip-path:inset(100% 0 0 0);-webkit-clip-path:inset(100% 0 0 0);transition:clip-path .72s var(--ease),-webkit-clip-path .72s var(--ease),visibility 0s linear .72s;}
 .folio-detail[hidden]{display:none !important;}.folio-detail.is-open{visibility:visible;pointer-events:auto;clip-path:inset(0);-webkit-clip-path:inset(0);transition:clip-path .72s var(--ease),-webkit-clip-path .72s var(--ease);}
 .folio-detail-scroll{height:100%;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;}
