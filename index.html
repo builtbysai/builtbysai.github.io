@@ -655,77 +655,75 @@ section:not(:last-of-type)::after{
 .lf-overlay-badge svg{width:14px;height:14px;flex-shrink:0;}
 
 
-/* selected work: 3D coverflow in plain HTML/CSS/JS. No canvas, no scroll-jacking, theme-aware. */
-.work-section{padding-bottom:clamp(36px,5vw,56px);overflow:hidden;}
-.cf{--cf-w:clamp(250px,31vw,420px);--cf-accent:var(--accent);position:relative;}
-.cf::before{content:"";position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(48% 60% at 50% 38%,color-mix(in srgb,var(--cf-accent) 15%,transparent),transparent 72%);transition:background .5s ease;}
-.cf-stage{position:relative;height:calc(var(--cf-w) * .8 + 56px);touch-action:pan-y;user-select:none;-webkit-user-select:none;outline:none;}
-.cf-stage.is-dragging{cursor:grabbing;}
-/* no-JS / pre-JS fallback: a swipeable scroll-snap row */
-.cf-track{display:flex;gap:16px;height:100%;align-items:center;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 max(18px,calc(50% - var(--cf-w) / 2));scrollbar-width:none;}
-.cf-track::-webkit-scrollbar{display:none;}
-.cf-card{position:relative;flex:0 0 var(--cf-w);width:var(--cf-w);aspect-ratio:5/4;padding:0;margin:0;overflow:hidden;scroll-snap-align:center;
-  background:var(--cover-bg,#111);border:1px solid var(--line);border-radius:14px;color:#fff;text-align:left;font:inherit;cursor:pointer;
-  box-shadow:0 24px 50px -28px rgba(0,0,0,.7);}
-.cf-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top left;pointer-events:none;}
-.cf-art{position:absolute;inset:0;display:block;color:var(--cover-ink);
-  background:
-    radial-gradient(circle at 82% 18%,color-mix(in srgb,var(--cover-accent) 32%,transparent),transparent 56%),
-    linear-gradient(color-mix(in srgb,var(--cover-ink) 7%,transparent) 1px,transparent 1px) 0 0/30px 30px,
-    linear-gradient(90deg,color-mix(in srgb,var(--cover-ink) 7%,transparent) 1px,transparent 1px) 0 0/30px 30px;}
-.cf-abbr{position:absolute;left:22px;top:20px;font-family:var(--font-display);font-weight:700;font-size:clamp(56px,8vw,96px);line-height:.9;letter-spacing:-.05em;}
-.cf-abbr::after{content:"";display:block;width:44px;height:4px;margin-top:12px;background:var(--cover-accent);border-radius:2px;}
-.cf-shade{position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(to top,rgba(5,7,10,.88) 0%,rgba(5,7,10,.5) 32%,transparent 62%),rgba(5,7,10,calc(var(--cf-dim,0) * var(--cf-dim-k,1)));}
-:root[data-theme="light"] .cf{--cf-dim-k:.6;}
-.cf-index,.cf-live{position:absolute;top:12px;z-index:2;font-family:var(--font-mono);font-size:11.5px;line-height:1;color:#fff;background:rgba(8,10,14,.72);padding:5px 8px;border-radius:5px;}
-.cf-index{left:12px;}
-.cf-live{right:12px;display:inline-flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.06em;}
-.cf-live i{width:6px;height:6px;border-radius:50%;background:#3ddc84;}
-.cf-label{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:0 18px 16px;display:flex;flex-direction:column;gap:3px;}
-.cf-label strong{font-family:var(--font-display);font-weight:700;font-size:clamp(17px,1.9vw,23px);line-height:1.15;letter-spacing:-.01em;text-shadow:0 1px 12px rgba(0,0,0,.5);}
-.cf-label small{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.82);}
-.cf-card:focus-visible{outline:2px solid var(--accent);outline-offset:4px;}
-/* JS mode: true 3D coverflow */
-.cf.cf-js .cf-stage{perspective:1500px;perspective-origin:50% 45%;cursor:grab;overflow:visible;}
-.cf.cf-js .cf-track{display:block;position:relative;height:100%;overflow:visible;padding:0;transform-style:preserve-3d;}
-.cf.cf-js .cf-card{position:absolute;left:50%;top:50%;flex:none;will-change:transform,opacity;backface-visibility:hidden;-webkit-backface-visibility:hidden;scroll-snap-align:none;
-  transition:border-color .25s ease,box-shadow .35s ease;}
-.cf.cf-js .cf-card.is-active{border-color:color-mix(in srgb,var(--card-accent) 70%,var(--line));
-  box-shadow:0 30px 60px -26px rgba(0,0,0,.75),0 0 0 1px color-mix(in srgb,var(--card-accent) 40%,transparent),0 0 50px -14px color-mix(in srgb,var(--card-accent) 55%,transparent);}
-.cf.cf-js .cf-card:not(.is-active) .cf-label{opacity:.0;}
-.cf.cf-js .cf-card .cf-label{transition:opacity .3s ease;}
-.cf.cf-js .cf-card:not(.is-active) .cf-index,.cf.cf-js .cf-card:not(.is-active) .cf-live{opacity:.0;}
-.cf-caption{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:18px 40px;max-width:900px;margin:8px auto 0;text-align:left;}
-.cf-cap-kicker{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0 0 8px;font-family:var(--font-mono);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-dimmer);}
-.cf-cap-kicker #cfCapIndex{color:var(--accent);}
-.cf-cap-title{margin:0;font-family:var(--font-display);font-weight:700;font-size:clamp(28px,4.2vw,46px);line-height:1.05;letter-spacing:-.03em;color:var(--text);}
-.cf-cap-pitch{margin:10px 0 0;max-width:56ch;font-size:16px;line-height:1.6;color:var(--text-dim);}
-.cf-cap-side{display:flex;flex-direction:column;align-items:flex-end;gap:12px;}
-.cf-cap-status{font-family:var(--font-mono);font-size:12.5px;color:var(--text-dim);border:1px solid var(--line);border-radius:999px;padding:5px 12px;white-space:nowrap;}
-.cf-caption.is-swapping .cf-cap-main,.cf-caption.is-swapping .cf-cap-side{opacity:0;transform:translateY(6px);}
-.cf-cap-main,.cf-cap-side{transition:opacity .22s ease,transform .22s ease;}
-.cf-controls{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:26px;}
-.cf-arrow{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--bg-card);color:var(--text);font-size:18px;cursor:pointer;transition:border-color .2s ease,color .2s ease;}
-.cf-arrow:hover{border-color:var(--accent-dim);color:var(--accent);}
-.cf-arrow:disabled{opacity:.35;cursor:default;border-color:var(--line);color:var(--text);}
-.cf-dots{display:flex;align-items:center;}
-.cf-dot{width:30px;height:44px;padding:0;border:0;background:none;cursor:pointer;display:grid;place-items:center;}
-.cf-dot::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--line);transition:background .25s ease,transform .25s var(--ease);}
-.cf-dot:hover::before{background:var(--text-dimmer);}
-.cf-dot[aria-current="true"]::before{background:var(--cf-accent);transform:scale(1.6);}
-.cf-hint{margin:2px 0 0;text-align:center;font-family:var(--font-mono);font-size:12.5px;color:var(--text-dimmer);}
-@media (max-width:760px){
-  .cf{--cf-w:min(74vw,330px);}
-  .cf-caption{grid-template-columns:1fr;}
-  .cf-cap-side{flex-direction:row-reverse;justify-content:space-between;align-items:center;}
-  .cf-cap-side .cf-open{flex:1;justify-content:center;}
-  .cf-cap-pitch{font-size:15px;}
-  .cf-controls{gap:6px;}
-  .cf-dot{width:24px;}
+.folio-section{
+  --folio-bg:#0a0b0b;--folio-ink:#dfe7e2;--folio-muted:#7a8979;--folio-line:rgba(223,231,226,.17);--folio-accent:var(--accent);
+  height:430vh;padding:0;background:var(--folio-bg);color:var(--folio-ink);position:relative;isolation:isolate;overflow:visible;
 }
-@media (prefers-reduced-motion:reduce){.cf::before,.cf-cap-main,.cf-cap-side{transition:none;}}
+:root[data-theme="light"] .folio-section{background:var(--folio-bg);color:var(--folio-ink);}
+.folio-section::after{display:none !important;}
+.folio-sticky{position:sticky;top:0;height:100svh;min-height:620px;overflow:hidden;}
+.folio-shell{position:relative;height:100%;padding:clamp(24px,3.2vw,48px) clamp(22px,4vw,64px) clamp(24px,3vw,44px);display:grid;grid-template-rows:auto minmax(0,1fr) auto;}
+.folio-topline{display:grid;grid-template-columns:auto minmax(110px,280px) auto;align-items:center;gap:22px;z-index:4;font-family:var(--font-mono);font-size:10px;line-height:1;text-transform:uppercase;letter-spacing:.12em;color:var(--folio-muted);}
+.folio-label{font:inherit;color:var(--folio-ink);margin:0;white-space:nowrap;}
+.folio-progress{position:relative;height:1px;background:rgba(223,231,226,.16);overflow:hidden;}
+.folio-progress-fill{position:absolute;inset:0;transform-origin:left center;transform:scaleX(0);background:var(--folio-accent);will-change:transform;}
+.folio-instruction{text-align:right;white-space:nowrap;}
+.folio-stage{position:relative;display:flex;align-items:center;justify-content:center;min-height:0;z-index:2;}
+.folio-ribbon{position:relative;width:min(94vw,1220px);height:min(58vh,590px);perspective:1300px;transform-style:preserve-3d;touch-action:pan-y;user-select:none;}
+.folio-ribbon.is-dragging{cursor:grabbing;}
+.folio-project{position:absolute;left:50%;top:50%;width:clamp(72px,7.6vw,110px);height:min(56vh,560px);padding:0;margin:0;border:0;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer;will-change:transform,opacity;transform-style:preserve-3d;transform-origin:center;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+.folio-project-inner{position:absolute;inset:0;overflow:hidden;border:1px solid var(--folio-line);background:#111;transition:border-color .25s ease,box-shadow .35s ease,filter .35s ease;}
+.folio-project::before{content:"";position:absolute;inset:-8px;z-index:-1;background:var(--card-accent,var(--folio-accent));opacity:0;filter:blur(24px);transition:opacity .35s ease;}
+.folio-project:hover::before,.folio-project.is-active::before{opacity:.12;}
+.folio-project:hover .folio-project-inner,.folio-project.is-active .folio-project-inner{border-color:color-mix(in srgb,var(--card-accent,var(--folio-accent)) 58%,transparent);}
+.folio-project:focus-visible{outline:1px solid var(--card-accent,var(--folio-accent));outline-offset:6px;border-radius:0;}
+.folio-project img,.folio-cover-fallback{display:block;width:100%;height:100%;object-fit:cover;}
+.folio-project img{filter:grayscale(1) saturate(.1) brightness(.52) contrast(1.08);transition:filter .4s var(--ease),transform .8s var(--ease);}
+.folio-project:hover img,.folio-project.is-active img{filter:grayscale(0) saturate(.95) brightness(.9) contrast(1.03);transform:scale(1.035);}
+.folio-cover-fallback{position:relative;overflow:hidden;background:var(--cover-bg,#111);color:var(--cover-ink,#eee);filter:grayscale(.92) saturate(.18) brightness(.62);transition:filter .4s var(--ease),transform .8s var(--ease);}
+.folio-cover-fallback::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 49.5%,color-mix(in srgb,var(--cover-accent,#fff) 22%,transparent) 50%,transparent 50.5%),repeating-linear-gradient(0deg,transparent 0 34px,color-mix(in srgb,var(--cover-ink,#fff) 9%,transparent) 35px 36px);opacity:.7;}
+.folio-cover-fallback::after{content:"";position:absolute;width:120%;aspect-ratio:1;border:1px solid var(--cover-accent,#fff);border-radius:50%;left:-52%;top:18%;opacity:.18;}
+.folio-project:hover .folio-cover-fallback,.folio-project.is-active .folio-cover-fallback{filter:grayscale(0) saturate(1) brightness(.95);transform:scale(1.02);}
+.folio-cover-abbr{position:absolute;left:50%;top:50%;z-index:2;writing-mode:vertical-rl;transform:translate(-50%,-50%) rotate(180deg);font-family:var(--font-display);font-size:clamp(34px,5.1vw,72px);font-weight:700;line-height:.78;letter-spacing:-.08em;text-transform:uppercase;}
+.folio-project-index{position:absolute;top:10px;left:10px;z-index:3;font-family:var(--font-mono);font-size:9px;letter-spacing:.08em;color:#fff;mix-blend-mode:difference;opacity:.78;}
+.folio-mobile-label{display:none;}
+.folio-caption{position:relative;z-index:4;display:grid;grid-template-columns:minmax(0,1fr) minmax(310px,.62fr);align-items:end;gap:44px;min-height:150px;border-top:1px solid var(--folio-line);padding-top:18px;}
+.folio-caption-main{min-width:0;}
+.folio-caption-index{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;color:var(--folio-accent);margin-bottom:8px;}
+.folio-caption-title{margin:0;font-family:var(--font-display);font-size:clamp(42px,6.8vw,102px);font-weight:600;line-height:.84;letter-spacing:-.055em;color:var(--folio-ink);max-width:12ch;text-wrap:balance;}
+.folio-caption-side{display:grid;gap:18px;align-self:end;padding-bottom:4px;}
+.folio-caption-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
+.folio-meta-block span{display:block;}.folio-meta-key{font-family:var(--font-mono);font-size:8.5px;letter-spacing:.14em;color:var(--folio-muted);margin-bottom:5px;}.folio-meta-value{font-family:var(--font-mono);font-size:10px;line-height:1.35;color:var(--folio-ink);text-transform:uppercase;}
+.folio-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.folio-open{background:none;border:0;border-bottom:1px solid currentColor;color:var(--folio-ink);padding:0 0 4px;cursor:pointer;font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;transition:color .2s ease,border-color .2s ease;}.folio-open:hover{color:var(--folio-accent);border-color:var(--folio-accent);}
+.folio-nav{display:flex;align-items:center;gap:7px;}.folio-nav button{width:32px;height:32px;border:1px solid var(--folio-line);border-radius:50%;background:none;color:var(--folio-ink);cursor:pointer;font-family:var(--font-mono);font-size:13px;line-height:1;transition:border-color .2s ease,color .2s ease,transform .2s ease;}.folio-nav button:hover{border-color:var(--folio-accent);color:var(--folio-accent);transform:scale(1.04);}
+@media(max-height:720px) and (min-width:821px){.folio-sticky{min-height:560px}.folio-ribbon{height:52vh}.folio-project{height:50vh}.folio-caption{min-height:126px}.folio-caption-title{font-size:clamp(38px,5.8vw,78px)}}
+@media(max-width:820px){
+ .folio-section{height:auto;padding:82px 0 92px;overflow:hidden}.folio-sticky{position:relative;top:auto;height:auto;min-height:0;overflow:visible}.folio-shell{height:auto;display:block;padding:0 18px}.folio-topline{grid-template-columns:auto 1fr;margin-bottom:34px}.folio-progress{display:none}.folio-instruction{text-align:right;font-size:9px}.folio-stage{display:block}.folio-ribbon{position:static;width:100%;height:auto;display:grid;grid-template-columns:1fr;gap:18px;perspective:none;touch-action:auto}.folio-project{position:relative;left:auto;top:auto;width:100%;height:auto;aspect-ratio:4/3;transform:none !important;opacity:1 !important;will-change:auto}.folio-project-inner{position:absolute;inset:0}.folio-project::before{display:none}.folio-project img{filter:grayscale(.9) saturate(.2) brightness(.62)}.folio-project.is-mobile-active img,.folio-project:hover img{filter:grayscale(0) saturate(1) brightness(.92)}.folio-cover-fallback{filter:grayscale(.8) saturate(.28) brightness(.72)}.folio-project.is-mobile-active .folio-cover-fallback,.folio-project:hover .folio-cover-fallback{filter:grayscale(0) saturate(1) brightness(.96)}.folio-cover-abbr{writing-mode:horizontal-tb;transform:translate(-50%,-50%);font-size:clamp(70px,25vw,132px)}.folio-project-index{top:14px;left:14px;font-size:10px}.folio-mobile-label{position:absolute;left:0;right:0;bottom:0;z-index:4;display:grid;grid-template-columns:1fr auto;align-items:end;gap:13px;padding:42px 14px 14px;background:linear-gradient(transparent,rgba(0,0,0,.82));color:#f2f5f3}.folio-mobile-label strong{display:block;font-family:var(--font-display);font-size:clamp(22px,7vw,34px);line-height:.92;letter-spacing:-.035em}.folio-mobile-label small{display:block;margin-top:6px;font-family:var(--font-mono);font-size:8.5px;line-height:1.3;letter-spacing:.08em;text-transform:uppercase;opacity:.72}.folio-mobile-arrow{font-family:var(--font-mono);font-size:17px;color:var(--card-accent,var(--accent))}.folio-caption{display:none}
+}
+@media(prefers-reduced-motion:reduce){.folio-section{height:auto;padding:82px 0}.folio-sticky{position:relative;height:auto;min-height:0;overflow:visible}.folio-shell{height:auto;display:block}.folio-topline{margin-bottom:30px}.folio-progress{display:none}.folio-ribbon{position:static;width:100%;height:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;perspective:none}.folio-project{position:relative;left:auto;top:auto;width:100%;height:auto;aspect-ratio:3/4;transform:none !important;opacity:1 !important;will-change:auto}.folio-project-inner{position:absolute;inset:0}.folio-caption{display:none}.folio-mobile-label{display:grid;position:absolute;left:0;right:0;bottom:0;z-index:4;grid-template-columns:1fr auto;gap:12px;padding:40px 12px 12px;background:linear-gradient(transparent,rgba(0,0,0,.82));color:#fff}.folio-mobile-label strong{font-family:var(--font-display);font-size:24px;line-height:.95}.folio-mobile-label small{display:block;font-family:var(--font-mono);font-size:8px;margin-top:5px;opacity:.7}}
+@media(prefers-reduced-motion:reduce) and (max-width:620px){.folio-ribbon{grid-template-columns:1fr}.folio-project{aspect-ratio:4/3}}
+
+/* ---- click-to-open UX ---- */
+.folio-project{cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.folio-ribbon.is-dragging .folio-project{cursor:grabbing;}
+.folio-card-cue{position:absolute;right:8px;top:8px;z-index:4;font-family:var(--font-mono);font-size:10px;line-height:1;letter-spacing:.06em;text-transform:uppercase;
+  color:#fff;background:rgba(8,10,14,.78);border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:5px 7px;
+  opacity:0;transform:translateY(-3px);transition:opacity .25s ease,transform .25s var(--ease),background .2s ease,color .2s ease;pointer-events:none;white-space:nowrap;}
+.folio-project:hover .folio-card-cue,.folio-project:focus-visible .folio-card-cue,.folio-project.is-active .folio-card-cue{opacity:1;transform:none;}
+.folio-project.is-active:hover .folio-card-cue{background:var(--card-accent,var(--folio-accent));color:#06100d;border-color:transparent;}
+.folio-project:hover .folio-project-inner{box-shadow:0 0 0 1px color-mix(in srgb,var(--card-accent,var(--folio-accent)) 70%,transparent),0 18px 40px -18px color-mix(in srgb,var(--card-accent,var(--folio-accent)) 60%,#000);}
+.folio-title-btn{all:unset;display:block;cursor:pointer;color:inherit;font:inherit;letter-spacing:inherit;line-height:inherit;text-wrap:balance;transition:color .2s ease;}
+.folio-title-btn:hover,.folio-title-btn:focus-visible{color:var(--folio-accent);}
+.folio-title-btn:focus-visible{outline:2px solid var(--folio-accent);outline-offset:6px;}
+.folio-open{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--folio-line);border-radius:999px;padding:11px 18px;min-height:44px;font-size:11px;
+  transition:background .2s ease,color .2s ease,border-color .2s ease;}
+.folio-open:hover,.folio-open:focus-visible{background:var(--folio-accent);color:#06100d;border-color:var(--folio-accent);}
+.folio-nav button{width:44px;height:44px;}
+.folio-instruction{color:var(--folio-ink);opacity:.82;}
+.folio-meta-key{font-size:10px;}.folio-meta-value{font-size:11px;}
+.folio-topline{font-size:11px;}
+@media(max-width:820px){.folio-card-cue{opacity:1;transform:none;font-size:10.5px;padding:6px 9px;}}
 .folio-detail{position:fixed;inset:0;z-index:320;background:var(--folio-detail-bg,#0a0b0b);color:var(--folio-detail-ink,#e7edf5);visibility:hidden;pointer-events:none;clip-path:inset(100% 0 0 0);-webkit-clip-path:inset(100% 0 0 0);transition:clip-path .72s var(--ease),-webkit-clip-path .72s var(--ease),visibility 0s linear .72s;}
 .folio-detail[hidden]{display:none !important;}.folio-detail.is-open{visibility:visible;pointer-events:auto;clip-path:inset(0);-webkit-clip-path:inset(0);transition:clip-path .72s var(--ease),-webkit-clip-path .72s var(--ease);}
 .folio-detail-scroll{height:100%;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;}
@@ -1101,72 +1099,43 @@ footer p{color:var(--text-dim);max-width:460px;margin:0 auto 24px;}
   </div>
 </section>
 
-<section id="projects" class="work-section">
-  <div class="wrap reveal">
-    <div class="section-head">
-      <p class="eyebrow">Projects</p>
-      <h2>Selected work</h2>
-    </div>
-  </div>
-  <div class="cf" id="cf" role="region" aria-roledescription="carousel" aria-label="Selected work">
-    <div class="cf-stage" id="cfStage">
-      <div class="cf-track" id="cfTrack">
-        <button class="cf-card" id="craft" type="button" data-index="0" data-title="Interactive Diploma" data-type="Creative / 3D" data-stack="Three.js" data-status="Fully interactive" data-abbr="ID" data-bg="#0c0906" data-ink="#f4ecdf" data-accent="#f0b429" data-hint="A full 3D, physically-lit recreation of my actual diploma. It's live. Drag it." style="--card-accent:#f0b429;--cover-bg:#0c0906;--cover-ink:#f4ecdf;--cover-accent:#f0b429">
-          <span class="cf-art" aria-hidden="true"><span class="cf-abbr">ID</span></span><span class="cf-shade" aria-hidden="true"></span><span class="cf-index">01</span><span class="cf-live"><i aria-hidden="true"></i>Live</span>
-          <span class="cf-label"><strong>Interactive Diploma</strong><small>Creative / 3D &middot; Three.js</small></span>
-        </button>
-        <button class="cf-card" id="proj-siem" type="button" data-index="1" data-title="Log Correlator SIEM" data-type="Security tool" data-stack="Python" data-status="25 tests passing" data-abbr="SIEM" data-bg="#081413" data-ink="#eafffb" data-accent="#5eead4" data-thumb="screenshots/log-correlator-siem.webp" data-hint="Correlates sequences of events across two log sources into one incident, not two alerts." style="--card-accent:#5eead4;--cover-bg:#081413;--cover-ink:#eafffb;--cover-accent:#5eead4">
-          <img src="screenshots/log-correlator-siem.webp" alt="" width="1200" height="780" loading="lazy" draggable="false"><span class="cf-shade" aria-hidden="true"></span><span class="cf-index">02</span>
-          <span class="cf-label"><strong>Log Correlator SIEM</strong><small>Security tool &middot; Python</small></span>
-        </button>
-        <button class="cf-card" id="proj-helpdesk" type="button" data-index="2" data-title="Helpdesk Ticket Analytics" data-type="Analytics tool" data-stack="Python" data-status="14 tests passing" data-abbr="HD" data-bg="#e9edf1" data-ink="#141b24" data-accent="#285f8f" data-hint="Turns a raw ticket export into SLA compliance, resolution-time, and volume metrics." style="--card-accent:#285f8f;--cover-bg:#e9edf1;--cover-ink:#141b24;--cover-accent:#285f8f">
-          <span class="cf-art" aria-hidden="true"><span class="cf-abbr">HD</span></span><span class="cf-shade" aria-hidden="true"></span><span class="cf-index">03</span>
-          <span class="cf-label"><strong>Helpdesk Ticket Analytics</strong><small>Analytics tool &middot; Python</small></span>
-        </button>
-        <button class="cf-card" id="proj-ad-auditor" type="button" data-index="3" data-title="AD Security Auditor" data-type="Security tool" data-stack="PowerShell" data-status="Pester tested" data-abbr="AD" data-bg="#0d0b14" data-ink="#efeaff" data-accent="#9d84e8" data-thumb="screenshots/ad-security-auditor.webp" data-hint="Audits Active Directory security posture entirely offline, from exported CSV data." style="--card-accent:#9d84e8;--cover-bg:#0d0b14;--cover-ink:#efeaff;--cover-accent:#9d84e8">
-          <img src="screenshots/ad-security-auditor.webp" alt="" width="1200" height="708" loading="lazy" draggable="false"><span class="cf-shade" aria-hidden="true"></span><span class="cf-index">04</span>
-          <span class="cf-label"><strong>AD Security Auditor</strong><small>Security tool &middot; PowerShell</small></span>
-        </button>
-        <button class="cf-card" id="proj-phishing" type="button" data-index="4" data-title="Phishing Email Analyzer" data-type="Security tool" data-stack="Python" data-status="46 tests passing" data-abbr="PH" data-bg="#160a0d" data-ink="#ffe9ee" data-accent="#e8748c" data-thumb="screenshots/phishing-email-analyzer.webp" data-hint="Statically analyzes raw .eml files for phishing indicators, fully offline." style="--card-accent:#e8748c;--cover-bg:#160a0d;--cover-ink:#ffe9ee;--cover-accent:#e8748c">
-          <img src="screenshots/phishing-email-analyzer.webp" alt="" width="1200" height="678" loading="lazy" draggable="false"><span class="cf-shade" aria-hidden="true"></span><span class="cf-index">05</span>
-          <span class="cf-label"><strong>Phishing Email Analyzer</strong><small>Security tool &middot; Python</small></span>
-        </button>
-        <button class="cf-card" id="proj-jotrelay" type="button" data-index="5" data-title="JotRelay" data-type="Web app" data-stack="JS / Supabase" data-status="Live demo" data-abbr="JR" data-bg="#eef7f1" data-ink="#0c1f15" data-accent="#256f4a" data-hint="Real-time encrypted collaborative notepad with shareable links and an installable PWA." style="--card-accent:#256f4a;--cover-bg:#eef7f1;--cover-ink:#0c1f15;--cover-accent:#256f4a">
-          <span class="cf-art" aria-hidden="true"><span class="cf-abbr">JR</span></span><span class="cf-shade" aria-hidden="true"></span><span class="cf-index">06</span><span class="cf-live"><i aria-hidden="true"></i>Live</span>
-          <span class="cf-label"><strong>JotRelay</strong><small>Web app &middot; JS / Supabase</small></span>
-        </button>
-        <button class="cf-card" id="proj-toolkit" type="button" data-index="6" data-title="AD &amp; Endpoint Automation Toolkit" data-type="Automation" data-stack="PowerShell" data-status="PS 5.1 compatible" data-abbr="EP" data-bg="#170f08" data-ink="#ffe9d1" data-accent="#e2a35c" data-hint="Provisioning, offboarding, and compliance scripts. Every write action supports -WhatIf." style="--card-accent:#e2a35c;--cover-bg:#170f08;--cover-ink:#ffe9d1;--cover-accent:#e2a35c">
-          <span class="cf-art" aria-hidden="true"><span class="cf-abbr">EP</span></span><span class="cf-shade" aria-hidden="true"></span><span class="cf-index">07</span>
-          <span class="cf-label"><strong>AD &amp; Endpoint Automation Toolkit</strong><small>Automation &middot; PowerShell</small></span>
-        </button>
-        <button class="cf-card" id="proj-winlog" type="button" data-index="7" data-title="WinLog Threat Hunter" data-type="Threat hunting" data-stack="Python" data-status="25 tests passing" data-abbr="WL" data-bg="#071316" data-ink="#eafbff" data-accent="#5fc9d8" data-hint="Parses Windows Security/Sysmon events and maps findings to MITRE ATT&amp;CK techniques." style="--card-accent:#5fc9d8;--cover-bg:#071316;--cover-ink:#eafbff;--cover-accent:#5fc9d8">
-          <span class="cf-art" aria-hidden="true"><span class="cf-abbr">WL</span></span><span class="cf-shade" aria-hidden="true"></span><span class="cf-index">08</span>
-          <span class="cf-label"><strong>WinLog Threat Hunter</strong><small>Threat hunting &middot; Python</small></span>
-        </button>
-        <button class="cf-card" id="proj-ghostball" type="button" data-index="8" data-title="Ghost Ball" data-type="Browser game" data-stack="Vanilla JS / Canvas" data-status="Live demo" data-abbr="GB" data-bg="#0a1c12" data-ink="#eaf3ea" data-accent="#a3d97b" data-hint="A browser pool game built around feel: the speed of your stroke is the speed of the shot." style="--card-accent:#a3d97b;--cover-bg:#0a1c12;--cover-ink:#eaf3ea;--cover-accent:#a3d97b">
-          <span class="cf-art" aria-hidden="true"><span class="cf-abbr">GB</span></span><span class="cf-shade" aria-hidden="true"></span><span class="cf-index">09</span><span class="cf-live"><i aria-hidden="true"></i>Live</span>
-          <span class="cf-label"><strong>Ghost Ball</strong><small>Browser game &middot; Vanilla JS / Canvas</small></span>
-        </button>
+<section id="projects" class="folio-section" style="--folio-count:9">
+  <div class="folio-sticky">
+    <div class="folio-shell">
+      <div class="folio-topline"><h2 class="folio-label">Selected work</h2><div class="folio-progress" aria-hidden="true"><span class="folio-progress-fill" id="folioProgressFill"></span></div><span class="folio-instruction" id="folioInstruction">Scroll to browse · click a card to open</span></div>
+      <div class="folio-stage"><div class="folio-ribbon" id="folioRibbon" aria-label="Project gallery" aria-keyshortcuts="ArrowLeft ArrowRight ArrowDown Enter">
+          <button class="folio-project" id="craft" type="button" data-index="0" data-title="Interactive Diploma" data-type="Creative / 3D" data-stack="Three.js" data-status="Fully interactive" data-abbr="ID" data-bg="#0c0906" data-ink="#f4ecdf" data-accent="#f0b429" data-hint="A full 3D, physically-lit recreation of my actual diploma. It's live. Drag it." style="--card-accent:#f0b429;">
+            <span class="folio-project-inner"><span class="folio-cover-fallback" style="--cover-bg:#0c0906;--cover-ink:#f4ecdf;--cover-accent:#f0b429;"><span class="folio-cover-abbr">ID</span></span><span class="folio-project-index">01</span><span class="folio-card-cue" aria-hidden="true">Open &nearr;</span><span class="folio-mobile-label"><span><strong>Interactive Diploma</strong><small>Creative / 3D · Three.js</small></span><span class="folio-mobile-arrow">↗</span></span></span>
+          </button>
+          <button class="folio-project" id="proj-siem" type="button" data-index="1" data-title="Log Correlator SIEM" data-type="Security tool" data-stack="Python" data-status="25 tests passing" data-abbr="SIEM" data-bg="#081413" data-ink="#eafffb" data-accent="#5eead4" data-thumb="screenshots/log-correlator-siem.webp" data-hint="Correlates sequences of events across two log sources into one incident, not two alerts." style="--card-accent:#5eead4;">
+            <span class="folio-project-inner"><img src="screenshots/log-correlator-siem.webp" alt="" loading="lazy"><span class="folio-project-index">02</span><span class="folio-card-cue" aria-hidden="true">Open &nearr;</span><span class="folio-mobile-label"><span><strong>Log Correlator SIEM</strong><small>Security tool · Python</small></span><span class="folio-mobile-arrow">↗</span></span></span>
+          </button>
+          <button class="folio-project" id="proj-helpdesk" type="button" data-index="2" data-title="Helpdesk Ticket Analytics" data-type="Analytics tool" data-stack="Python" data-status="14 tests passing" data-abbr="HD" data-bg="#e9edf1" data-ink="#141b24" data-accent="#285f8f" data-hint="Turns a raw ticket export into SLA compliance, resolution-time, and volume metrics." style="--card-accent:#285f8f;">
+            <span class="folio-project-inner"><span class="folio-cover-fallback" style="--cover-bg:#e9edf1;--cover-ink:#141b24;--cover-accent:#285f8f;"><span class="folio-cover-abbr">HD</span></span><span class="folio-project-index">03</span><span class="folio-card-cue" aria-hidden="true">Open &nearr;</span><span class="folio-mobile-label"><span><strong>Helpdesk Ticket Analytics</strong><small>Analytics tool · Python</small></span><span class="folio-mobile-arrow">↗</span></span></span>
+          </button>
+          <button class="folio-project" id="proj-ad-auditor" type="button" data-index="3" data-title="AD Security Auditor" data-type="Security tool" data-stack="PowerShell" data-status="Pester tested" data-abbr="AD" data-bg="#0d0b14" data-ink="#efeaff" data-accent="#9d84e8" data-thumb="screenshots/ad-security-auditor.webp" data-hint="Audits Active Directory security posture entirely offline, from exported CSV data." style="--card-accent:#9d84e8;">
+            <span class="folio-project-inner"><img src="screenshots/ad-security-auditor.webp" alt="" loading="lazy"><span class="folio-project-index">04</span><span class="folio-card-cue" aria-hidden="true">Open &nearr;</span><span class="folio-mobile-label"><span><strong>AD Security Auditor</strong><small>Security tool · PowerShell</small></span><span class="folio-mobile-arrow">↗</span></span></span>
+          </button>
+          <button class="folio-project" id="proj-phishing" type="button" data-index="4" data-title="Phishing Email Analyzer" data-type="Security tool" data-stack="Python" data-status="46 tests passing" data-abbr="PH" data-bg="#160a0d" data-ink="#ffe9ee" data-accent="#e8748c" data-thumb="screenshots/phishing-email-analyzer.webp" data-hint="Statically analyzes raw .eml files for phishing indicators, fully offline." style="--card-accent:#e8748c;">
+            <span class="folio-project-inner"><img src="screenshots/phishing-email-analyzer.webp" alt="" loading="lazy"><span class="folio-project-index">05</span><span class="folio-card-cue" aria-hidden="true">Open &nearr;</span><span class="folio-mobile-label"><span><strong>Phishing Email Analyzer</strong><small>Security tool · Python</small></span><span class="folio-mobile-arrow">↗</span></span></span>
+          </button>
+          <button class="folio-project" id="proj-jotrelay" type="button" data-index="5" data-title="JotRelay" data-type="Web app" data-stack="JS / Supabase" data-status="Live demo" data-abbr="JR" data-bg="#eef7f1" data-ink="#0c1f15" data-accent="#256f4a" data-hint="Real-time encrypted collaborative notepad with shareable links and an installable PWA." style="--card-accent:#256f4a;">
+            <span class="folio-project-inner"><span class="folio-cover-fallback" style="--cover-bg:#eef7f1;--cover-ink:#0c1f15;--cover-accent:#256f4a;"><span class="folio-cover-abbr">JR</span></span><span class="folio-project-index">06</span><span class="folio-card-cue" aria-hidden="true">Open &nearr;</span><span class="folio-mobile-label"><span><strong>JotRelay</strong><small>Web app · JS / Supabase</small></span><span class="folio-mobile-arrow">↗</span></span></span>
+          </button>
+          <button class="folio-project" id="proj-toolkit" type="button" data-index="6" data-title="AD &amp; Endpoint Automation Toolkit" data-type="Automation" data-stack="PowerShell" data-status="PS 5.1 compatible" data-abbr="EP" data-bg="#170f08" data-ink="#ffe9d1" data-accent="#e2a35c" data-hint="Provisioning, offboarding, and compliance scripts. Every write action supports -WhatIf." style="--card-accent:#e2a35c;">
+            <span class="folio-project-inner"><span class="folio-cover-fallback" style="--cover-bg:#170f08;--cover-ink:#ffe9d1;--cover-accent:#e2a35c;"><span class="folio-cover-abbr">EP</span></span><span class="folio-project-index">07</span><span class="folio-card-cue" aria-hidden="true">Open &nearr;</span><span class="folio-mobile-label"><span><strong>AD &amp; Endpoint Automation Toolkit</strong><small>Automation · PowerShell</small></span><span class="folio-mobile-arrow">↗</span></span></span>
+          </button>
+          <button class="folio-project" id="proj-winlog" type="button" data-index="7" data-title="WinLog Threat Hunter" data-type="Threat hunting" data-stack="Python" data-status="25 tests passing" data-abbr="WL" data-bg="#071316" data-ink="#eafbff" data-accent="#5fc9d8" data-hint="Parses Windows Security/Sysmon events and maps findings to MITRE ATT&amp;CK techniques." style="--card-accent:#5fc9d8;">
+            <span class="folio-project-inner"><span class="folio-cover-fallback" style="--cover-bg:#071316;--cover-ink:#eafbff;--cover-accent:#5fc9d8;"><span class="folio-cover-abbr">WL</span></span><span class="folio-project-index">08</span><span class="folio-card-cue" aria-hidden="true">Open &nearr;</span><span class="folio-mobile-label"><span><strong>WinLog Threat Hunter</strong><small>Threat hunting · Python</small></span><span class="folio-mobile-arrow">↗</span></span></span>
+          </button>
+          <button class="folio-project" id="proj-ghostball" type="button" data-index="8" data-title="Ghost Ball" data-type="Browser game" data-stack="Vanilla JS / Canvas" data-status="Live demo" data-abbr="GB" data-bg="#0a1c12" data-ink="#eaf3ea" data-accent="#a3d97b" data-hint="A browser pool game built around feel: the speed of your stroke is the speed of the shot." style="--card-accent:#a3d97b;">
+            <span class="folio-project-inner"><span class="folio-cover-fallback" style="--cover-bg:#0a1c12;--cover-ink:#eaf3ea;--cover-accent:#a3d97b;"><span class="folio-cover-abbr">GB</span></span><span class="folio-project-index">09</span><span class="folio-card-cue" aria-hidden="true">Open &nearr;</span><span class="folio-mobile-label"><span><strong>Ghost Ball</strong><small>Browser game &middot; Vanilla JS / Canvas</small></span><span class="folio-mobile-arrow">&nearr;</span></span></span>
+          </button>
+        </div></div>
+      <div class="folio-caption">
+        <div class="folio-caption-main"><div class="folio-caption-index" id="folioCaptionIndex">01 / 09</div><h3 class="folio-caption-title" id="folioCaptionTitle"><button type="button" class="folio-title-btn" id="folioTitleBtn">Interactive Diploma</button></h3></div>
+        <div class="folio-caption-side"><div class="folio-caption-meta"><div class="folio-meta-block"><span class="folio-meta-key">A / Type</span><span class="folio-meta-value" id="folioMetaType">Creative / 3D</span></div><div class="folio-meta-block"><span class="folio-meta-key">B / Stack</span><span class="folio-meta-value" id="folioMetaStack">Three.js</span></div><div class="folio-meta-block"><span class="folio-meta-key">C / Status</span><span class="folio-meta-value" id="folioMetaStatus">Fully interactive</span></div></div><div class="folio-actions"><button class="folio-open" id="folioOpen" type="button">Explore project <span aria-hidden="true">↗</span></button><div class="folio-nav" aria-label="Project navigation"><button id="folioPrev" type="button" aria-label="Previous project">←</button><button id="folioNext" type="button" aria-label="Next project">→</button></div></div></div>
       </div>
-    </div>
-    <div class="wrap">
-      <div class="cf-caption" id="cfCaption" aria-live="polite">
-        <div class="cf-cap-main">
-          <p class="cf-cap-kicker"><span id="cfCapIndex">01 / 09</span><span id="cfCapType"></span></p>
-          <h3 class="cf-cap-title" id="cfCapTitle"></h3>
-          <p class="cf-cap-pitch" id="cfCapPitch"></p>
-        </div>
-        <div class="cf-cap-side">
-          <span class="cf-cap-status" id="cfCapStatus"></span>
-          <button class="btn btn-primary cf-open" id="cfOpen" type="button">Open case study <span aria-hidden="true">&nearr;</span></button>
-        </div>
-      </div>
-      <div class="cf-controls">
-        <button class="cf-arrow" id="cfPrev" type="button" aria-label="Previous project">&larr;</button>
-        <div class="cf-dots" id="cfDots" role="group" aria-label="Choose project"></div>
-        <button class="cf-arrow" id="cfNext" type="button" aria-label="Next project">&rarr;</button>
-      </div>
-      <p class="cf-hint">Drag, swipe, or use the arrow keys. Tap the centre card to open it.</p>
     </div>
   </div>
 </section>
@@ -1685,20 +1654,21 @@ var hsLenis = null;
 
  
 (function(){
-  var root = document.getElementById('projects');
-  var cf = document.getElementById('cf');
-  var grid = document.getElementById('cfTrack');
+  var root = document.querySelector('.folio-section');
+  var ribbon = document.getElementById('folioRibbon');
   var detail = document.getElementById('folioDetail');
   var sourceWrap = document.getElementById('folioSource');
-  if(!root || !cf || !grid || !detail || !sourceWrap) return;
+  if(!root || !ribbon || !detail || !sourceWrap) return;
 
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var cards = Array.prototype.slice.call(grid.querySelectorAll('.cf-card'));
+  var mobileMQ = window.matchMedia ? window.matchMedia('(max-width:820px)') : {matches:false};
+  var cards = Array.prototype.slice.call(ribbon.querySelectorAll('.folio-project'));
   var N = cards.length;
   if(!N) return;
 
   function pad(n){ return String(n).padStart(2,'0'); }
   function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
+  function staticLayout(){ return reduce || mobileMQ.matches; }
 
   var PROJECTS = cards.map(function(card,i){
     var source = sourceWrap.querySelector('.proj-source[data-project="' + card.id + '"]');
@@ -1725,172 +1695,214 @@ var hsLenis = null;
     return -1;
   }
 
-  /* ---------- coverflow ---------- */
-  var stage = document.getElementById('cfStage');
-  var capBox = document.getElementById('cfCaption');
-  var capIndex = document.getElementById('cfCapIndex');
-  var capType = document.getElementById('cfCapType');
-  var capTitle = document.getElementById('cfCapTitle');
-  var capPitch = document.getElementById('cfCapPitch');
-  var capStatus = document.getElementById('cfCapStatus');
-  var openBtn = document.getElementById('cfOpen');
-  var prevBtn = document.getElementById('cfPrev');
-  var nextBtn = document.getElementById('cfNext');
-  var dotsBox = document.getElementById('cfDots');
+  var progressFill = document.getElementById('folioProgressFill');
+  var captionIndex = document.getElementById('folioCaptionIndex');
+  var captionTitle = document.getElementById('folioCaptionTitle');
+  var metaType = document.getElementById('folioMetaType');
+  var metaStack = document.getElementById('folioMetaStack');
+  var metaStatus = document.getElementById('folioMetaStatus');
+  var openBtn = document.getElementById('folioOpen');
+  var prevBtn = document.getElementById('folioPrev');
+  var nextBtn = document.getElementById('folioNext');
+  var instruction = document.getElementById('folioInstruction');
 
-  var pos = 0, target = 0, raf = null, activeIndex = -1, cardW = 360;
-  var dragging = false, moved = false, dragX0 = 0, dragPos0 = 0, lastX = 0, lastT = 0, vel = 0, suppressClickUntil = 0;
-  var swapTimer = null;
+  var activeIndex = -1;
+  var keyboardIndex = 0;
+  var keyboardNavUntil = 0;
+  var position = 0;
+  var lastRendered = NaN;
+  var sectionStart = 0;
+  var sectionHeight = 1;
+  var sectionSpan = 1;
+  var inSection = false;
+  var scrollRAF = null;
 
-  var dots = PROJECTS.map(function(p,i){
-    var d = document.createElement('button');
-    d.type = 'button'; d.className = 'cf-dot'; d.setAttribute('aria-label','Show ' + p.title);
-    d.addEventListener('click',function(){ goTo(i); });
-    dotsBox.appendChild(d);
-    return d;
-  });
-
-  function measure(){ cardW = cards[0].offsetWidth || 360; }
-
-  function layout(){
-    var x0 = cardW * 0.8, step = cardW * 0.3;
-    var narrow = cardW < 300;
-    if(narrow){ x0 = cardW * 0.7; step = cardW * 0.22; }
+  function setActive(index){
+    index = clamp(index,0,N-1);
+    if(index === activeIndex) return;
+    activeIndex = index;
+    var p = PROJECTS[index];
+    root.style.setProperty('--folio-accent',p.accent);
     cards.forEach(function(card,i){
-      var d = i - pos, ad = Math.abs(d), sg = d < 0 ? -1 : 1;
-      var near = Math.min(ad,1);
-      var x = sg * (near * x0 + Math.max(0,ad - 1) * step);
-      var z = -near * 150 - Math.max(0,ad - 1) * 50;
-      var ry = -sg * near * (narrow ? 42 : 54);
-      var sc = 1 - Math.min(ad,3) * 0.035;
-      var op = ad > 4.2 ? 0 : 1 - Math.max(0,ad - 1.2) * 0.22;
-      card.style.transform = 'translate(-50%,-50%) translate3d(' + x.toFixed(1) + 'px,0,' + z.toFixed(1) + 'px) rotateY(' + ry.toFixed(2) + 'deg) scale(' + sc.toFixed(3) + ')';
-      card.style.opacity = Math.max(0,op).toFixed(3);
-      card.style.zIndex = String(100 - Math.round(ad * 10));
-      card.style.setProperty('--cf-dim',(near * 0.5).toFixed(3));
-      card.style.visibility = ad > 4.2 ? 'hidden' : 'visible';
-      card.style.pointerEvents = ad > 3.6 ? 'none' : '';
+      var active = i === index;
+      card.classList.toggle('is-active',active);
+      if(active) card.setAttribute('aria-current','true');
+      else card.removeAttribute('aria-current');
     });
-    var idx = clamp(Math.round(pos),0,N-1);
-    if(idx !== activeIndex) setActive(idx);
+    if(captionIndex) captionIndex.textContent = pad(index+1) + ' / ' + pad(N);
+    if(captionTitle){ var tb = captionTitle.querySelector('button'); (tb||captionTitle).textContent = p.title; }
+    if(metaType) metaType.textContent = p.type;
+    if(metaStack) metaStack.textContent = p.stack;
+    if(metaStatus) metaStatus.textContent = p.status;
   }
 
-  function setActive(idx){
-    var first = activeIndex === -1;
-    activeIndex = idx;
-    var p = PROJECTS[idx];
-    cf.style.setProperty('--cf-accent',p.accent);
-    cards.forEach(function(c,i){
-      var on = i === idx;
-      c.classList.toggle('is-active',on);
-      c.tabIndex = on ? 0 : -1;
-      if(on) c.setAttribute('aria-current','true'); else c.removeAttribute('aria-current');
-      c.setAttribute('aria-label',(on ? 'Open case study: ' : 'Show ') + p0(i));
+  function render(nextPosition){
+    if(staticLayout()) return;
+    if(Number.isFinite(lastRendered) && Math.abs(nextPosition-lastRendered) < 0.00025) return;
+    lastRendered = nextPosition;
+    position = nextPosition;
+    var spacing = clamp(window.innerWidth * 0.086,88,126);
+    cards.forEach(function(card,i){
+      var d = i-nextPosition;
+      var ad = Math.abs(d);
+      var x = d*spacing;
+      var y = Math.min(118,ad*ad*6.5);
+      var z = -Math.min(430,ad*96);
+      var ry = clamp(d*-12.5,-64,64);
+      var scale = 1-Math.min(.29,ad*.052);
+      var opacity = clamp(1-ad*.085,.22,1);
+      card.style.transform = 'translate(-50%,-50%) translate3d(' + x.toFixed(2) + 'px,' + y.toFixed(2) + 'px,' + z.toFixed(2) + 'px) rotateY(' + ry.toFixed(2) + 'deg) scale(' + scale.toFixed(3) + ')';
+      card.style.opacity = opacity.toFixed(3);
+      card.style.zIndex = String(100-Math.round(ad*10));
     });
-    dots.forEach(function(d,i){ d.setAttribute('aria-current',i === idx ? 'true' : 'false'); });
-    if(prevBtn) prevBtn.disabled = idx === 0;
-    if(nextBtn) nextBtn.disabled = idx === N-1;
-    function fill(){
-      capIndex.textContent = pad(idx+1) + ' / ' + pad(N);
-      capType.textContent = p.type + ' · ' + p.stack;
-      capTitle.textContent = p.title;
-      capPitch.textContent = p.hint;
-      capStatus.textContent = p.status;
-      capBox.classList.remove('is-swapping');
+    if(progressFill){
+      var pp = N > 1 ? clamp(nextPosition/(N-1),0,1) : 1;
+      progressFill.style.transform = 'scaleX(' + pp.toFixed(4) + ')';
     }
-    clearTimeout(swapTimer);
-    if(first || reduce){ fill(); }
-    else{ capBox.classList.add('is-swapping'); swapTimer = setTimeout(fill,140); }
-  }
-  function p0(i){ return PROJECTS[i].title; }
-
-  function tick(){
-    raf = null;
-    var diff = target - pos;
-    if(Math.abs(diff) < 0.0008){ pos = target; layout(); return; }
-    pos += diff * 0.16;
-    layout();
-    raf = requestAnimationFrame(tick);
-  }
-  function kick(){ if(reduce){ pos = target; layout(); return; } if(!raf) raf = requestAnimationFrame(tick); }
-
-  function goTo(i,instant){
-    target = clamp(Math.round(i),0,N-1);
-    if(instant){ pos = target; layout(); return; }
-    kick();
+    setActive(clamp(Math.round(nextPosition),0,N-1));
   }
 
-  cf.classList.add('cf-js');
-  measure();
-  layout();
-  window.addEventListener('resize',function(){ measure(); layout(); });
-  /* far-away cards are visibility:hidden, so lazy images would pop in mid-animation: fetch them once idle */
-  function warm(){ cards.forEach(function(c){ var im = c.querySelector('img'); if(im) im.loading = 'eager'; }); }
-  if('requestIdleCallback' in window) window.addEventListener('load',function(){ requestIdleCallback(warm); });
-  else window.addEventListener('load',function(){ setTimeout(warm,1500); });
-  if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ measure(); layout(); });
+  function setSectionState(next){
+    if(next === inSection) return;
+    inSection = next;
+    document.body.classList.toggle('folio-active',next);
+    try{ window.dispatchEvent(new CustomEvent('hs:folio-active',{detail:next})); }catch(e){}
+  }
 
-  stage.addEventListener('pointerdown',function(e){
-    if(e.pointerType === 'mouse' && e.button !== 0) return;
-    dragging = true; moved = false; dragX0 = lastX = e.clientX; lastT = performance.now(); vel = 0; dragPos0 = pos;
-  });
-  stage.addEventListener('pointermove',function(e){
-    if(!dragging) return;
-    var dx = e.clientX - dragX0;
-    if(!moved && Math.abs(dx) > 6){
-      moved = true;
-      stage.classList.add('is-dragging');
-      try{ stage.setPointerCapture(e.pointerId); }catch(err){}
+  function measure(){
+    if(staticLayout()) return;
+    var rect = root.getBoundingClientRect();
+    sectionStart = window.scrollY + rect.top;
+    sectionHeight = root.offsetHeight || 1;
+    sectionSpan = Math.max(1,sectionHeight-window.innerHeight);
+    lastRendered = NaN;
+    scheduleFromScroll();
+  }
+
+  function updateFromScroll(){
+    scrollRAF = null;
+    if(staticLayout()) return;
+    var y = window.scrollY;
+    var progress = clamp((y-sectionStart)/sectionSpan,0,1);
+    var nextPosition = progress*(N-1);
+    var nextInSection = y >= sectionStart-window.innerHeight*.22 && y <= sectionStart+sectionHeight-window.innerHeight*.78;
+    setSectionState(nextInSection);
+    render(nextPosition);
+    if(performance.now() >= keyboardNavUntil) keyboardIndex = activeIndex < 0 ? clamp(Math.round(nextPosition),0,N-1) : activeIndex;
+  }
+
+  function scheduleFromScroll(){
+    if(scrollRAF || staticLayout()) return;
+    scrollRAF = requestAnimationFrame(updateFromScroll);
+  }
+
+  function sectionTop(){ return sectionStart; }
+
+  function scrollToIndex(index,instant,source){
+    index = clamp(index,0,N-1);
+    keyboardIndex = index;
+    if(source === 'keyboard') keyboardNavUntil = performance.now()+520;
+    if(staticLayout()){
+      var c = cards[index];
+      if(c) c.scrollIntoView({behavior:instant||reduce?'auto':'smooth',block:'center'});
+      return;
     }
-    if(!moved) return;
-    var now = performance.now(), dt = Math.max(1,now - lastT);
-    vel = 0.8 * vel + 0.2 * ((e.clientX - lastX) / dt);
-    lastX = e.clientX; lastT = now;
-    pos = clamp(dragPos0 - dx / (cardW * 0.8),-0.35,N - 0.65);
-    target = pos;
-    layout();
+    var y = sectionTop() + (N>1 ? sectionSpan*(index/(N-1)) : 0);
+    if(instant){
+      if(window.hsLenis){
+        try{ window.hsLenis.scrollTo(y,{immediate:true}); return; }catch(e){}
+      }
+      window.scrollTo({top:y,behavior:'auto'});
+      return;
+    }
+    if(window.hsLenis){
+      try{
+        window.hsLenis.scrollTo(y,{
+          duration: source === 'keyboard' ? .36 : .52,
+          onComplete: function(){ keyboardNavUntil = 0; keyboardIndex = activeIndex < 0 ? index : activeIndex; }
+        });
+        return;
+      }catch(e){}
+    }
+    window.scrollTo({top:y,behavior:reduce?'auto':'smooth'});
+  }
+
+  function resetKeyboardToScroll(){
+    keyboardNavUntil = 0;
+    requestAnimationFrame(function(){
+      keyboardIndex = activeIndex < 0 ? clamp(Math.round(position),0,N-1) : activeIndex;
+    });
+  }
+
+  if(!staticLayout()){
+    window.addEventListener('scroll',scheduleFromScroll,{passive:true});
+    window.addEventListener('resize',measure);
+    root.addEventListener('wheel',resetKeyboardToScroll,{passive:true});
+    root.addEventListener('pointerdown',resetKeyboardToScroll,{passive:true});
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(measure).catch(function(){});
+    window.addEventListener('load',measure,{once:true});
+    measure();
+  }else{
+    if(instruction) instruction.textContent = 'Tap a project to open it';
+    cards.forEach(function(c){ c.style.transform=''; c.style.opacity=''; c.style.zIndex=''; });
+    setActive(0);
+    keyboardIndex = 0;
+    if('IntersectionObserver' in window){
+      var mobileIO = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){ en.target.classList.toggle('is-mobile-active',en.isIntersecting); });
+      },{threshold:.48});
+      cards.forEach(function(c){ mobileIO.observe(c); });
+    }
+  }
+
+  var dragStartX = 0;
+  var dragging = false;
+  var dragMoved = false;
+  var suppressClickUntil = 0;
+  ribbon.addEventListener('pointerdown',function(e){
+    if(staticLayout() || (e.pointerType==='mouse' && e.button!==0)) return;
+    dragStartX = e.clientX;
+    dragging = true;
+    dragMoved = false;
   });
-  function endDrag(){
+  ribbon.addEventListener('pointermove',function(e){
+    if(!dragging || dragMoved) return;
+    if(Math.abs(e.clientX-dragStartX) > 8){
+      dragMoved = true;
+      ribbon.classList.add('is-dragging');
+      try{ ribbon.setPointerCapture(e.pointerId); }catch(err){}
+    }
+  });
+  function endDrag(e){
     if(!dragging) return;
     dragging = false;
-    stage.classList.remove('is-dragging');
-    if(moved){
-      suppressClickUntil = Date.now() + 250;
-      var fling = clamp(-vel * 120 / (cardW * 0.8),-1,1);
-      target = clamp(Math.round(pos + fling),0,N-1);
-      kick();
-    }
+    ribbon.classList.remove('is-dragging');
+    if(!dragMoved) return;
+    var dx = e.clientX-dragStartX;
+    suppressClickUntil = Date.now()+350;
+    if(Math.abs(dx)>42) scrollToIndex(activeIndex+(dx<0?1:-1),false,'drag');
   }
-  stage.addEventListener('pointerup',endDrag);
-  stage.addEventListener('pointercancel',endDrag);
+  ribbon.addEventListener('pointerup',endDrag);
+  ribbon.addEventListener('pointercancel',function(e){ endDrag(e); });
 
-  var wheelAcc = 0, wheelAt = 0;
-  stage.addEventListener('wheel',function(e){
-    if(Math.abs(e.deltaX) <= Math.abs(e.deltaY) || Math.abs(e.deltaX) < 3) return;
-    e.preventDefault();
-    var now = performance.now();
-    if(now - wheelAt > 200) wheelAcc = 0;
-    wheelAt = now; wheelAcc += e.deltaX;
-    if(Math.abs(wheelAcc) > 50){ goTo(target + (wheelAcc > 0 ? 1 : -1)); wheelAcc = 0; }
-  },{passive:false});
-
-  stage.addEventListener('keydown',function(e){
-    var k = e.key, to = null;
-    if(k === 'ArrowRight') to = target + 1;
-    else if(k === 'ArrowLeft') to = target - 1;
-    else if(k === 'Home') to = 0;
-    else if(k === 'End') to = N - 1;
-    if(to === null) return;
-    e.preventDefault();
-    to = clamp(to,0,N-1);
-    goTo(to);
-    cards[to].focus({preventScroll:true});
+  /* One click handler for the whole ribbon: the card under the pointer opens. Rotated 3D cards can be missed by the
+     browser's hit-testing, so fall back to the cards' on-screen rectangles, front-most (closest to the centre) first. */
+  function cardAtPoint(x,y){
+    var order = cards.map(function(c,k){ return k; }).sort(function(a,b){ return Math.abs(a-position)-Math.abs(b-position); });
+    for(var n=0;n<order.length;n++){
+      var r = cards[order[n]].getBoundingClientRect();
+      if(x>=r.left && x<=r.right && y>=r.top && y<=r.bottom) return order[n];
+    }
+    return -1;
+  }
+  ribbon.addEventListener('click',function(e){
+    if(Date.now()<suppressClickUntil) return;
+    var hit = e.target.closest ? e.target.closest('.folio-project') : null;
+    var i = hit ? cards.indexOf(hit) : (e.detail!==0 ? cardAtPoint(e.clientX,e.clientY) : -1);
+    if(i===-1) return;
+    keyboardIndex = i;
+    openDetail(i);
   });
-
-  if(prevBtn) prevBtn.addEventListener('click',function(){ goTo(target - 1); });
-  if(nextBtn) nextBtn.addEventListener('click',function(){ goTo(target + 1); });
-  if(openBtn) openBtn.addEventListener('click',function(){ openDetail(activeIndex); });
-
 
   var detailScroll = document.getElementById('folioDetailScroll');
   var detailClose = document.getElementById('folioDetailClose');
@@ -1953,7 +1965,8 @@ var hsLenis = null;
     opts = opts || {};
     index = ((index%N)+N)%N;
     detailGen++;
-    goTo(index,true);
+    keyboardIndex = index;
+    setActive(index);
     populateDetail(index);
     if(detail.hidden){
       detail.hidden = false;
@@ -2006,23 +2019,18 @@ var hsLenis = null;
     detailScroll.scrollBy({top:amount,behavior:reduce?'auto':'smooth'});
   }
 
-
-  /* one click handler for the whole stage: resolve the card from the event target, or from geometry
-     when the browser's 3D hit-testing misses a rotated card */
-  stage.addEventListener('click',function(e){
-    if(Date.now() < suppressClickUntil) return;
-    var hit = e.target.closest ? e.target.closest('.cf-card') : null;
-    var i = hit ? cards.indexOf(hit) : -1;
-    if(i === -1 && e.detail !== 0){
-      var order = cards.map(function(c,k){ return k; }).sort(function(x,y){ return Math.abs(x - pos) - Math.abs(y - pos); });
-      for(var n = 0; n < order.length; n++){
-        var r = cards[order[n]].getBoundingClientRect();
-        if(e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom && cards[order[n]].style.visibility !== 'hidden'){ i = order[n]; break; }
-      }
-    }
-    if(i === -1) return;
-    if(i === activeIndex) openDetail(i); else goTo(i);
+  /* Tabbing to a card brings it to the centre, so Enter always opens the card you can see is focused */
+  cards.forEach(function(card,i){
+    card.addEventListener('focus',function(){
+      keyboardIndex = i;
+      if(!staticLayout() && i !== activeIndex && detail.hidden) scrollToIndex(i,false,'keyboard');
+    });
   });
+  if(openBtn) openBtn.addEventListener('click',function(){ openDetail(activeIndex); });
+  var titleBtn = document.getElementById('folioTitleBtn');
+  if(titleBtn) titleBtn.addEventListener('click',function(){ openDetail(activeIndex); });
+  if(prevBtn) prevBtn.addEventListener('click',function(){ scrollToIndex(activeIndex-1,false,'button'); });
+  if(nextBtn) nextBtn.addEventListener('click',function(){ scrollToIndex(activeIndex+1,false,'button'); });
   if(detailClose) detailClose.addEventListener('click',function(){ closeDetail(); });
   if(detailPrev) detailPrev.addEventListener('click',prevDetail);
   if(detailNext) detailNext.addEventListener('click',nextDetail);
@@ -2050,7 +2058,6 @@ var hsLenis = null;
   });
   detail.addEventListener('pointercancel',function(){ swipeActive=false; });
 
-
   function typingTarget(el){
     if(!el) return false;
     var tag = el.tagName;
@@ -2058,55 +2065,84 @@ var hsLenis = null;
   }
 
   document.addEventListener('keydown',function(e){
-    if(detail.hidden || typingTarget(document.activeElement) || document.body.classList.contains('menu-open')) return;
-    if(e.key==='Escape'){
-      e.preventDefault();
-      closeDetail();
-    }else if(e.key==='ArrowRight'){
-      e.preventDefault();
-      nextDetail();
-    }else if(e.key==='ArrowLeft'){
-      e.preventDefault();
-      prevDetail();
-    }else if(e.key==='ArrowDown' || e.key==='PageDown'){
-      e.preventDefault();
-      scrollDetail(1);
-    }else if(e.key==='ArrowUp' || e.key==='PageUp'){
-      e.preventDefault();
-      if(detailScroll && detailScroll.scrollTop<=8 && e.key==='ArrowUp') closeDetail();
-      else scrollDetail(-1);
-    }else if(e.key==='Home'){
-      e.preventDefault();
-      if(detailScroll) detailScroll.scrollTo({top:0,behavior:reduce?'auto':'smooth'});
-    }else if(e.key==='End'){
-      e.preventDefault();
-      if(detailScroll) detailScroll.scrollTo({top:detailScroll.scrollHeight,behavior:reduce?'auto':'smooth'});
+    if(typingTarget(document.activeElement) || document.body.classList.contains('menu-open')) return;
+
+    if(!detail.hidden){
+      if(e.key==='Escape'){
+        e.preventDefault();
+        closeDetail();
+      }else if(e.key==='ArrowRight'){
+        e.preventDefault();
+        nextDetail();
+      }else if(e.key==='ArrowLeft'){
+        e.preventDefault();
+        prevDetail();
+      }else if(e.key==='ArrowDown' || e.key==='PageDown'){
+        e.preventDefault();
+        scrollDetail(1);
+      }else if(e.key==='ArrowUp' || e.key==='PageUp'){
+        e.preventDefault();
+        if(detailScroll && detailScroll.scrollTop<=8 && e.key==='ArrowUp') closeDetail();
+        else scrollDetail(-1);
+      }else if(e.key==='Home'){
+        e.preventDefault();
+        if(detailScroll) detailScroll.scrollTo({top:0,behavior:reduce?'auto':'smooth'});
+      }else if(e.key==='End'){
+        e.preventDefault();
+        if(detailScroll) detailScroll.scrollTo({top:detailScroll.scrollHeight,behavior:reduce?'auto':'smooth'});
+      }
+      return;
+    }
+
+    if(!staticLayout() && inSection){
+      if(e.key==='ArrowRight'){
+        e.preventDefault();
+        keyboardIndex = clamp(keyboardIndex+1,0,N-1);
+        scrollToIndex(keyboardIndex,false,'keyboard');
+      }else if(e.key==='ArrowLeft'){
+        e.preventDefault();
+        keyboardIndex = clamp(keyboardIndex-1,0,N-1);
+        scrollToIndex(keyboardIndex,false,'keyboard');
+      }else if(e.key==='ArrowDown' || e.key==='Enter'){
+        e.preventDefault();
+        openDetail(clamp(keyboardIndex,0,N-1));
+      }
     }
   });
 
   window.addEventListener('hashchange',function(){
     var idx = indexForId(location.hash.slice(1));
-    if(idx!==-1) openDetail(idx,{updateHash:false});
-    else if(detailIndexActive!==-1) closeDetail({updateHash:false});
+    if(idx!==-1){
+      if(!staticLayout()) scrollToIndex(idx,true);
+      openDetail(idx,{updateHash:false});
+    }else if(detailIndexActive!==-1){
+      closeDetail({updateHash:false});
+    }
   });
 
   window.hsScrollToProjSlide = function(el){
-    var idx = el && el.id ? indexForId(el.id) : -1;
+    if(!el) return false;
+    var idx = el.id ? indexForId(el.id) : -1;
     if(idx===-1) return false;
-    openDetail(idx);
+    scrollToIndex(idx,false,'link');
+    setTimeout(function(){ openDetail(idx); },reduce?0:360);
     return true;
   };
 
   window.hsProjects = {
-    goToProject:function(i){ openDetail(i); },
-    next:function(){ if(detailIndexActive!==-1) nextDetail(); },
-    prev:function(){ if(detailIndexActive!==-1) prevDetail(); },
+    goToProject:function(i){ scrollToIndex(i,false,'api'); setTimeout(function(){ openDetail(i); },reduce?0:360); },
+    next:function(){ if(detailIndexActive!==-1) nextDetail(); else scrollToIndex(activeIndex+1,false,'api'); },
+    prev:function(){ if(detailIndexActive!==-1) prevDetail(); else scrollToIndex(activeIndex-1,false,'api'); },
     closeProjectDetail:closeDetail
   };
 
   var initialIdx = indexForId((window.hsInitialHash||'').slice(1));
-  if(initialIdx!==-1) openDetail(initialIdx,{instant:true,updateHash:'replace'});
+  if(initialIdx!==-1){
+    scrollToIndex(initialIdx,true);
+    openDetail(initialIdx,{instant:true,updateHash:'replace'});
+  }
 })();
+
 
 (function(){
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
