@@ -10,7 +10,7 @@ Personal portfolio for Hans Sai - Systems Administrator building toward security
 
 ## What it is
 
-A single-file, hand-built portfolio: Active Directory / IT operations background, a terminal-style hero, a filterable card grid of real projects (with test counts and MITRE ATT&CK mappings where relevant, each opening a full-screen case study), and certifications with linked proof.
+A single-file, hand-built portfolio: Active Directory / IT operations background, a terminal-style hero, a scroll-driven 3D project gallery (click any card to open its case study) (with test counts and MITRE ATT&CK mappings where relevant, each opening a full-screen case study), and certifications with linked proof.
 
 No framework, no build step, no bundler. `index.html` is the entire site - HTML, CSS, and JS inline, plus one CDN script (Lenis, for anchor-scroll easing). No canvas or WebGL on the page itself; the Interactive Diploma is embedded live from its own repo.
 
