@@ -31,6 +31,7 @@
   }catch(e){}
 })();
 </script>
+<noscript><style>.reveal,.stagger-item,.hero-copy>*,.hero-inner>.terminal{opacity:1!important;transform:none!important;animation:none!important}</style></noscript>
 <title>Hans Sai | Systems Administrator</title>
 <meta name="description" content="Hans Sai. Systems Administrator building toward security engineering. Active Directory, endpoint management, applied security tooling.">
 <link rel="canonical" href="https://builtbysai.com/">
@@ -121,7 +122,7 @@ hsSetFavicon(window.hsInitialTheme === 'light');
   --text:#181c22;
   --text-dim:#434b57;
   --text-dimmer:#5d6571;
-  --accent:#0f766e;
+  --accent:#0d6b64;
   --accent-dim:#14746b;
   --accent-hover:#0b5f58;
   --on-accent:#ffffff;
@@ -301,6 +302,9 @@ body.folio-detail-lock{overflow:hidden;}
 
 
 .theme-toggle{width:40px;height:40px;}
+.nav-brand{min-height:40px;}
+.teaser-all,.cert-proof{display:inline-flex;align-items:center;min-height:40px;}
+.section-dock a{padding:9px;}
 .nav-toggle{min-height:40px;}
 
 .hero{position:relative;padding:56px 0 48px;
@@ -1104,7 +1108,7 @@ footer p{color:var(--text-dim);max-width:460px;margin:0 auto 24px;}
       <h2>Selected work</h2>
     </div>
   </div>
-  <div class="cf" id="cf" aria-roledescription="carousel" aria-label="Selected work">
+  <div class="cf" id="cf" role="region" aria-roledescription="carousel" aria-label="Selected work">
     <div class="cf-stage" id="cfStage">
       <div class="cf-track" id="cfTrack">
         <button class="cf-card" id="craft" type="button" data-index="0" data-title="Interactive Diploma" data-type="Creative / 3D" data-stack="Three.js" data-status="Fully interactive" data-abbr="ID" data-bg="#0c0906" data-ink="#f4ecdf" data-accent="#f0b429" data-hint="A full 3D, physically-lit recreation of my actual diploma. It's live. Drag it." style="--card-accent:#f0b429;--cover-bg:#0c0906;--cover-ink:#f4ecdf;--cover-accent:#f0b429">
@@ -1820,6 +1824,10 @@ var hsLenis = null;
   measure();
   layout();
   window.addEventListener('resize',function(){ measure(); layout(); });
+  /* far-away cards are visibility:hidden, so lazy images would pop in mid-animation: fetch them once idle */
+  function warm(){ cards.forEach(function(c){ var im = c.querySelector('img'); if(im) im.loading = 'eager'; }); }
+  if('requestIdleCallback' in window) window.addEventListener('load',function(){ requestIdleCallback(warm); });
+  else window.addEventListener('load',function(){ setTimeout(warm,1500); });
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ measure(); layout(); });
 
   stage.addEventListener('pointerdown',function(e){
