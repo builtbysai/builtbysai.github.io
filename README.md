@@ -4,17 +4,15 @@
 
 <p align="center"><img src="assets/hero-screenshot.png" width="800" alt="builtbysai.com hero: headline and interactive ops-console terminal"></p>
 
-<p align="center"><img src="assets/projects-screenshot.png" width="800" alt="builtbysai.com Selected Work section: 3D project carousel"></p>
-
 Personal portfolio for Hans Sai - Systems Administrator building toward security engineering.
 
 **Live site: [builtbysai.com](https://builtbysai.com)**
 
 ## What it is
 
-A single-file, hand-built portfolio: Active Directory / IT operations background, a terminal-style hero with a live three.js particle network, real projects (with test counts and MITRE ATT&CK mappings where relevant), and certifications with linked proof.
+A single-file, hand-built portfolio: Active Directory / IT operations background, a terminal-style hero, a filterable card grid of real projects (with test counts and MITRE ATT&CK mappings where relevant, each opening a full-screen case study), and certifications with linked proof.
 
-No framework, no build step, no bundler. `index.html` is the entire site - HTML, CSS, and JS inline, plus two CDN scripts (three.js for the hero/diploma-adjacent visuals, Lenis for smooth scrolling).
+No framework, no build step, no bundler. `index.html` is the entire site - HTML, CSS, and JS inline, plus one CDN script (Lenis, for anchor-scroll easing). No canvas or WebGL on the page itself; the Interactive Diploma is embedded live from its own repo.
 
 ## Structure
 
