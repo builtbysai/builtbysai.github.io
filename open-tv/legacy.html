@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Open TV</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#000000">
+
+  <script type="module" crossorigin src="/open-tv/assets/legacy-Bxs2LJCj.js"></script>
+  <link rel="modulepreload" crossorigin href="/open-tv/assets/service-D61WwGXL.js">
+  <link rel="stylesheet" crossorigin href="/open-tv/assets/legacy-hxlV-TGw.css">
+</head>
+<body><dialog id="compatGate" open style="position:fixed;inset:0;z-index:9999;background:#111;color:#fff;padding:36px;max-width:560px;margin:auto;border:1px solid #666"><h1>Compatibility workspace</h1><p>This retained interface includes unclassified and adult sources. Continue only if you are 18 or older and allowed to access these sources in your region. Viewing history stays in memory in this workspace.</p><p><button id="compatContinue">I am 18+ · Continue privately</button> <a href="/">Return to Open TV</a></p></dialog>
+<header>
+  <div class="brand">OPEN<span>TV</span></div>
+  <nav class="tabs">
+    <button id="tabWatch" class="active">Live TV</button>
+    <button id="tabMovies">Movies</button>
+    <button id="tabSrv">My Server</button>
+    <button id="tabXt">Xtream</button>
+  </nav>
+  <input id="search" type="text" placeholder="Search everything..." autocomplete="off">
+  <button id="shuffleBtn" title="Play something random">🔀</button>
+  <button id="proxyTgl" disabled title="The old Cloudflare relay has been retired">Legacy relay: offline</button>
+  <span id="status"></span>
+</header>
+
+<!-- theater player -->
+<div id="theater">
+  <div id="tBar">
+    <span id="tTitle"></span>
+    <select id="quality"></select>
+    <button id="pipBtn" title="Picture in picture">PiP</button>
+    <button id="sleepBtn" title="Sleep timer">💤 Off</button>
+    <button id="nextCh" title="Play next">Next</button>
+    <button id="tClose">Close</button>
+  </div>
+  <div id="tStage">
+    <video id="video" controls playsinline></video>
+    <iframe referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-presentation" id="embed" class="hidden" allowfullscreen allow="autoplay; fullscreen; encrypted-media"></iframe>
+    <button id="tResume" class="hidden"><span class="rp">▶</span><span id="tResumeName"></span><span class="rs">tap to resume</span></button>
+  </div>
+  <div id="tHint">Streams come from free public playlists and can go offline without notice.</div>
+</div>
+
+<!-- watch view -->
+<div id="viewWatch" class="view on">
+  <div class="stack">
+    <div class="scroll" id="homeScroll">
+      <div id="hero" class="hidden"></div>
+      <div id="rows"></div>
+      <div class="browseHead"><h2>Browse all</h2></div>
+      <div id="customRow">
+        <input id="customUrl" type="url" placeholder="Paste your own M3U playlist URL..." autocomplete="off">
+        <button id="customGo">Load</button>
+      </div>
+      <nav id="cats" class="chips" aria-label="Categories"></nav>
+      <div id="epornerBox" class="hidden">
+        <div class="seg" id="tubeSrcSeg" style="margin-bottom:8px">
+          <button data-s="eporner" class="active">Eporner</button>
+          <button data-s="pornhub">PornHub</button>
+        </div>
+        <div style="display:flex;gap:8px;width:100%">
+          <input id="epornerQ" type="text" placeholder="Search millions of adult films..." autocomplete="off">
+          <button id="epornerGo">Search</button>
+        </div>
+      </div>
+      <div id="epornerNote" class="hidden">Tap a film to play. Sources: Eporner's public API, PornHub search.</div>
+      <div id="grid"><div id="empty">Loading channels...</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- unified search results -->
+<div id="viewSearch" class="view">
+  <div class="stack">
+    <div class="scroll" id="searchScroll"></div>
+  </div>
+</div>
+
+<!-- movies view -->
+<div id="viewMovies" class="view">
+  <div class="stack">
+    <div class="scroll" id="scrMovies">
+      <div style="padding:14px 20px 0;max-width:860px">
+        <input id="movieSearch" type="text" placeholder="Search movies... (TMDB results appear here)" autocomplete="off"
+          style="width:100%;background:var(--panel);border:1px solid var(--line);color:var(--text);padding:12px 18px;border-radius:12px;font-size:14px;outline:none">
+        <div id="movieSearchHint" style="font-size:12px;color:var(--faint);margin-top:8px"></div>
+      </div>
+      <div id="tmdbResults" class="hidden">
+        <div class="rowHead" style="padding-top:16px"><h2>From TMDB</h2><span class="cnt" id="tmdbCnt"></span></div>
+        <div class="rail" id="tmdbRail"></div>
+      </div>
+      <div class="rowHead" style="padding-top:16px"><h2>Classic films</h2><span class="cnt">public domain · free forever</span></div>
+      <div id="movieGrid" style="padding-top:4px"><div id="empty">Loading films...</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- my server view -->
+<div id="viewSrv" class="view">
+  <div class="stack">
+    <div class="scroll" id="scrSrv">
+      <div class="srvWrap">
+        <div class="srvCard">
+          <h2>Your servers</h2>
+          <p>Add each of your private servers. Items are built from their embed addresses:<br>
+          <code>{server}/embed/movie/{id}</code> and <code>{server}/embed/tv/{id}/{season}/{episode}</code></p>
+          <div id="srvList"></div>
+          <div class="frow" style="margin-top:12px">
+            <div class="field" style="flex:2">
+              <label>Name</label>
+              <input id="srvNewName" type="text" placeholder="e.g. Main server" autocomplete="off">
+            </div>
+            <div class="field" style="flex:3">
+              <label>Base URL</label>
+              <input id="srvNewBase" type="url" placeholder="https://www.site.com" autocomplete="off">
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <button class="btnGhost" id="srvAddServer">Add server</button>
+            <button class="btnGhost" id="srvCheckAll">Check all</button>
+            <span id="srvListMsg" style="font-size:12.5px;color:var(--faint)"></span>
+          </div>
+          <div class="field" style="margin-top:16px">
+            <label>TMDB API key (for posters and details)</label>
+            <input id="srvTmdbKey" type="password" placeholder="Paste your TMDB key" autocomplete="off">
+          </div>
+          <button class="btnGhost" id="srvSaveTmdb">Save key</button>
+          <span id="srvTmdbMsg" style="font-size:12.5px;color:var(--faint);margin-left:10px"></span>
+        </div>
+        <div class="srvCard">
+          <h2>Add to your library</h2>
+          <p>Everything stays in this browser. Nothing is uploaded anywhere.</p>
+          <div class="field">
+            <label>Title</label>
+            <input id="srvTitle" type="text" placeholder="e.g. Dune: Part Two" autocomplete="off">
+          </div>
+          <div class="field">
+            <label>Type</label>
+            <div class="seg" id="srvTypeSeg">
+              <button data-t="movie" class="active">Movie</button>
+              <button data-t="tv">TV Show</button>
+              <button data-t="anime">Anime</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>Server</label>
+            <select id="srvFormServerSel"></select>
+          </div>
+          <div class="frow">
+            <div class="field">
+              <label>ID</label>
+              <input id="srvId" type="text" placeholder="Media ID on your server" autocomplete="off">
+            </div>
+            <div class="field" id="srvSeasonF">
+              <label>Season</label>
+              <input id="srvSeason" type="number" min="1" value="1">
+            </div>
+            <div class="field" id="srvEpF">
+              <label>Episode</label>
+              <input id="srvEp" type="number" min="1" value="1">
+            </div>
+          </div>
+          <div id="srvPreview"></div>
+          <button class="btnPrimary" id="srvAdd">Add to library</button>
+        </div>
+        <div class="srvSecHead"><h2>Your library</h2><span class="cnt" id="srvCount"></span></div>
+        <div id="srvGrid"><div id="empty">Nothing saved yet. Add your first movie, show, or anime above.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- xtream view -->
+<div id="viewXt" class="view">
+  <div class="stack">
+    <div class="scroll" id="scrXt">
+      <div id="xlogin">
+        <div class="xcard">
+          <h2>Xtream Codes Login</h2>
+          <p>Connect with server credentials, like a trial account or your own panel. Nothing is stored or sent anywhere except the server you enter.</p>
+          <input id="xserver" type="text" placeholder="Server URL, e.g. http://example.com:8080" autocomplete="off">
+          <input id="xuser" type="text" placeholder="Username" autocomplete="off">
+          <input id="xpass" type="password" placeholder="Password" autocomplete="off">
+          <button class="go" id="xgo">Connect</button>
+          <div id="xmsg"></div>
+        </div>
+      </div>
+      <div id="xbrowse" class="hidden">
+        <div id="tmdbRow">
+          <input id="tmdbKey" type="password" placeholder="TMDB API key (free at themoviedb.org)" autocomplete="off">
+          <button id="tmdbSave">Save</button>
+          <span id="tmdbMsg"></span>
+        </div>
+        <div id="xtype">
+          <button id="xtLive" class="active">Live TV</button>
+          <button id="xtVod">Movies</button>
+          <button id="xout" style="margin-left:auto">Disconnect</button>
+        </div>
+        <div id="xmeta"></div>
+        <nav id="xcats" class="chips" aria-label="Categories"></nav>
+        <div id="xgrid"><div id="empty">Select a category.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
