@@ -1,1 +1,1 @@
-{"background_color":"#0b0d10","display":"standalone","icons":[{"sizes":"any","src":"/icon.svg","type":"image/svg+xml"}],"name":"Open TV","short_name":"Open TV","start_url":"/","theme_color":"#0b0d10"}
+{"name":"Open TV","short_name":"Open TV","start_url":"./","display":"standalone","background_color":"#0b0d10","theme_color":"#0b0d10","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml"}]}
