@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="cull-build" content="cull-v1-2026-10-23">
+<title>Cull — Generative Doodles</title>
+<style>
+  :root{
+    --bg:#101010; --panel:#161616; --panel2:#1c1c1c; --line:#2b2b2b;
+    --ink:#edede8; --dim:#9b9b93; --faint:#6d6d66;
+    --keep:#46c26a; --del:#e5484d; --skip:#d8a03c; --merge:#58a6ff;
+    --bad:#e5484d;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    display:flex;flex-direction:column}
+  .mono{font-variant-numeric:tabular-nums}
+  button{font:inherit;cursor:pointer;background:var(--panel2);color:var(--ink);
+    border:1px solid var(--line);border-radius:2px;padding:8px 14px;
+    text-transform:uppercase;letter-spacing:.1em;font-size:12px;font-weight:600}
+  button:hover{border-color:#4a4a4a}
+  button.on{outline:2px solid currentColor;outline-offset:-2px}
+  button.b-keep.on{color:var(--keep)} button.b-del.on{color:var(--del)}
+  button.b-skip.on{color:var(--skip)} button.b-merge.on{color:var(--merge)}
+  input,textarea,select{font:inherit;background:#0c0c0c;color:var(--ink);
+    border:1px solid var(--line);border-radius:2px;padding:8px 10px}
+  input:focus,textarea:focus{outline:1px solid #555}
+  /* header */
+  header{border-bottom:1px solid var(--line);padding:10px 16px;
+    display:flex;flex-wrap:wrap;gap:8px 22px;align-items:baseline}
+  header .brand{font-size:20px;font-weight:800;letter-spacing:.18em}
+  header .brand span{color:var(--faint);font-weight:600;letter-spacing:.05em;font-size:12px;margin-left:8px}
+  #progress{font-size:13px;color:var(--dim)}
+  #progress b{color:var(--ink)}
+  #brokenline{font-size:12px;color:var(--bad)}
+  nav.modes{display:flex;gap:0;margin-left:auto}
+  nav.modes button{background:none;border:none;border-radius:0;padding:6px 10px;color:var(--dim)}
+  nav.modes button.on{color:var(--ink);box-shadow:inset 0 -2px 0 var(--ink);outline:none}
+  .tools{display:flex;gap:8px;align-items:center}
+  .tools label{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--dim)}
+  main{flex:1;display:flex;flex-direction:column;min-height:0}
+  section.view{flex:1;display:flex;flex-direction:column;min-height:0}
+  [hidden]{display:none !important}
+  /* review */
+  #idbar{padding:12px 16px 8px;display:flex;flex-wrap:wrap;gap:6px 26px;align-items:baseline;border-bottom:1px solid var(--line)}
+  #pnum{font-size:42px;font-weight:800;line-height:1;letter-spacing:.01em}
+  #ptitle{font-size:20px;font-weight:650}
+  #pdate{color:var(--dim);font-size:14px}
+  #pstatus{font-size:12px;text-transform:uppercase;letter-spacing:.1em;padding:4px 8px;border:1px solid var(--line)}
+  #pstatus.ok{color:var(--keep)} #pstatus.bad{color:var(--bad)} #pstatus.unk{color:var(--skip)}
+  #pnote{flex-basis:100%;color:var(--dim);font-size:13px;max-width:900px}
+  #framewrap{flex:1;min-height:280px;position:relative;background:#000}
+  #frame{position:absolute;inset:0;width:100%;height:100%;border:none;background:#000}
+  #dock{border-top:1px solid var(--line);padding:10px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  #dock .decisions{display:flex;gap:8px}
+  #note{flex:1;min-width:200px}
+  #mergebox{display:flex;gap:6px;align-items:center}
+  #mergebox input{width:90px}
+  #navbar{display:flex;gap:8px;align-items:center}
+  #pos{color:var(--dim);font-size:13px;min-width:110px;text-align:center}
+  #jump{width:84px}
+  .ctlrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  select#filter{padding:7px 8px}
+  .keys{color:var(--faint);font-size:11px;padding:0 16px 10px}
+  /* grid + dupes */
+  .scroll{overflow:auto;padding:14px 16px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+  .tile{background:var(--panel);padding:10px 12px;cursor:pointer;min-height:96px;display:flex;flex-direction:column;gap:3px}
+  .tile:hover{background:var(--panel2)}
+  .tile .tn{font-size:19px;font-weight:800}
+  .tile .tt{font-size:13px;font-weight:600;line-height:1.25}
+  .tile .td{font-size:11px;color:var(--dim)}
+  .tile .tb{margin-top:auto;font-size:10px;text-transform:uppercase;letter-spacing:.1em;display:flex;justify-content:space-between;gap:6px}
+  .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#555;vertical-align:1px}
+  .dot.ok{background:var(--keep)} .dot.bad{background:var(--bad)} .dot.unk{background:var(--skip)}
+  .st-keep{color:var(--keep)} .st-delete{color:var(--del)} .st-skip{color:var(--skip)} .st-merge{color:var(--merge)} .st-none{color:var(--faint)}
+  .group{margin-bottom:26px}
+  .group h3{font-size:13px;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);margin:0 0 8px}
+  .group .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+  .group .tile{cursor:default}
+  .group .mrow{display:flex;gap:6px;margin-top:8px}
+  .group .mrow input{width:80px;padding:5px 7px}
+  .group .mrow button{padding:5px 9px}
+  /* export */
+  #report{width:100%;min-height:46vh;background:#0c0c0c;color:var(--ink);
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;line-height:1.5;padding:12px}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .pad{padding:14px 16px}
+  .dim{color:var(--dim)} .small{font-size:12px}
+  #loadmsg{padding:30px 16px;color:var(--dim)}
+  @media (max-width:720px){
+    #pnum{font-size:30px} #ptitle{font-size:16px}
+    #framewrap{min-height:44vh}
+    header .brand{font-size:16px}
+    #pos{min-width:0}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">CULL<span>GENERATIVE DOODLES</span></div>
+  <div id="progress" class="mono">Loading index…</div>
+  <div id="brokenline"></div>
+  <nav class="modes" aria-label="Mode">
+    <button data-mode="review" class="on">Review</button>
+    <button data-mode="grid">Grid</button>
+    <button data-mode="dupes">Duplicates</button>
+    <button data-mode="export">Export</button>
+  </nav>
+</header>
+
+<main>
+  <!-- REVIEW -->
+  <section class="view" id="view-review">
+    <div id="idbar">
+      <div id="pnum" class="mono">No. —</div>
+      <div>
+        <div id="ptitle">…</div>
+        <div id="pdate" class="mono"></div>
+      </div>
+      <div id="pstatus" class="unk">Not checked</div>
+      <button id="reprobe" title="Re-check this piece">Re-check</button>
+      <div id="pnote"></div>
+    </div>
+    <div id="framewrap"><iframe id="frame" title="Piece preview"></iframe></div>
+    <div id="dock">
+      <div class="decisions">
+        <button id="b-keep" class="b-keep">Keep</button>
+        <button id="b-del" class="b-del">Delete</button>
+        <button id="b-skip" class="b-skip">Skip</button>
+      </div>
+      <div id="mergebox">
+        <button id="b-merge" class="b-merge">Merge into</button>
+        <input id="mergetarget" class="mono" inputmode="numeric" placeholder="No.">
+      </div>
+      <input id="note" placeholder="Note for this piece (auto-saves)">
+      <div id="navbar">
+        <button id="prev">← Prev</button>
+        <div id="pos" class="mono"></div>
+        <button id="next">Next →</button>
+      </div>
+      <div class="ctlrow">
+        <label class="small dim" for="filter">SHOW</label>
+        <select id="filter">
+          <option value="all">All pieces</option>
+          <option value="undecided">Undecided only</option>
+          <option value="keep">Keep</option>
+          <option value="delete">Delete</option>
+          <option value="skip">Skip</option>
+          <option value="merge">Merge</option>
+          <option value="broken">Can't load</option>
+        </select>
+        <input id="jump" class="mono" inputmode="numeric" placeholder="Go to No.">
+        <button id="gojump">Go</button>
+      </div>
+    </div>
+    <div class="keys">Keys: ← → move · K keep · X delete · S skip · decisions and notes save on this device as you type</div>
+  </section>
+
+  <!-- GRID -->
+  <section class="view" id="view-grid" hidden>
+    <div class="pad row">
+      <label class="small dim" for="gfilter">SHOW</label>
+      <select id="gfilter">
+        <option value="all">All pieces</option>
+        <option value="undecided">Undecided only</option>
+        <option value="keep">Keep</option>
+        <option value="delete">Delete</option>
+        <option value="skip">Skip</option>
+        <option value="merge">Merge</option>
+        <option value="broken">Can't load</option>
+      </select>
+      <span class="small dim" id="gcount"></span>
+      <span class="small dim">Tap a tile to open it in Review.</span>
+    </div>
+    <div class="scroll"><div class="grid" id="grid"></div></div>
+  </section>
+
+  <!-- DUPLICATES -->
+  <section class="view" id="view-dupes" hidden>
+    <div class="pad">
+      <p class="small dim" style="margin:0 0 14px;max-width:760px">Groups of pieces whose titles match after trimming edition markers (II, 2, “part 2”, remix, and the like). Heuristic only — judge by eye. Pick the survivor, then mark each other piece “Merge into” it.</p>
+      <div id="dupes"></div>
+    </div>
+  </section>
+
+  <!-- EXPORT -->
+  <section class="view" id="view-export" hidden>
+    <div class="pad" style="display:flex;flex-direction:column;gap:12px;flex:1;min-height:0">
+      <div class="row">
+        <button id="dljson">Download JSON</button>
+        <button id="copyrep">Copy report</button>
+        <label class="small dim" for="importfile">IMPORT A SAVED EXPORT</label>
+        <input type="file" id="importfile" accept="application/json,.json">
+        <button id="clearall">Clear all decisions</button>
+      </div>
+      <div class="small dim">The report lists every delete, every skip, every merge, and every note — each with number, title, and date. Decisions for pieces that have left the index are kept and listed at the end, not dropped.</div>
+      <textarea id="report" readonly spellcheck="false"></textarea>
+    </div>
+  </section>
+
+  <div id="loadmsg" hidden></div>
+</main>
+<noscript><p style="padding:16px">The cull tool needs JavaScript.</p></noscript>
+<script>
+"use strict";
+var INDEX_URL = "https://builtbysai.com/generative-doodles/pieces.json";
+var LS_DEC = "cull.v1.decisions", LS_PROBE = "cull.v1.probes";
+function pieceUrl(n){ return "https://builtbysai.com/generative-doodles/" + n + "/"; }
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+
+/* ---------- state ---------- */
+var pieces = [];            // as listed in the live index (newest first)
+var byN = {};               // n -> piece
+var decisions = loadJSON(LS_DEC, {});   // n -> {d:'keep|delete|skip|merge', target, note, ts}
+var probes = loadJSON(LS_PROBE, {});    // n -> {http:200|404|0, render:'ok|blank|unknown'|null, ts}
+var cur = 0;                // index into filtered list
+var mode = "review";
+function loadJSON(k, fb){ try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch(e){ return fb; } }
+function saveDec(){ try { localStorage.setItem(LS_DEC, JSON.stringify(decisions)); } catch(e){} }
+function saveProbes(){ try { localStorage.setItem(LS_PROBE, JSON.stringify(probes)); } catch(e){} }
+function decOf(n){ return decisions[n] || null; }
+function statusOf(n){
+  var p = probes[n];
+  if (!p) return "unknown";
+  if (p.http === 404) return "missing";
+  if (p.render === "ok") return "ok";
+  if (p.render === "blank") return "blank";
+  return "unknown";
+}
+function statusLabel(n){
+  var s = statusOf(n);
+  if (s === "ok") return "Loads OK";
+  if (s === "missing") return "Doesn't load: page missing";
+  if (s === "blank") return "Loads blank / crashed";
+  return "Not verified";
+}
+function counts(){
+  var c = {keep:0, del:0, skip:0, merge:0, decided:0, undecided:0, broken:0};
+  for (var i=0;i<pieces.length;i++){
+    var n = pieces[i].n, d = decOf(n), s = statusOf(n);
+    if (s === "missing" || s === "blank") c.broken++;
+    if (!d || !d.d) { c.undecided++; continue; }
+    c.decided++;
+    if (d.d === "keep") c.keep++; else if (d.d === "delete") c.del++;
+    else if (d.d === "skip") c.skip++; else if (d.d === "merge") c.merge++;
+  }
+  return c;
+}
+function renderProgress(){
+  var c = counts();
+  $("progress").innerHTML = "Reviewed <b>" + c.decided + "</b> of <b>" + pieces.length +
+    "</b> · Keep <b>" + c.keep + "</b> · Delete <b>" + c.del + "</b> · Skip <b>" + c.skip +
+    "</b> · Merge <b>" + c.merge + "</b> · Undecided <b>" + c.undecided + "</b>";
+  $("brokenline").textContent = c.broken ? (c.broken + " piece" + (c.broken===1?"":"s") + " in the index can't load") : "";
+}
+
+/* ---------- filtering ---------- */
+function filterVal(){ return mode === "grid" ? $("gfilter").value : $("filter").value; }
+function filtered(){
+  var f = filterVal();
+  return pieces.filter(function(p){
+    var d = decOf(p.n), s = statusOf(p.n);
+    if (f === "all") return true;
+    if (f === "undecided") return !(d && d.d);
+    if (f === "broken") return s === "missing" || s === "blank";
+    return d && d.d === f;
+  });
+}
+
+/* ---------- probes ---------- */
+function probeHttp(n){
+  return fetch(pieceUrl(n), { method:"GET", cache:"no-store" }).then(function(r){
+    var s = r.status;
+    try { if (r.body) r.body.cancel().catch(function(){}); } catch(e){}
+    return s;
+  }).catch(function(){ return 0; });
+}
+function canvasNonBlank(c){
+  try {
+    if (!c.width || !c.height) return false;
+    var S = 24, t = document.createElement("canvas");
+    t.width = S; t.height = S;
+    var x = t.getContext("2d", { willReadFrequently:true });
+    x.drawImage(c, 0, 0, S, S);
+    var d = x.getImageData(0, 0, S, S).data;
+    var r0=d[0], g0=d[1], b0=d[2], a0=d[3];
+    for (var i=4;i<d.length;i+=4){
+      if (d[i]!==r0 || d[i+1]!==g0 || d[i+2]!==b0 || d[i+3]!==a0) return true;
+    }
+    return false;
+  } catch(e){ return null; }  // tainted / unreadable
+}
+function inspectFrame(){
+  var fr = $("frame"), doc;
+  try { doc = fr.contentDocument; } catch(e){ return "unknown"; }
+  if (!doc) return "unknown";
+  var cvs = doc.querySelectorAll("canvas"), sawCanvas = false, tainted = false;
+  for (var i=0;i<cvs.length;i++){
+    sawCanvas = true;
+    var r = canvasNonBlank(cvs[i]);
+    if (r === true) return "ok";
+    if (r === null) tainted = true;
+  }
+  if (tainted) return "unknown";
+  if (sawCanvas) return "blank";
+  try {
+    var els = doc.body ? doc.body.querySelectorAll("*") : [];
+    for (var j=0;j<els.length;j++){
+      var b = els[j].getBoundingClientRect();
+      if (b.width > 4 && b.height > 4){
+        var cs = doc.defaultView.getComputedStyle(els[j]);
+        if (cs.display !== "none" && cs.visibility !== "hidden") return "ok";
+      }
+    }
+  } catch(e){ return "unknown"; }
+  return "blank";
+}
+function setProbe(n, patch){
+  var p = probes[n] || { http:null, render:null, ts:0 };
+  for (var k in patch) p[k] = patch[k];
+  p.ts = Date.now();
+  probes[n] = p; saveProbes();
+}
+var bgProbing = false;
+function backgroundProbe(){
+  if (bgProbing) return;
+  var queue = pieces.filter(function(p){ var pr = probes[p.n]; return !pr || pr.http === null || pr.http === undefined; });
+  if (!queue.length) return;
+  bgProbing = true;
+  var i = 0, active = 0;
+  function step(){
+    while (active < 4 && i < queue.length){
+      (function(p){
+        active++;
+        probeHttp(p.n).then(function(s){
+          setProbe(p.n, { http: s });
+          active--; renderProgress(); step();
+          if (mode === "review") paintStatus();
+        });
+      })(queue[i++]);
+    }
+    if (i >= queue.length && active === 0){ bgProbing = false; if (mode === "grid") renderGrid(); if (mode === "review") paintStatus(); }
+  }
+  step();
+}
+
+/* ---------- review ---------- */
+function curPiece(){
+  var list = filtered();
+  if (!list.length) return null;
+  if (cur < 0) cur = 0;
+  if (cur >= list.length) cur = list.length - 1;
+  return list[cur];
+}
+function paintStatus(){
+  var p = curPiece(); if (!p) return;
+  var s = statusOf(p.n), el = $("pstatus");
+  el.textContent = statusLabel(p.n);
+  el.className = s === "ok" ? "ok" : (s === "missing" || s === "blank") ? "bad" : "unk";
+  el.id = "pstatus";
+}
+var probeTimer = null;
+function showCurrent(){
+  var list = filtered(), p = curPiece();
+  renderProgress();
+  if (!p){
+    $("pnum").textContent = "No. —"; $("ptitle").textContent = "Nothing matches this filter";
+    $("pdate").textContent = ""; $("pnote").textContent = ""; $("pos").textContent = "";
+    $("frame").removeAttribute("src");
+    ["b-keep","b-del","b-skip","b-merge"].forEach(function(id){ $(id).classList.remove("on"); });
+    return;
+  }
+  $("pnum").textContent = "No. " + p.n;
+  $("ptitle").textContent = p.title;
+  $("pdate").textContent = p.date;
+  $("pnote").textContent = p.note ? ("Index note: " + p.note) : "";
+  $("pos").textContent = (cur + 1) + " / " + list.length;
+  var d = decOf(p.n);
+  $("b-keep").classList.toggle("on", !!(d && d.d === "keep"));
+  $("b-del").classList.toggle("on", !!(d && d.d === "delete"));
+  $("b-skip").classList.toggle("on", !!(d && d.d === "skip"));
+  $("b-merge").classList.toggle("on", !!(d && d.d === "merge"));
+  $("mergetarget").value = d && d.d === "merge" && d.target ? d.target : "";
+  var nv = $("note");
+  if (document.activeElement !== nv) nv.value = d && d.note ? d.note : "";
+  paintStatus();
+  var fr = $("frame"), url = pieceUrl(p.n);
+  if (fr.getAttribute("src") !== url){
+    fr.setAttribute("src", url);
+    if (probeTimer) clearTimeout(probeTimer);
+    probeTimer = setTimeout(function(){
+      var r = inspectFrame();
+      setProbe(p.n, { render: r });
+      probeHttp(p.n).then(function(s){ setProbe(p.n, { http: s }); paintStatus(); renderProgress(); });
+      paintStatus(); renderProgress();
+    }, 2200);
+  }
+}
+function decide(kind){
+  var p = curPiece(); if (!p) return;
+  var d = decOf(p.n) || {};
+  if (kind === "merge"){
+    var t = parseInt($("mergetarget").value, 10);
+    if (!t || !byN[t]){ $("mergetarget").focus(); $("mergetarget").style.borderColor = "var(--del)"; return; }
+    $("mergetarget").style.borderColor = "";
+    d.d = "merge"; d.target = t;
+  } else {
+    if (d.d === kind) { delete d.d; delete d.target; }  // tap again to clear
+    else { d.d = kind; if (kind !== "merge") delete d.target; }
+  }
+  d.ts = Date.now();
+  decisions[p.n] = d; saveDec();
+  renderProgress();
+  if (kind !== "merge" && d.d) advance();
+  else showCurrent();
+}
+function advance(){
+  var list = filtered();
+  if (cur < list.length - 1) cur++;
+  showCurrent();
+}
+function setMode(m){
+  mode = m;
+  var btns = document.querySelectorAll("nav.modes button");
+  btns.forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-mode") === m); });
+  ["review","grid","dupes","export"].forEach(function(v){ $("view-" + v).hidden = v !== m; });
+  if (m === "review") showCurrent();
+  if (m === "grid") renderGrid();
+  if (m === "dupes") renderDupes();
+  if (m === "export") renderExport();
+}
+
+/* ---------- grid ---------- */
+function badge(p){
+  var d = decOf(p.n), s = statusOf(p.n);
+  var dc = d && d.d ? d.d : "none";
+  var dt = d && d.d ? (d.d === "merge" ? "merge → " + d.target : d.d) : "undecided";
+  var dot = s === "ok" ? "ok" : (s === "missing" || s === "blank") ? "bad" : "unk";
+  return '<span class="st-' + dc + '">' + esc(dt) + '</span><span><span class="dot ' + dot + '"></span> ' +
+    (s === "ok" ? "loads" : s === "missing" ? "missing" : s === "blank" ? "blank" : "unchecked") + '</span>';
+}
+function tileHTML(p){
+  return '<div class="tile" data-n="' + p.n + '"><div class="tn mono">No. ' + p.n + '</div>' +
+    '<div class="tt">' + esc(p.title) + '</div><div class="td mono">' + esc(p.date) + '</div>' +
+    '<div class="tb">' + badge(p) + '</div></div>';
+}
+function renderGrid(){
+  var list = filtered();
+  $("gcount").textContent = list.length + " shown";
+  $("grid").innerHTML = list.map(tileHTML).join("");
+}
+$("grid").addEventListener("click", function(ev){
+  var t = ev.target.closest(".tile"); if (!t) return;
+  var n = parseInt(t.getAttribute("data-n"), 10);
+  openInReview(n);
+});
+function openInReview(n){
+  if ($("filter").value !== "all"){ /* keep filter if the piece is inside it, else reset to all */
+    var keep = filtered().some(function(p){ return p.n === n; });
+    if (!keep) $("filter").value = "all";
+  }
+  var list = filtered(), idx = -1;
+  for (var i=0;i<list.length;i++) if (list[i].n === n) idx = i;
+  if (idx < 0) return;
+  cur = idx; setMode("review");
+}
+
+/* ---------- duplicates ---------- */
+function stem(t){
+  var s = String(t || "").toLowerCase().replace(/['’]/g, "")
+    .replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
+  var tail = /\s+(ii|iii|iv|v|vi|vii|2|3|4|5|6|part\s*\d+|pt\s*\d+|version\s*\d+|v\d+|remix|redux|reprise|no\s*\d+)$/;
+  var prev;
+  do { prev = s; s = s.replace(tail, "").trim(); } while (s !== prev && s.length > 0);
+  return s;
+}
+function dupeGroups(){
+  var g = {};
+  pieces.forEach(function(p){
+    var s = stem(p.title);
+    if (!s) return;
+    (g[s] = g[s] || []).push(p);
+  });
+  return Object.keys(g).filter(function(k){ return g[k].length > 1; })
+    .map(function(k){ return { stem:k, items:g[k] }; })
+    .sort(function(a, b){ return b.items.length - a.items.length || a.stem.localeCompare(b.stem); });
+}
+function renderDupes(){
+  var groups = dupeGroups(), wrap = $("dupes");
+  if (!groups.length){ wrap.innerHTML = '<p class="dim">No near-duplicate title groups in the current index.</p>'; return; }
+  wrap.innerHTML = groups.map(function(gr, gi){
+    var survivor = gr.items[0].n;
+    var tiles = gr.items.map(function(p){
+      var d = decOf(p.n);
+      var cur2 = d && d.d === "merge" ? d.target : "";
+      return '<div class="tile"><div class="tn mono">No. ' + p.n + '</div>' +
+        '<div class="tt">' + esc(p.title) + '</div><div class="td mono">' + esc(p.date) + '</div>' +
+        '<div class="tb">' + badge(p) + '</div>' +
+        '<div class="mrow"><button data-open="' + p.n + '">Review</button>' +
+        '<input class="mono" data-tgt="' + p.n + '" value="' + (cur2 || survivor) + '" aria-label="Merge target number">' +
+        '<button data-merge="' + p.n + '">Merge into</button></div></div>';
+    }).join("");
+    return '<div class="group"><h3>' + esc(gr.stem) + ' — ' + gr.items.length + ' pieces</h3><div class="tiles">' + tiles + '</div></div>';
+  }).join("");
+}
+$("dupes").addEventListener("click", function(ev){
+  var open = ev.target.closest("[data-open]");
+  if (open){ openInReview(parseInt(open.getAttribute("data-open"), 10)); return; }
+  var mg = ev.target.closest("[data-merge]");
+  if (mg){
+    var n = parseInt(mg.getAttribute("data-merge"), 10);
+    var inp = document.querySelector('input[data-tgt="' + n + '"]');
+    var t = inp ? parseInt(inp.value, 10) : NaN;
+    if (!t || !byN[t] || t === n){ if (inp) inp.style.borderColor = "var(--del)"; return; }
+    var d = decOf(n) || {};
+    d.d = "merge"; d.target = t; d.ts = Date.now();
+    decisions[n] = d; saveDec(); renderProgress(); renderDupes();
+  }
+});
+
+/* ---------- export / import ---------- */
+function orphans(){
+  return Object.keys(decisions).map(function(k){ return parseInt(k, 10); })
+    .filter(function(n){ return !byN[n] && (decisions[n].d || decisions[n].note); })
+    .sort(function(a, b){ return a - b; });
+}
+function entryLine(p, d){
+  var s = "No. " + p.n + " — " + p.title + " — " + p.date;
+  if (d && d.note) s += "\n  note: " + d.note;
+  return s;
+}
+function buildReport(){
+  var c = counts(), L = [];
+  L.push("GALLERY CULL REPORT");
+  L.push("Exported: " + new Date().toISOString());
+  L.push("Index: " + pieces.length + " pieces, read live from " + INDEX_URL);
+  L.push("");
+  L.push("Reviewed " + c.decided + " of " + pieces.length + " · Keep " + c.keep + " · Delete " + c.del +
+         " · Skip " + c.skip + " · Merge " + c.merge + " · Undecided " + c.undecided);
+  L.push("Can't load (missing or blank): " + c.broken);
+  function section(name, kind){
+    var rows = pieces.filter(function(p){ var d = decOf(p.n); return d && d.d === kind; });
+    L.push(""); L.push("== " + name + " (" + rows.length + ") ==");
+    rows.forEach(function(p){
+      var d = decOf(p.n), line = entryLine(p, d);
+      if (kind === "merge") line = "No. " + p.n + " — " + p.title + " — " + p.date +
+        " → merge into No. " + d.target + (byN[d.target] ? " — " + byN[d.target].title : " (target not in index)") +
+        (d.note ? "\n  note: " + d.note : "");
+      L.push(line);
+    });
+    if (!rows.length) L.push("(none)");
+  }
+  section("DELETE", "delete");
+  section("SKIP", "skip");
+  section("MERGE", "merge");
+  section("KEEP", "keep");
+  var noted = pieces.filter(function(p){ var d = decOf(p.n); return d && d.note; });
+  L.push(""); L.push("== ALL NOTES (" + noted.length + ") ==");
+  noted.forEach(function(p){ L.push(entryLine(p, decOf(p.n))); });
+  if (!noted.length) L.push("(none)");
+  var orph = orphans();
+  L.push(""); L.push("== NO LONGER IN GALLERY (" + orph.length + ") ==");
+  orph.forEach(function(n){
+    var d = decisions[n];
+    L.push("No. " + n + (d.d ? " — decision: " + d.d + (d.d === "merge" ? " → No. " + d.target : "") : " — no decision") +
+      (d.note ? "\n  note: " + d.note : ""));
+  });
+  if (!orph.length) L.push("(none)");
+  return L.join("\n");
+}
+function buildJSON(){
+  var list = [];
+  pieces.forEach(function(p){
+    var d = decOf(p.n);
+    if (d && (d.d || d.note)) list.push({ n:p.n, title:p.title, date:p.date, decision:d.d || null, target:d.target || null, note:d.note || "" });
+  });
+  var orph = orphans().map(function(n){
+    var d = decisions[n];
+    return { n:n, title:null, date:null, decision:d.d || null, target:d.target || null, note:d.note || "", noLongerInGallery:true };
+  });
+  return { app:"builtbysai-cull", version:1, exportedAt:new Date().toISOString(), index:INDEX_URL,
+           counts:counts(), decisions:list.concat(orph) };
+}
+function renderExport(){ $("report").value = buildReport(); }
+$("dljson").addEventListener("click", function(){
+  var blob = new Blob([JSON.stringify(buildJSON(), null, 2)], { type:"application/json" });
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "cull-export.json";
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 400);
+});
+$("copyrep").addEventListener("click", function(){
+  renderExport();
+  $("report").select();
+  if (navigator.clipboard) navigator.clipboard.writeText($("report").value);
+  else document.execCommand("copy");
+  $("copyrep").textContent = "Copied";
+  setTimeout(function(){ $("copyrep").textContent = "Copy report"; }, 1200);
+});
+$("importfile").addEventListener("change", function(ev){
+  var f = ev.target.files[0]; if (!f) return;
+  var rd = new FileReader();
+  rd.onload = function(){
+    try {
+      var data = JSON.parse(rd.result);
+      var rows = data.decisions || data;
+      if (!Array.isArray(rows)) throw new Error("shape");
+      var next = {};
+      rows.forEach(function(r){
+        if (!r || typeof r.n !== "number") return;
+        var d = {};
+        if (r.decision) d.d = r.decision;
+        if (r.target) d.target = r.target;
+        if (r.note) d.note = r.note;
+        d.ts = Date.now();
+        if (d.d || d.note) next[r.n] = d;
+      });
+      decisions = next; saveDec();
+      cur = 0; renderProgress(); renderExport(); showCurrent();
+      alert("Imported " + Object.keys(next).length + " piece records.");
+    } catch(e){ alert("That file is not a cull export."); }
+    ev.target.value = "";
+  };
+  rd.readAsText(f);
+});
+$("clearall").addEventListener("click", function(){
+  if (!confirm("Clear every decision and note saved on this device? Export first if you need them.")) return;
+  decisions = {}; saveDec(); cur = 0; renderProgress(); renderExport(); showCurrent();
+});
+
+/* ---------- wiring ---------- */
+document.querySelectorAll("nav.modes button").forEach(function(b){
+  b.addEventListener("click", function(){ setMode(b.getAttribute("data-mode")); });
+});
+$("b-keep").addEventListener("click", function(){ decide("keep"); });
+$("b-del").addEventListener("click", function(){ decide("delete"); });
+$("b-skip").addEventListener("click", function(){ decide("skip"); });
+$("b-merge").addEventListener("click", function(){ decide("merge"); });
+$("prev").addEventListener("click", function(){ if (cur > 0){ cur--; showCurrent(); } });
+$("next").addEventListener("click", function(){ var l = filtered(); if (cur < l.length - 1){ cur++; showCurrent(); } });
+$("filter").addEventListener("change", function(){ cur = 0; showCurrent(); });
+$("gfilter").addEventListener("change", function(){ renderGrid(); });
+function doJump(){
+  var n = parseInt($("jump").value, 10);
+  if (!n || !byN[n]){ $("jump").style.borderColor = "var(--del)"; return; }
+  $("jump").style.borderColor = "";
+  if ($("filter").value !== "all"){
+    var keep = filtered().some(function(p){ return p.n === n; });
+    if (!keep) $("filter").value = "all";
+  }
+  var list = filtered();
+  for (var i=0;i<list.length;i++) if (list[i].n === n){ cur = i; break; }
+  showCurrent();
+}
+$("gojump").addEventListener("click", doJump);
+$("jump").addEventListener("keydown", function(ev){ if (ev.key === "Enter") doJump(); });
+var noteTimer = null;
+$("note").addEventListener("input", function(){
+  var p = curPiece(); if (!p) return;
+  var v = $("note").value, n = p.n;
+  if (noteTimer) clearTimeout(noteTimer);
+  noteTimer = setTimeout(function(){
+    var d = decOf(n) || {};
+    if (v) d.note = v; else delete d.note;
+    d.ts = Date.now();
+    if (d.d || d.note) decisions[n] = d; else delete decisions[n];
+    saveDec();
+  }, 250);
+});
+$("reprobe").addEventListener("click", function(){
+  var p = curPiece(); if (!p) return;
+  delete probes[p.n]; saveProbes(); paintStatus();
+  $("frame").removeAttribute("src");
+  setTimeout(showCurrent, 60);
+});
+document.addEventListener("keydown", function(ev){
+  if (mode !== "review") return;
+  var tag = (ev.target.tagName || "").toLowerCase();
+  if (tag === "input" || tag === "textarea" || tag === "select") return;
+  if (ev.key === "ArrowRight"){ var l = filtered(); if (cur < l.length - 1){ cur++; showCurrent(); } }
+  else if (ev.key === "ArrowLeft"){ if (cur > 0){ cur--; showCurrent(); } }
+  else if (ev.key === "k" || ev.key === "K") decide("keep");
+  else if (ev.key === "x" || ev.key === "X") decide("delete");
+  else if (ev.key === "s" || ev.key === "S") decide("skip");
+});
+
+/* ---------- load ---------- */
+fetch(INDEX_URL, { cache:"no-store" }).then(function(r){
+  if (!r.ok) throw new Error("index " + r.status);
+  return r.json();
+}).then(function(data){
+  pieces = data.filter(function(p){ return p && typeof p.n === "number"; });
+  pieces.forEach(function(p){ byN[p.n] = p; });
+  cur = 0;
+  showCurrent();
+  backgroundProbe();
+}).catch(function(e){
+  var m = $("loadmsg");
+  m.hidden = false;
+  m.textContent = "Could not read the gallery index (" + e.message + "). Reload to try again.";
+  $("progress").textContent = "Index failed to load";
+});
+</script>
+</body>
+</html>
