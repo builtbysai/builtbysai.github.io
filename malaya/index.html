@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Malaya — butterflies &amp; cute things</title>
+<meta name="description" content="Malaya loves butterflies and cute things. Beautiful flowers, beautiful everything cute and pink.">
+<!-- malaya-butterfly-garden-v1 -->
+<style>
+  :root{
+    --blush:#fff7fa;
+    --cream:#fffdf8;
+    --pink-soft:#ffd6e7;
+    --pink:#ff8fab;
+    --pink-deep:#e75480;
+    --rose:#d6336c;
+    --ink:#5b2333;
+    --ink-soft:#8a4b63;
+    --lilac:#c9a7eb;
+    --gold:#f4b942;
+    --card:#ffffff;
+    --radius:28px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--blush);
+    color:var(--ink);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--pink-soft);color:var(--rose)}
+  a{color:inherit}
+  h1,h2,h3,.serif{font-family:Georgia,"Times New Roman",serif;font-weight:400}
+
+  /* ---------- nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 28px;
+    background:rgba(255,247,250,.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--pink-soft);
+  }
+  .logo{font-family:Georgia,serif;font-size:1.5rem;letter-spacing:.04em;text-decoration:none;color:var(--rose);white-space:nowrap}
+  .logo span{color:var(--pink-deep)}
+  nav ul{display:flex;gap:26px;list-style:none}
+  nav ul a{
+    text-decoration:none;font-size:.82rem;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--ink-soft);padding:6px 2px;border-bottom:2px solid transparent;
+  }
+  nav ul a:hover{color:var(--rose);border-bottom-color:var(--pink)}
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;text-align:center;
+    padding:110px 24px 90px;overflow:hidden;
+    background:
+      radial-gradient(ellipse 60% 45% at 50% 0%, #ffe3ee 0%, transparent 70%),
+      linear-gradient(180deg,#fff7fa 0%,#ffeef5 100%);
+  }
+  .hero .eyebrow{
+    font-size:.8rem;letter-spacing:.32em;text-transform:uppercase;color:var(--pink-deep);
+    margin-bottom:18px;
+  }
+  .hero h1{
+    font-size:clamp(3rem,9vw,6.2rem);line-height:1.02;color:var(--rose);
+  }
+  .hero h1 em{font-style:italic;color:var(--pink-deep)}
+  .hero .tagline{
+    margin:22px auto 0;max-width:560px;font-size:clamp(1.05rem,2.4vw,1.35rem);color:var(--ink-soft);
+  }
+  .hero .tagline b{color:var(--rose);font-weight:600}
+  .hero .cta{margin-top:36px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .btn{
+    display:inline-block;text-decoration:none;border-radius:999px;padding:13px 28px;
+    font-size:.95rem;letter-spacing:.02em;transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn-pink{background:var(--pink-deep);color:#fff;box-shadow:0 8px 20px rgba(231,84,128,.35)}
+  .btn-ghost{background:#fff;color:var(--rose);border:1.5px solid var(--pink-soft)}
+  .hero-butterfly{position:absolute;pointer-events:none;opacity:.9;will-change:transform}
+  .hero-butterfly svg{display:block}
+  .bf1{top:16%;left:9%;width:64px;animation:drift1 11s ease-in-out infinite}
+  .bf2{top:24%;right:10%;width:46px;animation:drift2 13s ease-in-out infinite}
+  .bf3{bottom:18%;left:16%;width:38px;animation:drift1 15s ease-in-out infinite reverse}
+  .bf4{top:8%;right:32%;width:30px;animation:drift2 9s ease-in-out infinite}
+  @keyframes drift1{
+    0%,100%{transform:translate(0,0) rotate(-6deg)}
+    50%{transform:translate(18px,-26px) rotate(8deg)}
+  }
+  @keyframes drift2{
+    0%,100%{transform:translate(0,0) rotate(5deg)}
+    50%{transform:translate(-20px,-18px) rotate(-9deg)}
+  }
+  .flutter{animation:flutter 1.6s ease-in-out infinite;transform-origin:center}
+  @keyframes flutter{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.72)}}
+  .petal{
+    position:absolute;top:-24px;width:16px;height:13px;
+    background:var(--pink);opacity:.55;border-radius:100% 4px 100% 4px;
+    animation:fall linear infinite;pointer-events:none;
+  }
+  .petal.p2{background:var(--pink-soft);width:12px;height:10px}
+  .petal.p3{background:var(--lilac);width:13px;height:11px;opacity:.4}
+  @keyframes fall{
+    0%{transform:translateY(0) rotate(0deg) translateX(0)}
+    50%{transform:translateY(45vh) rotate(180deg) translateX(24px)}
+    100%{transform:translateY(92vh) rotate(340deg) translateX(-10px)}
+  }
+
+  /* scalloped divider */
+  .scallop{height:26px;background:
+    radial-gradient(circle at 16px -6px, transparent 18px, var(--cream) 19px);
+    background-size:32px 26px;background-repeat:repeat-x;
+  }
+
+  /* ---------- sections ---------- */
+  section{padding:84px 24px;max-width:1080px;margin:0 auto}
+  .section-head{text-align:center;margin-bottom:48px}
+  .section-head .kicker{
+    font-size:.78rem;letter-spacing:.32em;text-transform:uppercase;color:var(--pink-deep);
+  }
+  .section-head h2{font-size:clamp(2rem,5vw,3rem);color:var(--rose);margin-top:10px}
+  .section-head h2 em{font-style:italic;color:var(--pink-deep)}
+  .section-head p{color:var(--ink-soft);max-width:520px;margin:12px auto 0}
+  .flower-div{display:flex;justify-content:center;margin:0 auto 18px}
+  .flower-div svg{width:44px;height:44px}
+
+  /* ---------- work cards ---------- */
+  .work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .work-card{
+    background:var(--card);border:2px dashed var(--pink-soft);border-radius:var(--radius);
+    padding:30px 26px 34px;text-align:center;position:relative;
+    transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  .work-card:hover{transform:translateY(-4px);border-color:var(--pink);box-shadow:0 16px 34px rgba(231,84,128,.14)}
+  .work-card .slot{
+    display:inline-block;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--pink-deep);background:#ffeef5;border-radius:999px;padding:5px 12px;margin-bottom:18px;
+  }
+  .work-card .art{
+    height:150px;border-radius:18px;margin-bottom:20px;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,#ffe3ee,#fff0f6 55%,#f3e8ff);
+    overflow:hidden;position:relative;
+  }
+  .work-card .art svg{width:86px;height:86px}
+  .work-card h3{font-size:1.35rem;color:var(--rose);margin-bottom:8px}
+  .work-card p{font-size:.95rem;color:var(--ink-soft)}
+  .work-card .fill-note{margin-top:16px;font-size:.82rem;color:var(--pink-deep);font-style:italic}
+
+  /* ---------- marquee ---------- */
+  .marquee-clip{overflow:hidden;padding:12px 0}
+  .marquee-wrap{
+    background:var(--pink-deep);color:#fff;overflow:hidden;
+    padding:16px 0;transform:rotate(-1.2deg);width:102%;margin-left:-1%;
+  }
+  .marquee{display:flex;gap:0;width:max-content;animation:scroll 26s linear infinite}
+  .marquee span{
+    font-family:Georgia,serif;font-size:1.25rem;letter-spacing:.06em;white-space:nowrap;
+    padding:0 18px;display:flex;align-items:center;gap:18px;
+  }
+  .marquee span i{font-style:normal;font-size:1rem;opacity:.85}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ---------- play garden ---------- */
+  .garden{
+    position:relative;height:340px;border-radius:var(--radius);overflow:hidden;cursor:pointer;
+    background:linear-gradient(180deg,#ffeef5 0%,#fff7fa 55%,#e9f7e4 100%);
+    border:2px solid var(--pink-soft);
+    display:flex;align-items:flex-end;justify-content:center;
+  }
+  .garden .hint{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;pointer-events:none;padding:20px;
+  }
+  .garden .hint h3{font-size:1.6rem;color:var(--rose)}
+  .garden .hint p{color:var(--ink-soft);max-width:380px;margin-top:8px}
+  .garden .counter{
+    position:absolute;top:16px;right:20px;font-size:.85rem;color:var(--pink-deep);
+    background:rgba(255,255,255,.85);border-radius:999px;padding:6px 14px;
+  }
+  .garden .grass{
+    position:absolute;bottom:0;left:0;right:0;height:64px;
+    background:radial-gradient(circle at 10px 0, #b8e6a3 10px, transparent 11px),
+               radial-gradient(circle at 34px 6px, #a5dc90 12px, transparent 13px);
+    background-size:48px 64px;background-repeat:repeat-x;opacity:.8;
+  }
+  .garden .flower-row{position:absolute;bottom:14px;left:0;right:0;display:flex;justify-content:space-around;pointer-events:none}
+  .garden .flower-row svg{width:34px;height:34px}
+  .released{position:absolute;pointer-events:none;z-index:5;will-change:transform}
+
+  /* ---------- about ---------- */
+  .about-wrap{display:grid;grid-template-columns:1fr 1.15fr;gap:48px;align-items:start}
+  .about-intro h2{font-size:clamp(2rem,4.5vw,2.8rem);color:var(--rose);line-height:1.15}
+  .about-intro h2 em{font-style:italic;color:var(--pink-deep)}
+  .about-intro p{color:var(--ink-soft);margin-top:16px}
+  .about-intro .big-butterfly{margin-top:26px;width:120px}
+  .timeline{list-style:none;position:relative;padding-left:34px}
+  .timeline::before{
+    content:"";position:absolute;left:9px;top:8px;bottom:8px;width:2px;
+    background:repeating-linear-gradient(180deg,var(--pink) 0 8px,transparent 8px 16px);
+  }
+  .timeline li{position:relative;padding:0 0 30px 14px}
+  .timeline li:last-child{padding-bottom:0}
+  .timeline li::before{
+    content:"";position:absolute;left:-34px;top:6px;width:20px;height:20px;border-radius:50%;
+    background:#fff;border:2px solid var(--pink-deep);
+    box-shadow:0 0 0 4px #ffe3ee;
+  }
+  .timeline .when{font-size:.75rem;letter-spacing:.24em;text-transform:uppercase;color:var(--pink-deep)}
+  .timeline h3{font-size:1.2rem;color:var(--rose);margin:4px 0 4px}
+  .timeline p{font-size:.95rem;color:var(--ink-soft)}
+  .timeline .placeholder{
+    border:2px dashed var(--pink-soft);border-radius:18px;padding:18px 20px;background:#fff;
+  }
+  .timeline .placeholder h3{color:var(--ink-soft)}
+  .timeline .placeholder p{font-style:italic}
+
+  /* ---------- contact ---------- */
+  .contact{text-align:center}
+  .contact h2{font-size:clamp(2.4rem,6vw,3.6rem);color:var(--rose)}
+  .contact h2 em{font-style:italic;color:var(--pink-deep)}
+  .contact p{color:var(--ink-soft);max-width:480px;margin:14px auto 0}
+  .link-slots{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:32px}
+  .link-slot{
+    border:2px dashed var(--pink-soft);background:#fff;border-radius:999px;
+    padding:12px 24px;font-size:.95rem;color:var(--ink-soft);
+  }
+  .link-slot b{color:var(--rose);font-weight:600}
+  .contact .fill-note{margin-top:22px;font-size:.85rem;color:var(--pink-deep);font-style:italic}
+
+  footer{
+    text-align:center;padding:34px 24px 44px;color:var(--ink-soft);font-size:.85rem;
+    border-top:1px solid var(--pink-soft);
+  }
+  footer .heart{color:var(--pink-deep)}
+
+  @media (max-width:760px){
+    nav{padding:12px 16px}
+    nav ul{gap:14px}
+    nav ul a{font-size:.7rem}
+    .logo{font-size:1.3rem}
+    .bf3{left:3%;bottom:5%}
+    .bf4{display:none}
+    .work-grid{grid-template-columns:1fr}
+    .about-wrap{grid-template-columns:1fr;gap:36px}
+    section{padding:64px 20px}
+    .hero{padding:84px 20px 70px}
+    .bf1{left:2%}
+    .bf2{right:2%}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<!-- butterfly + flower symbols, drawn in code -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="butterfly" viewBox="0 0 100 80">
+      <path d="M50 38 C32 4 6 8 13 31 C18 48 38 45 50 38 Z" fill="#ff8fab"/>
+      <path d="M50 38 C68 4 94 8 87 31 C82 48 62 45 50 38 Z" fill="#ff8fab"/>
+      <path d="M50 42 C36 54 20 60 28 71 C36 79 46 60 50 42 Z" fill="#ffc2d4"/>
+      <path d="M50 42 C64 54 80 60 72 71 C64 79 54 60 50 42 Z" fill="#ffc2d4"/>
+      <ellipse cx="50" cy="42" rx="4.5" ry="17" fill="#5b2333"/>
+      <path d="M47 26 Q44 16 38 12 M53 26 Q56 16 62 12" stroke="#5b2333" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="flower" viewBox="0 0 100 100">
+      <g fill="#ffb3c6">
+        <ellipse cx="50" cy="24" rx="15" ry="21"/>
+        <ellipse cx="50" cy="24" rx="15" ry="21" transform="rotate(72 50 50)"/>
+        <ellipse cx="50" cy="24" rx="15" ry="21" transform="rotate(144 50 50)"/>
+        <ellipse cx="50" cy="24" rx="15" ry="21" transform="rotate(216 50 50)"/>
+        <ellipse cx="50" cy="24" rx="15" ry="21" transform="rotate(288 50 50)"/>
+      </g>
+      <circle cx="50" cy="50" r="13" fill="#f4b942"/>
+      <circle cx="46" cy="47" r="2.4" fill="#d98a1f"/>
+      <circle cx="54" cy="53" r="2.4" fill="#d98a1f"/>
+    </symbol>
+    <symbol id="daisy" viewBox="0 0 100 100">
+      <g fill="#ffffff" stroke="#ffd6e7" stroke-width="1.5">
+        <ellipse cx="50" cy="22" rx="12" ry="22"/>
+        <ellipse cx="50" cy="22" rx="12" ry="22" transform="rotate(60 50 50)"/>
+        <ellipse cx="50" cy="22" rx="12" ry="22" transform="rotate(120 50 50)"/>
+        <ellipse cx="50" cy="22" rx="12" ry="22" transform="rotate(180 50 50)"/>
+        <ellipse cx="50" cy="22" rx="12" ry="22" transform="rotate(240 50 50)"/>
+        <ellipse cx="50" cy="22" rx="12" ry="22" transform="rotate(300 50 50)"/>
+      </g>
+      <circle cx="50" cy="50" r="13" fill="#f4b942"/>
+    </symbol>
+  </defs>
+</svg>
+
+<nav>
+  <a class="logo" href="#top">Malaya <span>&#10084;</span></a>
+  <ul>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#play">Play</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-butterfly bf1"><svg class="flutter" viewBox="0 0 100 80"><use href="#butterfly"/></svg></div>
+  <div class="hero-butterfly bf2"><svg class="flutter" viewBox="0 0 100 80"><use href="#butterfly"/></svg></div>
+  <div class="hero-butterfly bf3"><svg class="flutter" viewBox="0 0 100 80"><use href="#butterfly"/></svg></div>
+  <div class="hero-butterfly bf4"><svg class="flutter" viewBox="0 0 100 80"><use href="#butterfly"/></svg></div>
+  <p class="eyebrow">butterflies &middot; flowers &middot; everything cute</p>
+  <h1>Hi, I&rsquo;m <em>Malaya</em></h1>
+  <p class="tagline">Lover of <b>butterflies</b> and <b>cute things</b>. Beautiful flowers, beautiful everything cute and <b>pink</b>.</p>
+  <div class="cta">
+    <a class="btn btn-pink" href="#work">See my work &darr;</a>
+    <a class="btn btn-ghost" href="#contact">Say hello &#10084;</a>
+  </div>
+</header>
+
+<div class="scallop" aria-hidden="true"></div>
+
+<section id="work">
+  <div class="section-head">
+    <div class="flower-div"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#flower"/></svg></div>
+    <p class="kicker">Selected work</p>
+    <h2>Things I&rsquo;ve <em>made</em></h2>
+    <p>A little garden of favourite projects. These three spots are waiting for Malaya&rsquo;s real work.</p>
+  </div>
+  <div class="work-grid">
+    <article class="work-card">
+      <span class="slot">Slot 1 &middot; your project</span>
+      <div class="art"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#butterfly"/></svg></div>
+      <h3>Your project here</h3>
+      <p>A title, one line about it, and a photo when you&rsquo;re ready.</p>
+      <p class="fill-note">Add your first favourite thing here.</p>
+    </article>
+    <article class="work-card">
+      <span class="slot">Slot 2 &middot; your project</span>
+      <div class="art"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#flower"/></svg></div>
+      <h3>Your project here</h3>
+      <p>A title, one line about it, and a photo when you&rsquo;re ready.</p>
+      <p class="fill-note">Add your second favourite thing here.</p>
+    </article>
+    <article class="work-card">
+      <span class="slot">Slot 3 &middot; your project</span>
+      <div class="art"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#daisy"/></svg></div>
+      <h3>Your project here</h3>
+      <p>A title, one line about it, and a photo when you&rsquo;re ready.</p>
+      <p class="fill-note">Add your third favourite thing here.</p>
+    </article>
+  </div>
+</section>
+
+<div class="marquee-clip">
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee">
+    <span>Butterflies <i>&#10022;</i></span><span>Cherry blossoms <i>&#10022;</i></span><span>Pink skies <i>&#10022;</i></span><span>Daisies <i>&#10022;</i></span><span>Roses <i>&#10022;</i></span><span>Sunshine <i>&#10022;</i></span><span>Peonies <i>&#10022;</i></span><span>Soft clouds <i>&#10022;</i></span>
+    <span>Butterflies <i>&#10022;</i></span><span>Cherry blossoms <i>&#10022;</i></span><span>Pink skies <i>&#10022;</i></span><span>Daisies <i>&#10022;</i></span><span>Roses <i>&#10022;</i></span><span>Sunshine <i>&#10022;</i></span><span>Peonies <i>&#10022;</i></span><span>Soft clouds <i>&#10022;</i></span>
+  </div>
+</div>
+</div>
+
+<section id="play">
+  <div class="section-head">
+    <div class="flower-div"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#daisy"/></svg></div>
+    <p class="kicker">Play</p>
+    <h2>The butterfly <em>garden</em></h2>
+    <p>Tap anywhere in the garden and a butterfly appears. They only stay a moment, like real ones.</p>
+  </div>
+  <div class="garden" id="garden" role="button" tabindex="0" aria-label="Butterfly garden. Activate to release a butterfly.">
+    <div class="grass" aria-hidden="true"></div>
+    <div class="flower-row" aria-hidden="true">
+      <svg viewBox="0 0 100 100"><use href="#flower"/></svg>
+      <svg viewBox="0 0 100 100"><use href="#daisy"/></svg>
+      <svg viewBox="0 0 100 100"><use href="#flower"/></svg>
+      <svg viewBox="0 0 100 100"><use href="#daisy"/></svg>
+      <svg viewBox="0 0 100 100"><use href="#flower"/></svg>
+    </div>
+    <div class="hint">
+      <h3>Tap to release a butterfly</h3>
+      <p>Every tap lets one go. Watch it flutter up and away.</p>
+    </div>
+    <div class="counter" id="counter">0 butterflies released</div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="about-wrap">
+    <div class="about-intro">
+      <div class="flower-div" style="justify-content:flex-start"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#flower"/></svg></div>
+      <p class="kicker">About</p>
+      <h2>About <em>Malaya</em></h2>
+      <p>Malaya loves butterflies and cute things. Beautiful flowers, beautiful everything cute and pink. This is her little corner of the internet, in her favourite colour.</p>
+      <p>Her story, her photos and her favourite moments go here, when she&rsquo;s ready to add them.</p>
+      <svg class="big-butterfly" viewBox="0 0 100 80" aria-hidden="true"><use href="#butterfly"/></svg>
+    </div>
+    <ol class="timeline">
+      <li>
+        <div class="placeholder">
+          <p class="when">A moment to add</p>
+          <h3>Your first memory here</h3>
+          <p>A favourite butterfly, a flower, a day worth keeping. Add the date and the story when you&rsquo;re ready.</p>
+        </div>
+      </li>
+      <li>
+        <div class="placeholder">
+          <p class="when">A moment to add</p>
+          <h3>Your second memory here</h3>
+          <p>Another little moment that made you smile. A photo goes beautifully here.</p>
+        </div>
+      </li>
+      <li>
+        <div class="placeholder">
+          <p class="when">A moment to add</p>
+          <h3>Your third memory here</h3>
+          <p>The most recent one, or the one you love most. This timeline grows with you.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="flower-div"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#flower"/></svg></div>
+  <p class="kicker">Contact</p>
+  <h2>Say <em>hello</em></h2>
+  <p>Malaya would love to hear from you. Her links go here when she&rsquo;s ready to share them.</p>
+  <div class="link-slots">
+    <span class="link-slot"><b>Instagram</b> &middot; add your link</span>
+    <span class="link-slot"><b>Email</b> &middot; add your address</span>
+    <span class="link-slot"><b>Your link</b> &middot; add anywhere else</span>
+  </div>
+  <p class="fill-note">Nothing here is a real link yet &mdash; these are placeholders, not dead ends.</p>
+</section>
+
+<footer>
+  <p>&copy; Malaya &middot; made with <span class="heart">&#10084;</span> butterflies &amp; pink</p>
+  <p>A placeholder site &mdash; fill in your own work, photos and links.</p>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---- falling petals in the hero ---- */
+  var hero = document.querySelector(".hero");
+  if (hero && !reduceMotion) {
+    for (var i = 0; i < 14; i++) {
+      var petal = document.createElement("span");
+      petal.className = "petal" + (i % 3 === 1 ? " p2" : i % 3 === 2 ? " p3" : "");
+      petal.style.left = (Math.random() * 96) + "%";
+      petal.style.animationDuration = (9 + Math.random() * 9) + "s";
+      petal.style.animationDelay = (-Math.random() * 16) + "s";
+      hero.appendChild(petal);
+    }
+  }
+
+  /* ---- butterfly garden: tap to release ---- */
+  var garden = document.getElementById("garden");
+  var counter = document.getElementById("counter");
+  var released = 0;
+  var palette = ["#ff8fab", "#e75480", "#c9a7eb", "#ffb3c6", "#f4b942"];
+
+  function releaseButterfly(x, y) {
+    var b = document.createElement("div");
+    b.className = "released";
+    var size = 34 + Math.random() * 26;
+    b.style.width = size + "px";
+    b.style.left = (x - size / 2) + "px";
+    b.style.top = (y - size / 2) + "px";
+    var color = palette[Math.floor(Math.random() * palette.length)];
+    b.innerHTML = '<svg class="flutter" viewBox="0 0 100 80" aria-hidden="true">' +
+      '<path d="M50 38 C32 4 6 8 13 31 C18 48 38 45 50 38 Z" fill="' + color + '"/>' +
+      '<path d="M50 38 C68 4 94 8 87 31 C82 48 62 45 50 38 Z" fill="' + color + '"/>' +
+      '<path d="M50 42 C36 54 20 60 28 71 C36 79 46 60 50 42 Z" fill="#ffd6e7"/>' +
+      '<path d="M50 42 C64 54 80 60 72 71 C64 79 54 60 50 42 Z" fill="#ffd6e7"/>' +
+      '<ellipse cx="50" cy="42" rx="4.5" ry="17" fill="#5b2333"/></svg>';
+    garden.appendChild(b);
+    released++;
+    counter.textContent = released + (released === 1 ? " butterfly released" : " butterflies released");
+    var drift = (Math.random() - 0.5) * 140;
+    var rise = 120 + Math.random() * 120;
+    if (reduceMotion) {
+      setTimeout(function(){ b.remove(); }, 400);
+      return;
+    }
+    b.animate([
+      { transform: "translate(0,0) rotate(0deg)", opacity: 1 },
+      { transform: "translate(" + (drift * 0.4) + "px," + (-rise * 0.5) + "px) rotate(" + (drift * 0.1) + "deg)", opacity: 1, offset: 0.55 },
+      { transform: "translate(" + drift + "px," + (-rise) + "px) rotate(" + (drift * 0.16) + "deg)", opacity: 0 }
+    ], { duration: 2600 + Math.random() * 900, easing: "ease-out" }).onfinish = function(){ b.remove(); };
+  }
+
+  garden.addEventListener("click", function(e){
+    var rect = garden.getBoundingClientRect();
+    releaseButterfly(e.clientX - rect.left, e.clientY - rect.top);
+  });
+  garden.addEventListener("keydown", function(e){
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      var rect = garden.getBoundingClientRect();
+      releaseButterfly(rect.width * (0.3 + Math.random() * 0.4), rect.height * 0.6);
+    }
+  });
+})();
+</script>
+</body>
+</html>
