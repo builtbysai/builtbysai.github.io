@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample AI Audit — Michaelangelo's Italian Restaurant, Cherry Hill NJ | Hans Sai</title>
+<meta name="description" content="A sample AI audit of Michaelangelo's Italian Restaurant in Cherry Hill, NJ, prepared by Hans Sai from public sources only.">
+<link rel="icon" href="../favicon.ico">
+<style>
+  :root{
+    --paper:#F6F1E7;
+    --paper-2:#EFE8D8;
+    --ink:#17140E;
+    --green:#1E4D38;
+    --rust:#B3401E;
+    --muted:#6B6455;
+    --line:rgba(23,20,14,.22);
+    --line-soft:rgba(23,20,14,.12);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--green);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+  a:hover{color:var(--ink)}
+  ::selection{background:var(--green);color:var(--paper)}
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px}
+  .label{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+  }
+  .label b{color:var(--green);font-weight:700}
+  .topbar{border-bottom:1px solid var(--ink);padding:14px 0}
+  .topbar .wrap{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;max-width:1080px}
+  .brand{font-family:Georgia,"Times New Roman",serif;font-weight:700;font-size:19px;letter-spacing:-.01em}
+  .brand a{color:var(--ink);text-decoration:none}
+  .brand a:hover{color:var(--green)}
+  .back{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+  header.audit-head{padding:48px 0 28px;border-bottom:1px solid var(--ink)}
+  header.audit-head h1{
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:clamp(2.1rem,5vw,3.2rem);line-height:1.05;letter-spacing:-.02em;
+    margin:16px 0 14px;font-weight:700;
+  }
+  .meta{font-size:14px;color:var(--muted);line-height:1.6}
+  .lede{font-size:19px;line-height:1.6;margin:28px 0 0;padding:20px 24px;background:var(--paper-2);border-left:3px solid var(--green)}
+  .lede strong{font-weight:700}
+  section{padding:36px 0 8px}
+  section h2{
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:1.55rem;line-height:1.2;letter-spacing:-.01em;margin:0 0 18px;font-weight:700;
+    padding-bottom:10px;border-bottom:1px solid var(--line);
+  }
+  section h3{font-family:Georgia,"Times New Roman",serif;font-size:1.2rem;line-height:1.3;margin:26px 0 8px;font-weight:700}
+  section h3:first-of-type{margin-top:0}
+  p{margin:0 0 16px;max-width:68ch}
+  p:last-child{margin-bottom:0}
+  blockquote{
+    margin:20px 0;padding:4px 0 4px 20px;border-left:3px solid var(--green);
+    font-family:Georgia,"Times New Roman",serif;font-size:1.12rem;line-height:1.55;font-style:italic;
+  }
+  .recs{margin:0;padding:0;list-style:none;counter-reset:rec}
+  .recs>li{
+    counter-increment:rec;position:relative;padding:20px 0 20px 52px;
+    border-bottom:1px solid var(--line-soft);
+  }
+  .recs>li:last-child{border-bottom:none}
+  .recs>li::before{
+    content:counter(rec,decimal-leading-zero);
+    position:absolute;left:0;top:22px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:15px;color:var(--green);font-weight:700;
+  }
+  .recs h3{margin:0 0 6px}
+  .bottomline{
+    margin:36px 0 0;padding:24px;background:var(--paper-2);border:1px solid var(--ink);
+  }
+  .bottomline h2{border-bottom:none;padding-bottom:0;margin-bottom:12px}
+  .sources{padding:36px 0 12px}
+  .sources ol{margin:0;padding-left:22px;font-size:14px;line-height:1.7;color:var(--muted)}
+  .sources li{margin-bottom:6px;word-break:break-all}
+  footer{padding:40px 0 56px;border-top:1px solid var(--ink);margin-top:40px}
+  .foot-grid{display:flex;justify-content:space-between;gap:32px;flex-wrap:wrap;align-items:flex-start}
+  .foot-links{font-family:Georgia,"Times New Roman",serif;font-size:1.15rem;line-height:1.9}
+  .foot-links a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--green)}
+  .foot-links a:hover{color:var(--green)}
+  .foot-meta{font-size:13px;color:var(--muted);line-height:1.7;max-width:44ch}
+  @media (max-width:520px){
+    body{font-size:16px}
+    .wrap{padding:0 18px}
+    header.audit-head{padding:36px 0 24px}
+    .lede{padding:16px 18px}
+    .recs>li{padding-left:42px}
+    .bottomline{padding:18px}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand"><a href="https://builtbysai.com/">Hans Sai</a></div>
+    <div><a class="back" href="index.html">&larr; Back to the OpenWorks page</a></div>
+  </div>
+</header>
+
+<header class="audit-head">
+  <div class="wrap">
+    <div class="label"><b>Sample AI Audit</b> &middot; OpenAI OpenWorks Partner application</div>
+    <h1>Michaelangelo&rsquo;s Italian Restaurant</h1>
+    <div class="meta">1334 Brace Rd, Cherry Hill, NJ 08034 &middot; Family-owned Italian restaurant and pizzeria<br>
+    Prepared by Hans Sai, November 24, 2026 &middot; From public sources only. The business was not contacted.</div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <p class="lede"><strong>One-line summary:</strong> A well-loved, 37-year-old family restaurant with strong reviews and a huge menu, whose online presence is split across two websites, two phone numbers, and conflicting hours &mdash; a fixable mess a small AI setup can clean up and keep clean.</p>
+
+    <section>
+      <h2>The business</h2>
+      <p><strong>Michaelangelo&rsquo;s Italian Restaurant</strong> has served Cherry Hill since 1989. Its own site says:</p>
+      <blockquote>&ldquo;Since 1989, our family has been proud to share the traditions and flavors of Italy with the Cherry Hill community.&rdquo;</blockquote>
+    </section>
+
+    <section>
+      <h2>Current online presence</h2>
+
+      <h3>Websites &mdash; two of them, and they disagree</h3>
+      <p>The brand site (.org, Squarespace) tells the family story and links out to ordering; the ordering site (.com) is powered by Slice and carries the full menu. The two sites list <em>different phone numbers</em>: the brand site and Google listing show (856) 428-3231, while the Slice site&rsquo;s footer shows (856) 408-1574 &mdash; and directory listings repeat both. Hours conflict too: Google lists Mon&ndash;Thu 11am&ndash;9pm, Fri&ndash;Sat 11am&ndash;10pm, Sun 12&ndash;8:30pm, but the Slice site footer says 11am&ndash;8pm every day and omits Thursday entirely. A third domain, michaelangeloscherryhill.com, also appears in directory listings.</p>
+
+      <h3>Menu and ordering</h3>
+      <p>The Slice menu is very large &mdash; pizza (Thin Sicilian, deep dish, gourmet pies), pasta, chicken, veal, seafood, sandwiches, hoagies, and catering trays ($55&ndash;$170) &mdash; plus rotating monthly specials. Ordering runs through Slice (the site&rsquo;s preferred channel, pitched as &ldquo;no crazy fees&rdquo;), DoorDash, and Grubhub, plus phone pickup. There is no online reservation system: reservations are by phone, for parties of 6 or more. Only about seven menu items have photos, and the same dish sometimes shows two prices on the same site &mdash; Fettuccine Alfredo is $23.95 under Popular Items and $24.95 under Pasta Entrees; Fried Mozzarella Sticks are $11.95 vs. $13.95; Eggplant Parmigiana $21.95 vs. $22.95.</p>
+
+      <h3>Reviews</h3>
+      <p>Google rating is about 4.4 stars across roughly 480&ndash;500 reviews (aggregators report 482&ndash;497). Slice shows 5/5 from 1,844 ratings, with recent reviews from October 2026 praising the food (&ldquo;Delicious every time!&rdquo;, &ldquo;BBQ Chicken pizza was amazing&rdquo;). DoorDash shows 2,000+ ratings at about 93% positive. Recurring praise centers on the Thin Sicilian and deep-dish pizzas, Penne alla Vodka, salmon, and friendly service. Recurring complaints are wrong orders, undercooked food, and soggy takeout containers.</p>
+
+      <h3>Social media</h3>
+      <p>Facebook (~2,400 followers) is active &mdash; the most recent posts are weekend-specials graphics from November 6 and November 21, 2026 &mdash; but engagement is low (1&ndash;9 likes per post) and posts are almost all static specials graphics. No official Instagram account was found in public search; the restaurant&rsquo;s own site links only to Facebook. In September 2025 the restaurant had to post a public clarification because customers were confusing it with a different Michelangelo&rsquo;s in Downingtown, PA, and complaining about price differences.</p>
+    </section>
+
+    <section>
+      <h2>Recommended AI improvements</h2>
+      <ol class="recs">
+        <li>
+          <h3>One listing sweep, then automated monitoring</h3>
+          <p>The conflicting phone numbers, hours, and duplicate domains are the highest-value fix: customers calling the wrong number or arriving at the wrong time is lost business. An AI-assisted pass can reconcile every listing to one canonical set of facts, then re-check monthly and flag drift before customers notice.</p>
+        </li>
+        <li>
+          <h3>An AI assistant for the questions the phone already answers</h3>
+          <p>Reservations are phone-only, catering is a real revenue line, and the Downingtown mix-up shows customers regularly ask &ldquo;is this the Cherry Hill location?&rdquo; A simple assistant on the website and Facebook Messenger &mdash; trained only on the restaurant&rsquo;s real menu, hours, and catering trays &mdash; could answer those questions instantly, take large-party reservation requests, and draft catering quotes, instead of every inquiry tying up the front of house.</p>
+        </li>
+        <li>
+          <h3>Review-response drafts in the owner&rsquo;s voice</h3>
+          <p>With ~500 Google reviews and 1,800+ Slice ratings, replies are a part-time job nobody has time for. AI can draft short, warm replies &mdash; thanking regulars for specific dishes, and giving recurring complaints (wrong order, soggy containers) a gracious public answer &mdash; with the owner approving each before it posts.</p>
+        </li>
+        <li>
+          <h3>Turn the menu into social content</h3>
+          <p>The restaurant already creates weekly specials; it just posts one static graphic that gets a handful of likes. AI can turn each week&rsquo;s specials and the 200-item menu into varied posts &mdash; a dish spotlight, a catering idea for the weekend, a &ldquo;regulars&rsquo; favorite&rdquo; pulled from real review themes &mdash; and repurpose them for an Instagram presence, which the restaurant currently lacks entirely.</p>
+        </li>
+        <li>
+          <h3>A menu-consistency check</h3>
+          <p>The price mismatches on the Slice menu (Fettuccine Alfredo, mozzarella sticks, eggplant parm) are the kind of error no human re-reads a 200-item menu to find. An automated check can flag every item whose price differs between sections, and list items missing photos or descriptions, so the online menu stops contradicting itself.</p>
+        </li>
+      </ol>
+    </section>
+
+    <div class="bottomline">
+      <h2>Bottom line</h2>
+      <p>Michaelangelo&rsquo;s has the hard parts &mdash; 37 years of goodwill, a 4.4-star reputation, and regulars who praise it by name. What it needs is tidier operations: one set of facts everywhere, faster answers to the questions customers already ask, and replies and posts that keep up with the praise it already gets. All five fixes are small, cheap, and built on information the restaurant already has.</p>
+    </div>
+
+    <section class="sources">
+      <h2>Sources</h2>
+      <ol>
+        <li>Restaurant website (brand site): <a href="https://www.michaelangelositalianrestaurant.org/">michaelangelositalianrestaurant.org</a></li>
+        <li>Restaurant website (Slice ordering/menu): <a href="https://www.michaelangelositalianrestaurant.com/">michaelangelositalianrestaurant.com</a></li>
+        <li>Slice listing and reviews: <a href="https://slicelife.com/restaurants/nj/cherry-hill/08034/michaelangelos-italian-restaurant/menu?view_delivery_preferences=_removed_">slicelife.com</a></li>
+        <li>DoorDash listing: <a href="https://www.doordash.com/sdl/store/Michaelangelo-s-Pizza-Restaurant-Cherry-Hill-219685/">doordash.com</a></li>
+        <li>Facebook page: <a href="https://www.facebook.com/michaelangelositalianrestaurant/">facebook.com/michaelangelositalianrestaurant</a></li>
+        <li>Facebook post, weekend specials, Nov 21, 2026: <a href="https://www.facebook.com/michaelangelositalianrestaurant/posts/pfbid02CWPAT5ARTmeer9Zp5vc4ro22361i3eGJuYqnomFYdzst1WodHG8ouraQx3podtmKl">facebook.com</a></li>
+        <li>Facebook post, weekend specials, Nov 6, 2026: <a href="https://www.facebook.com/michaelangelositalianrestaurant/posts/pfbid02YQWNf5C1KXvJ8RnVsZdidL5of3NL3A9BVcaHiuN5FYznwWaHm616MH2LANS4qDkkl">facebook.com</a></li>
+        <li>Facebook post, Downingtown name-confusion clarification, Sep 17, 2025: <a href="https://www.facebook.com/michaelangelositalianrestaurant/posts/pfbid05xPzSsTZY5vLQwiL4hCFjHPe2U345XweJ7nweX9AznEpwPAtwmp9CwLyBSrAwApgl">facebook.com</a></li>
+        <li>Restaurant Guru (Google rating 4.4): <a href="https://restaurantguru.com/Michaelangelos-Cherry-Hill">restaurantguru.com</a></li>
+        <li>Restaurantji (reviews, address): <a href="https://www.restaurantji.com/nj/cherry-hill/michaelangelos-italian-restaurant-/">restaurantji.com</a></li>
+        <li>Top Rated Online (4.4, 482 reviews): <a href="https://www.top-rated.online/cities/Cherry+Hill+Township/place/p/7053542/Michaelangelo%27s+Italian+Restaurant">top-rated.online</a></li>
+        <li>Restaurant Jump (4.4, 493 reviews): <a href="https://restaurantjump.com/michaelangelos-italian-restaurant-08034/">restaurantjump.com</a></li>
+        <li>LocalityBiz (4.4, 497 ratings): <a href="https://localitybiz.com/new-jersey/fine-dining-cuisine-in-cherry-hill">localitybiz.com</a></li>
+        <li>Cylex listing (alternate phone number): <a href="https://www.cylex.us.com/company/michaelangelo's-italian-restaurant-25734775.html">cylex.us.com</a></li>
+      </ol>
+      <p style="font-size:13px;color:var(--muted);margin-top:18px">Audit date: November 24, 2026. All facts verified from the public sources listed above on that date.</p>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap" style="max-width:1080px">
+    <div class="foot-grid">
+      <div class="foot-links">
+        <a href="index.html">The OpenWorks page</a><br>
+        <a href="https://builtbysai.com/">builtbysai.com</a><br>
+        <a href="https://github.com/builtbysai">github.com/builtbysai</a>
+      </div>
+      <div class="foot-meta">
+        <strong>Hans Sai</strong><br>
+        Lindenwold, New Jersey<br>
+        <a href="mailto:saihanswissle@gmail.com">saihanswissle@gmail.com</a><br>
+        Built by Hans Sai &middot; November 2026
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
