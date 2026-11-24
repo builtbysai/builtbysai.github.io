@@ -3,332 +3,335 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hans Sai — Bring OpenWorks to South Jersey</title>
+<title>Hans Sai: Bring OpenWorks to South Jersey</title>
 <meta name="description" content="Hans Sai is applying to become an OpenAI OpenWorks Partner for Cherry Hill, New Jersey, and bring the program to South Jersey.">
 <link rel="icon" href="../favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#F6F1E7;
-    --paper-2:#EFE8D8;
-    --ink:#17140E;
-    --green:#1E4D38;
-    --rust:#B3401E;
-    --muted:#6B6455;
-    --line:rgba(23,20,14,.22);
-    --line-soft:rgba(23,20,14,.12);
+    --paper:#FFFFFF;
+    --ink:#111111;
+    --sig:#FF4D00;
+    --mut:#6B6B6B;
+    --line:#111111;
+    --line-soft:#C9C9C9;
   }
   *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
   body{
-    margin:0;
-    background:var(--paper);
-    color:var(--ink);
+    margin:0;background:var(--paper);color:var(--ink);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    font-size:17px;
-    line-height:1.65;
-    -webkit-font-smoothing:antialiased;
+    font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;
   }
-  a{color:var(--green);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
-  a:hover{color:var(--ink)}
-  ::selection{background:var(--green);color:var(--paper)}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
-  .label{
-    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-    font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
-  }
-  .label b{color:var(--green);font-weight:700}
+  a{color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+  a:hover{color:var(--sig)}
+  ::selection{background:var(--sig);color:#fff}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  .sheet{max-width:880px;margin:0 auto;padding:0 24px}
 
-  /* ---------- top bar ---------- */
-  .topbar{border-bottom:1px solid var(--ink);padding:14px 0}
-  .topbar .wrap{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
-  .topbar .brand{font-family:Georgia,"Times New Roman",serif;font-weight:700;font-size:19px;letter-spacing:-.01em}
-  .topbar .brand a{color:var(--ink);text-decoration:none}
-  .topbar .brand a:hover{color:var(--green)}
-
-  /* ---------- hero ---------- */
-  .hero{padding:56px 0 44px;border-bottom:1px solid var(--ink)}
-  .hero-grid{display:grid;grid-template-columns:1fr 292px;gap:48px;align-items:start}
-  .hero h1{
-    font-family:Georgia,"Times New Roman",serif;
-    font-size:clamp(2.7rem,6.4vw,4.6rem);
-    line-height:1.02;letter-spacing:-.025em;
-    margin:18px 0 22px;font-weight:700;
+  /* ---- cover strip ---- */
+  .cover-strip{
+    border-top:6px solid var(--ink);
+    border-bottom:1px solid var(--ink);
+    padding:10px 0;
+    display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    font-size:11px;letter-spacing:.12em;text-transform:uppercase;
   }
-  .hero h1 em{font-style:normal;color:var(--green)}
-  .standfirst{font-size:19px;line-height:1.6;max-width:56ch;margin:0 0 26px}
+  .cover-strip b{font-weight:600}
+
+  /* ---- hero ---- */
+  .hero{padding:44px 0 40px}
+  h1{
+    font-family:"Barlow Condensed","Arial Narrow","Helvetica Neue",Arial,sans-serif;
+    font-size:clamp(3.4rem,11vw,7.2rem);
+    line-height:.88;letter-spacing:-.005em;text-transform:uppercase;
+    margin:0 0 26px;font-weight:700;
+  }
+  h1 .oj{color:var(--sig)}
+  .standfirst{font-size:19px;line-height:1.55;max-width:58ch;margin:0 0 34px}
   .standfirst strong{font-weight:700}
-  .commit{
-    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-    padding:14px 0;display:flex;gap:28px;flex-wrap:wrap;
-  }
-  .commit div{font-size:14px;line-height:1.5}
-  .commit .label{display:block;margin-bottom:2px}
-  figure.portrait{margin:6px 0 0}
-  figure.portrait img{
-    display:block;width:100%;height:auto;
-    border:1px solid var(--ink);
-  }
-  figure.portrait figcaption{
-    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-    font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
-    padding-top:8px;line-height:1.5;
-  }
 
-  /* ---------- proof strip ---------- */
-  .proof{border-bottom:1px solid var(--ink);padding:26px 0}
-  .proof-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:24px}
-  .stat .num{
-    font-family:Georgia,"Times New Roman",serif;
-    font-size:2.35rem;line-height:1;font-weight:700;letter-spacing:-.02em;
+  .cover-grid{display:grid;grid-template-columns:1fr 208px;gap:40px;align-items:start}
+  .data{margin:0;padding:0;list-style:none}
+  .data li{
+    display:flex;align-items:baseline;gap:10px;
+    padding:9px 0;border-bottom:1px dotted var(--mut);
+    font-size:13px;line-height:1.45;
   }
-  .stat .num.green{color:var(--green)}
-  .stat p{margin:6px 0 0;font-size:13.5px;line-height:1.45;color:var(--muted)}
+  .data li:first-child{border-top:1px dotted var(--mut)}
+  .data .k{flex:none;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:11.5px}
+  .data .v{text-align:right;margin-left:auto}
+  figure.idphoto{margin:0}
+  figure.idphoto img{display:block;width:100%;height:auto;border:3px solid var(--ink)}
+  figure.idphoto figcaption{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);padding-top:8px;line-height:1.5}
 
-  /* ---------- sections ---------- */
-  section{padding:52px 0;border-bottom:1px solid var(--line)}
-  section:last-of-type{border-bottom:1px solid var(--ink)}
-  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:26px}
-  .sec-num{
-    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-    font-size:13px;color:var(--green);font-weight:700;letter-spacing:.1em;flex:none;
-  }
+  /* ---- sections ---- */
+  section{padding:44px 0 48px}
+  section:last-of-type{border-bottom:3px solid var(--ink)}
+  .sec-head{display:flex;align-items:baseline;gap:16px;border-top:3px solid var(--ink);padding-top:14px;margin-bottom:26px}
+  .sec-num{font-size:13px;font-weight:600;letter-spacing:.1em;flex:none}
   .sec-head h2{
-    font-family:Georgia,"Times New Roman",serif;
-    font-size:clamp(1.6rem,3.4vw,2.1rem);
-    line-height:1.15;letter-spacing:-.015em;margin:0;font-weight:700;
+    font-family:"Barlow Condensed","Arial Narrow","Helvetica Neue",Arial,sans-serif;
+    font-size:2.4rem;line-height:1;text-transform:uppercase;letter-spacing:.01em;
+    margin:0;font-weight:700;
   }
-  .lede{font-size:19px;line-height:1.6;max-width:62ch;margin:0 0 20px}
-  p{margin:0 0 16px}
+  .lede{font-size:19px;line-height:1.55;max-width:62ch;margin:0 0 20px}
+  p{margin:0 0 16px;max-width:62ch}
   p:last-child{margin-bottom:0}
-
-  /* gap */
-  .gap-grid{display:grid;grid-template-columns:200px 1fr;gap:40px;align-items:start}
-  .big-zero{font-family:Georgia,"Times New Roman",serif;font-size:7.5rem;line-height:.85;color:var(--rust);font-weight:700;letter-spacing:-.03em}
-  .big-zero-cap{font-size:14px;line-height:1.5;color:var(--muted);margin-top:10px;max-width:20ch}
-  .gap-body p{max-width:62ch}
-  .footnote{font-size:13px;color:var(--muted);margin-top:18px}
-
-  /* work entries */
-  .work-entry{display:grid;grid-template-columns:220px 1fr;gap:32px;padding:26px 0;border-top:1px solid var(--line-soft)}
-  .work-entry:first-of-type{border-top:none;padding-top:0}
-  .work-entry:last-of-type{padding-bottom:0}
-  .work-entry h3{font-family:Georgia,"Times New Roman",serif;font-size:1.25rem;line-height:1.25;margin:2px 0 6px;font-weight:700}
-  .work-entry .where{font-size:13px;color:var(--muted);line-height:1.5}
-  .work-entry .body p{max-width:64ch}
-  .work-entry .body p:last-child{margin-bottom:0}
-  .tag{
-    display:inline-block;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-    font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
-    border:1px solid var(--green);color:var(--green);padding:2px 8px;margin:0 6px 8px 0;
+  h3{
+    font-family:"Barlow Condensed","Arial Narrow","Helvetica Neue",Arial,sans-serif;
+    font-size:1.55rem;line-height:1.05;text-transform:uppercase;letter-spacing:.01em;
+    margin:0 0 8px;font-weight:700;
   }
 
-  /* two columns */
+  /* ---- 1.0 gap ---- */
+  .gap-grid{display:grid;grid-template-columns:260px 1fr;gap:36px;align-items:start}
+  .zero-box{border:3px solid var(--ink);padding:18px 20px 16px}
+  .zero-box .lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;line-height:1.5}
+  .zero-box .zero{
+    font-family:"Barlow Condensed","Arial Narrow","Helvetica Neue",Arial,sans-serif;
+    font-size:7rem;line-height:.9;font-weight:700;color:var(--sig);
+  }
+  .zero-box .cap{font-size:12.5px;line-height:1.5;color:var(--mut);margin-top:6px}
+  .footnote{font-size:12px;color:var(--mut);margin-top:20px;line-height:1.6}
+
+  /* ---- 2.0 field record ---- */
+  .log-entry{padding:26px 0;border-top:1px solid var(--line-soft)}
+  .log-entry:first-of-type{border-top:none;padding-top:0}
+  .log-entry:last-of-type{padding-bottom:0}
+  .log-entry .where{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:6px;font-weight:500}
+  .log-entry .body p{max-width:64ch}
+  .log-entry .body p:last-child{margin-bottom:0}
+
+  /* ---- 3.0 method ---- */
   .two-col{display:grid;grid-template-columns:1fr 1fr;gap:40px}
-  .two-col h3{font-family:Georgia,"Times New Roman",serif;font-size:1.3rem;line-height:1.25;margin:0 0 10px;font-weight:700}
   .two-col p{max-width:52ch}
 
-  /* 90 days */
-  .days{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
-  .day{border-top:3px solid var(--ink);padding-top:16px}
-  .day .month{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--green);font-weight:700;margin-bottom:10px}
-  .day h3{font-family:Georgia,"Times New Roman",serif;font-size:1.2rem;line-height:1.25;margin:0 0 10px;font-weight:700}
-  .day p{font-size:15.5px;line-height:1.6}
-  .day ul{margin:0;padding:0 0 0 18px;font-size:15.5px;line-height:1.6}
-  .day li{margin-bottom:8px}
-  .day li:last-child{margin-bottom:0}
+  /* ---- 4.0 operation ---- */
+  .route-box{border:3px solid var(--ink);margin:0 0 28px}
+  .route-head{
+    display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    border-bottom:1px solid var(--ink);padding:10px 16px;
+    font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;
+  }
+  .route-head span:last-child{color:var(--mut);font-weight:400}
+  .route-box svg{display:block;width:100%;height:auto}
+  .route-cap{border-top:1px solid var(--ink);padding:10px 16px;font-size:12.5px;color:var(--mut);line-height:1.5}
+  .phases{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+  .phase{border-top:3px solid var(--ink);padding-top:14px}
+  .phase .when{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+  .phase .when .sig{color:var(--sig)}
+  .check{margin:0;padding:0;list-style:none}
+  .check li{
+    position:relative;padding:0 0 10px 30px;
+    font-size:15.5px;line-height:1.55;
+  }
+  .check li:last-child{padding-bottom:0}
+  .check li::before{
+    content:"";
+    position:absolute;left:0;top:3px;width:15px;height:15px;
+    border:2px solid var(--ink);background:#fff;
+  }
+  .check li.done::before{
+    content:"\2713";
+    background:var(--sig);border-color:var(--sig);color:#fff;
+    font-size:12px;line-height:15px;text-align:center;font-weight:700;
+  }
 
-  /* audit panel */
-  .audit-panel{border:1px solid var(--ink);background:var(--paper-2)}
-  .audit-head{
-    display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;
-    border-bottom:1px solid var(--ink);padding:16px 24px;
+  /* ---- 5.0 exhibit ---- */
+  .exhibit{border:3px solid var(--ink)}
+  .exhibit-head{border-bottom:3px solid var(--ink);padding:16px 20px}
+  .exhibit-head .tag{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--sig)}
+  .exhibit-head h3{font-size:2rem;margin:6px 0 4px}
+  .exhibit-head .meta{font-size:12px;color:var(--mut);line-height:1.5}
+  .exhibit-body{padding:20px}
+  .exhibit-body>p{max-width:70ch}
+  .finding{margin:22px 0 0}
+  .finding .fname{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-bottom:10px}
+  .finding .fname .fn{color:var(--sig)}
+  .record{border:1px solid var(--ink);border-bottom:none}
+  .record:last-child{border-bottom:1px solid var(--ink)}
+  .record-row{display:grid;grid-template-columns:200px 1fr;border-bottom:1px solid var(--line-soft)}
+  .record-row:last-child{border-bottom:none}
+  .record-row .rk{
+    padding:9px 12px;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;
+    font-weight:600;border-right:1px solid var(--line-soft);line-height:1.5;
   }
-  .audit-head h3{font-family:Georgia,"Times New Roman",serif;font-size:1.35rem;line-height:1.2;margin:0;font-weight:700}
-  .audit-body{padding:24px}
-  .audit-body p{max-width:70ch}
-  .findings{margin:20px 0;padding:0;list-style:none;border-top:1px solid var(--line)}
-  .findings li{
-    display:grid;grid-template-columns:28px 1fr;gap:12px;
-    padding:13px 0;border-bottom:1px solid var(--line);font-size:15.5px;line-height:1.55;
-  }
-  .findings .n{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;color:var(--rust);font-weight:700;padding-top:3px}
-  .fixes{margin:0 0 20px;padding:0;list-style:none;counter-reset:fix}
+  .record-row .rv{padding:9px 12px;font-size:14.5px;line-height:1.5}
+  .record-row .rv.conflict{color:var(--sig);font-weight:600}
+  .record-row .rv .mark{font-weight:600;color:var(--sig)}
+  .price-row{display:grid;grid-template-columns:1.4fr 1fr 1fr .6fr;border-bottom:1px solid var(--line-soft);font-size:14px;line-height:1.5}
+  .price-row:last-child{border-bottom:none}
+  .price-row.head{font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;background:var(--ink);color:#fff}
+  .price-row>div{padding:9px 12px}
+  .price-row .delta{color:var(--sig);font-weight:600}
+  .fixes{margin:22px 0 0;padding:0;list-style:none}
   .fixes li{
-    counter-increment:fix;position:relative;padding:8px 0 8px 34px;
+    padding:9px 0 9px 44px;position:relative;
     font-size:15.5px;line-height:1.55;border-bottom:1px solid var(--line-soft);
   }
   .fixes li:last-child{border-bottom:none}
   .fixes li::before{
-    content:counter(fix,decimal-leading-zero);
-    position:absolute;left:0;top:10px;
-    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-    font-size:12px;color:var(--green);font-weight:700;
+    content:attr(data-n);
+    position:absolute;left:0;top:11px;
+    font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:12px;font-weight:600;color:var(--sig);
   }
-  .audit-note{font-size:13px;color:var(--muted);margin-top:16px}
   .read-full{
-    display:inline-block;margin-top:4px;
-    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-    font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;
+    display:inline-block;margin-top:20px;
+    font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;
   }
+  .exhibit-note{font-size:12.5px;color:var(--mut);margin-top:14px}
 
-  /* workshops */
+  /* ---- 6.0 workshops ---- */
   .workshops{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
-  .workshop h3{font-family:Georgia,"Times New Roman",serif;font-size:1.2rem;line-height:1.3;margin:0 0 8px;font-weight:700}
-  .workshop p{font-size:15px;line-height:1.6;color:var(--muted)}
-  .workshop .no{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;color:var(--green);font-weight:700;letter-spacing:.1em;margin-bottom:8px}
+  .workshop{border-top:3px solid var(--ink);padding-top:14px}
+  .workshop .no{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+  .workshop p{font-size:15px;line-height:1.6;color:var(--ink)}
 
-  /* credentials */
-  .creds{display:grid;grid-template-columns:1fr 1fr;gap:40px}
-  .creds h3{font-family:Georgia,"Times New Roman",serif;font-size:1.15rem;line-height:1.3;margin:0 0 12px;font-weight:700}
-  .creds ul{margin:0;padding:0;list-style:none;font-size:15px;line-height:1.6}
-  .creds li{padding:7px 0;border-bottom:1px solid var(--line-soft)}
-  .creds li:last-child{border-bottom:none}
-  .creds li span{color:var(--muted);font-size:13.5px}
+  /* ---- 7.0 service record ---- */
+  table.record-table{width:100%;border-collapse:collapse;margin:0 0 28px}
+  table.record-table:last-child{margin-bottom:0}
+  table.record-table caption{
+    text-align:left;font-family:"Barlow Condensed","Arial Narrow","Helvetica Neue",Arial,sans-serif;
+    font-size:1.4rem;line-height:1.1;text-transform:uppercase;font-weight:700;
+    padding:0 0 10px;
+  }
+  table.record-table th,table.record-table td{
+    border:1px solid var(--ink);padding:10px 12px;text-align:left;
+    font-size:14.5px;line-height:1.5;vertical-align:top;
+  }
+  table.record-table th{
+    font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;
+    background:var(--ink);color:#fff;
+  }
+  table.record-table td span{color:var(--mut);font-size:13px}
 
-  /* footer */
-  footer{padding:44px 0 56px}
+  /* ---- footer ---- */
+  footer{padding:40px 0 56px}
   .foot-grid{display:flex;justify-content:space-between;gap:32px;flex-wrap:wrap;align-items:flex-start}
-  .foot-links{font-family:Georgia,"Times New Roman",serif;font-size:1.25rem;line-height:1.9}
-  .foot-links a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--green)}
-  .foot-links a:hover{color:var(--green)}
-  .foot-meta{font-size:13px;color:var(--muted);line-height:1.7;max-width:44ch}
-  .disclaimer{font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:28px;max-width:72ch}
+  .foot-links{font-size:15px;line-height:2}
+  .foot-meta{font-size:13px;color:var(--mut);line-height:1.7;max-width:44ch}
+  .disclaimer{font-size:12.5px;color:var(--mut);line-height:1.6;margin-top:28px;max-width:72ch}
 
-  /* ---------- responsive ---------- */
+  /* ---- responsive ---- */
   @media (max-width:860px){
-    .hero-grid{grid-template-columns:1fr;gap:32px}
-    figure.portrait{max-width:300px}
-    .proof-grid{grid-template-columns:repeat(3,1fr)}
-    .gap-grid{grid-template-columns:1fr;gap:20px}
-    .big-zero{font-size:5.5rem}
-    .big-zero-cap{max-width:none}
-    .work-entry{grid-template-columns:1fr;gap:10px}
     .two-col{grid-template-columns:1fr;gap:28px}
-    .days{grid-template-columns:1fr;gap:28px}
+    .phases{grid-template-columns:1fr;gap:28px}
     .workshops{grid-template-columns:1fr;gap:24px}
-    .creds{grid-template-columns:1fr;gap:28px}
+  }
+  @media (max-width:700px){
+    .cover-grid{grid-template-columns:1fr;gap:28px}
+    figure.idphoto{max-width:220px}
+    .gap-grid{grid-template-columns:1fr;gap:24px}
+    .zero-box{max-width:340px}
+    .record-row{grid-template-columns:1fr}
+    .record-row .rk{border-right:none;border-bottom:1px dotted var(--line-soft);padding-bottom:4px}
+    .record-row .rv{padding-top:4px}
   }
   @media (max-width:520px){
     body{font-size:16px}
-    .wrap{padding:0 18px}
-    .hero{padding:40px 0 32px}
-    section{padding:40px 0}
-    .proof-grid{grid-template-columns:repeat(2,1fr);gap:20px}
-    .stat .num{font-size:1.9rem}
-    .audit-body{padding:18px}
-    .audit-head{padding:14px 18px}
-    .findings li{grid-template-columns:22px 1fr}
+    .sheet{padding:0 18px}
+    .hero{padding:32px 0 32px}
+    h1{font-size:clamp(2.6rem,12vw,3.1rem);overflow-wrap:break-word}
+    .sec-head h2{font-size:2rem}
+    section{padding:36px 0 40px}
+    .data li{flex-wrap:wrap;gap:2px}
+    .data .v{text-align:left;margin-left:0}
+    .exhibit-body{padding:16px}
+    .exhibit-head{padding:14px 16px}
+    .price-row{grid-template-columns:1.3fr 1fr 1fr .5fr;font-size:13px}
+    .price-row>div{padding:8px 8px}
+    table.record-table th,table.record-table td{font-size:13.5px;padding:8px 10px}
   }
 </style>
 </head>
 <body>
+<div class="sheet">
 
-<header class="topbar">
-  <div class="wrap">
-    <div class="brand"><a href="https://builtbysai.com/">Hans Sai</a></div>
-    <div class="label">OpenAI OpenWorks &middot; Partner application &middot; November 2026</div>
+  <div class="cover-strip mono">
+    <span><b>TM-OW-2026</b></span>
+    <span>OpenAI OpenWorks &middot; Partner application</span>
+    <span>November 2026</span>
   </div>
-</header>
 
-<main>
-  <!-- HERO -->
   <div class="hero">
-    <div class="wrap">
-      <div class="hero-grid">
-        <div>
-          <div class="label"><b>Cherry Hill, New Jersey</b> &middot; South Jersey</div>
-          <h1>Bring OpenWorks to <em>South&nbsp;Jersey.</em></h1>
-          <p class="standfirst">OpenWorks is live in 20 pilot communities, and none of them is in New Jersey. I&rsquo;m <strong>Hans Sai</strong> &mdash; an IT specialist, Air Force Reservist, and builder from Lindenwold &mdash; and I&rsquo;m applying to be the person who brings it here, starting in Cherry Hill.</p>
-          <div class="commit">
-            <div><span class="label">Commitment</span>Four full days a month, in person,<br>free for local businesses</div>
-            <div><span class="label">Plus</span>One workshop a month,<br>open to any local business</div>
-            <div><span class="label">Home base</span>Lindenwold, NJ &mdash; 15 minutes<br>from Cherry Hill</div>
-          </div>
-        </div>
-        <figure class="portrait">
-          <img src="../headshot-web.webp" alt="Hans Sai in U.S. Air Force dress uniform" width="640" height="800">
-          <figcaption>Hans Sai &middot; Staff Sergeant, U.S. Air Force Reserve</figcaption>
-        </figure>
-      </div>
+    <h1>Bring OpenWorks to <span class="oj">South&nbsp;Jersey.</span></h1>
+    <p class="standfirst">OpenWorks is live in 20 pilot communities, and none of them is in New Jersey. I&rsquo;m <strong>Hans Sai</strong>, an IT specialist, Air Force Reservist, and builder from Lindenwold. I&rsquo;m applying to be the person who brings it here, starting in Cherry Hill.</p>
+    <div class="cover-grid">
+      <ul class="data mono">
+        <li><span class="k">Applicant</span><span class="v">Hans Sai</span></li>
+        <li><span class="k">Experience</span><span class="v">5+ years in IT support and operations</span></li>
+        <li><span class="k">GitHub</span><span class="v">49 public repositories</span></li>
+        <li><span class="k">Home base</span><span class="v">Lindenwold, NJ, 15 min from Cherry Hill</span></li>
+        <li><span class="k">Area of operations</span><span class="v">Cherry Hill, NJ &middot; Camden County</span></li>
+        <li><span class="k">Commitment</span><span class="v">Four full days a month, in person, free for local businesses</span></li>
+        <li><span class="k">Plus</span><span class="v">One workshop a month, open to any local business</span></li>
+      </ul>
+      <figure class="idphoto">
+        <img src="../headshot-web.webp" alt="Hans Sai in U.S. Air Force dress uniform" width="640" height="800">
+        <figcaption class="mono">Hans Sai &middot; Staff Sergeant, U.S. Air Force Reserve &middot; 87 MDG / 514 AMDS</figcaption>
+      </figure>
     </div>
   </div>
 
-  <!-- PROOF STRIP -->
-  <div class="proof">
-    <div class="wrap">
-      <div class="proof-grid">
-        <div class="stat"><div class="num">5+</div><p>years in IT support and operations</p></div>
-        <div class="stat"><div class="num">300+</div><p>endpoints supported at Amazon</p></div>
-        <div class="stat"><div class="num">150+</div><p>systems deployed in the Air Force</p></div>
-        <div class="stat"><div class="num">1,000+</div><p>support tickets resolved a year</p></div>
-        <div class="stat"><div class="num green">49</div><p>public software repositories on GitHub</p></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="wrap">
-
-    <!-- 01 THE GAP -->
+  <main>
+    <!-- 1.0 THE GAP -->
     <section id="gap">
-      <div class="sec-head"><span class="sec-num">01</span><h2>The gap</h2></div>
+      <div class="sec-head"><span class="sec-num mono">1.0</span><h2>The gap</h2></div>
       <div class="gap-grid">
-        <div>
-          <div class="big-zero">0</div>
-          <div class="big-zero-cap">OpenWorks communities in New Jersey today. The nearest pilot is New York City.</div>
+        <div class="zero-box">
+          <div class="lbl mono">OpenWorks communities in New Jersey</div>
+          <div class="zero">0</div>
+          <div class="cap">Nearest pilot: New York City.</div>
         </div>
-        <div class="gap-body">
+        <div>
           <p class="lede">Cherry Hill has about <strong>3,970 businesses</strong>, the third most of any town in New Jersey. It is Camden County&rsquo;s business hub, and the county&rsquo;s regional chamber of commerce is headquartered here.</p>
           <p>That is thousands of restaurants, retailers, salons, garages, and family firms within a fifteen-minute drive of my front door, and none of them has an OpenWorks partner. I&rsquo;m not applying to join a community. I&rsquo;m applying to open one.</p>
-          <p class="footnote">Business count: DealFlow OS, State of Main Street Ownership, New Jersey, Q4 2026. Pilot communities: openai.com/openworks, November 2026.</p>
+          <p class="footnote mono">Business count: DealFlow OS, State of Main Street Ownership, New Jersey, Q4 2026. Pilot communities: openai.com/openworks, November 2026.</p>
         </div>
       </div>
     </section>
 
-    <!-- 02 THE WORK SO FAR -->
+    <!-- 2.0 FIELD RECORD -->
     <section id="work">
-      <div class="sec-head"><span class="sec-num">02</span><h2>The work so far</h2></div>
+      <div class="sec-head"><span class="sec-num mono">2.0</span><h2>Field record</h2></div>
 
-      <div class="work-entry">
-        <div>
-          <span class="tag">Local business</span>
-          <h3>Cifelli&rsquo;s Pizza</h3>
-          <div class="where">Lindenwold, NJ &middot; family pizza shop</div>
-        </div>
+      <div class="log-entry">
+        <div class="where mono">Local business &middot; Lindenwold, NJ</div>
+        <h3>Cifelli&rsquo;s Pizza</h3>
         <div class="body">
-          <p>I built the online ordering website for Cifelli&rsquo;s, a family pizza shop in my hometown, using AI-assisted development: customers browse the real menu and order online, with payment integration underway. It is the same kind of work I would do for a Cherry Hill shop on day one &mdash; a working tool, not a slide deck.</p>
+          <p>I built the online ordering website for Cifelli&rsquo;s, a family pizza shop in my hometown, using AI-assisted development: customers browse the real menu and order online, with payment integration underway. It is the same kind of work I would do for a Cherry Hill shop on day one: a working tool, not a slide deck.</p>
         </div>
       </div>
 
-      <div class="work-entry">
-        <div>
-          <span class="tag">U.S. Air Force Reserve</span>
-          <h3>Workflows that hold up under pressure</h3>
-          <div class="where">87 MDG / 514 AMDS &middot; Joint Base McGuire-Dix-Lakehurst &middot; since 2021</div>
-        </div>
+      <div class="log-entry">
+        <div class="where mono">U.S. Air Force Reserve &middot; 87 MDG / 514 AMDS &middot; Joint Base McGuire-Dix-Lakehurst &middot; since 2021</div>
+        <h3>Workflows that hold up under pressure</h3>
         <div class="body">
           <p>As an IT Systems Administrator in a military medical unit, I built a QR-code clinic tracking system and an encrypted records workflow that improved patient check-in while protecting sensitive data. I reimaged and deployed 150+ computers, resolve 1,000+ support tickets a year, and trained 80+ personnel on readiness procedures. I hold the Air Force Continuous Process Improvement &amp; Six Sigma Green Belt: restructure a process, measure it, then automate what&rsquo;s left.</p>
         </div>
       </div>
 
-      <div class="work-entry">
-        <div>
-          <span class="tag">Amazon &amp; retail</span>
-          <h3>I know what a shop floor looks like</h3>
-          <div class="where">Amazon, South Jersey &middot; Shoppers World &amp; Forman Mills &middot; McDonald&rsquo;s</div>
-        </div>
+      <div class="log-entry">
+        <div class="where mono">Amazon, South Jersey &middot; Shoppers World &amp; Forman Mills &middot; McDonald&rsquo;s</div>
+        <h3>I know what a shop floor looks like</h3>
         <div class="body">
-          <p>At Amazon I support 300+ operations technology endpoints across multiple buildings, where downtime costs real money in real time. Before that I ran IT across multiple retail locations, and spent five years running restaurant technology at McDonald&rsquo;s &mdash; POS, kiosks, printers, mobile payments &mdash; cutting technology downtime 25% and managing a crew of 15+. I&rsquo;ve stood where a small business owner stands. I know which problems are annoying and which ones cost money.</p>
+          <p>At Amazon I support 300+ operations technology endpoints across multiple buildings, where downtime costs real money in real time. Before that I ran IT across multiple retail locations, and spent five years running restaurant technology at McDonald&rsquo;s. POS, kiosks, printers, mobile payments. I cut technology downtime 25% and managed a crew of 15+. I&rsquo;ve stood where a small business owner stands. I know which problems are annoying and which ones cost money.</p>
         </div>
       </div>
     </section>
 
-    <!-- 03 HOW I WORK -->
+    <!-- 3.0 METHOD -->
     <section id="how">
-      <div class="sec-head"><span class="sec-num">03</span><h2>How I work</h2></div>
+      <div class="sec-head"><span class="sec-num mono">3.0</span><h2>Method</h2></div>
       <div class="two-col">
         <div>
           <h3>AI agents, every day</h3>
-          <p>I don&rsquo;t just use AI tools. I run AI agents that build software, do research, and ship finished work every day &mdash; this page, my tools, and dozens of projects exist because agents do the work while I direct it. Most people can prompt a chatbot. I can show a business owner AI that works while they sleep: an assistant that answers customers, drafts replies, and keeps listings accurate.</p>
+          <p>I don&rsquo;t just use AI tools. I run AI agents that build software, do research, and ship finished work every day. This page, my tools, and dozens of projects exist because agents do the work while I direct it. Most people can prompt a chatbot. I can show a business owner AI that works while they sleep: an assistant that answers customers, drafts replies, and keeps listings accurate.</p>
         </div>
         <div>
           <h3>Safe AI</h3>
@@ -337,33 +340,54 @@
       </div>
     </section>
 
-    <!-- 04 FIRST 90 DAYS -->
+    <!-- 4.0 OPERATION -->
     <section id="plan">
-      <div class="sec-head"><span class="sec-num">04</span><h2>The first 90 days</h2></div>
+      <div class="sec-head"><span class="sec-num mono">4.0</span><h2>Operation: first 90 days</h2></div>
       <p class="lede">A plan, not a promise. Here is what the first three months look like.</p>
-      <div class="days">
-        <div class="day">
-          <div class="month">Days 1&ndash;30 &middot; Listen</div>
+
+      <div class="route-box">
+        <div class="route-head mono"><span>Area of operations</span><span>Schematic, not to scale</span></div>
+        <svg viewBox="0 0 760 230" role="img" aria-label="Schematic map of the four Cherry Hill corridors: Route 38, Route 70, Brace Road, and Haddonfield Road, with Michaelangelo's Italian Restaurant marked on Brace Road.">
+          <line x1="130" y1="52" x2="730" y2="52" stroke="#111" stroke-width="2"/>
+          <text x="12" y="57" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="600" fill="#111">ROUTE 38</text>
+          <line x1="130" y1="112" x2="730" y2="112" stroke="#111" stroke-width="2"/>
+          <text x="12" y="117" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="600" fill="#111">ROUTE 70</text>
+          <line x1="130" y1="172" x2="730" y2="172" stroke="#111" stroke-width="2"/>
+          <text x="12" y="177" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="600" fill="#111">BRACE RD</text>
+          <line x1="400" y1="22" x2="400" y2="202" stroke="#111" stroke-width="2"/>
+          <text x="412" y="30" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="600" fill="#111">HADDONFIELD RD</text>
+          <circle cx="560" cy="172" r="7" fill="#FF4D00" stroke="#111" stroke-width="2"/>
+          <text x="560" y="152" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="600" fill="#111">MICHAELANGELO&rsquo;S</text>
+          <text x="560" y="196" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#6B6B6B">1334 BRACE RD</text>
+          <text x="12" y="220" font-family="IBM Plex Mono, monospace" font-size="11" fill="#6B6B6B">WALK ROUTE: BRACE RD, ROUTE 70, ROUTE 38, HADDONFIELD RD</text>
+        </svg>
+        <div class="route-cap">The four corridors I will walk in the first 30 days. The orange dot is the first audit, already done.</div>
+      </div>
+
+      <div class="phases">
+        <div class="phase">
+          <div class="when mono">Days 1&ndash;30 &middot; <span class="sig">Listen</span></div>
           <h3>Walk the corridors</h3>
-          <ul>
+          <ul class="check">
             <li>Walk Brace Rd, Route 70, Route 38, and Haddonfield Rd, and meet owners in person.</li>
             <li>Meet the Camden County Regional Chamber of Commerce, headquartered in Cherry Hill.</li>
-            <li>Ten free AI audits of Cherry Hill shops, published as samples like the one below.</li>
+            <li class="done">Audit 1 of 10 complete: Michaelangelo&rsquo;s Italian Restaurant (Exhibit A, below).</li>
+            <li>Audits 2&ndash;10 of Cherry Hill shops, published as samples like the one below.</li>
           </ul>
         </div>
-        <div class="day">
-          <div class="month">Days 31&ndash;60 &middot; Build</div>
+        <div class="phase">
+          <div class="when mono">Days 31&ndash;60 &middot; <span class="sig">Build</span></div>
           <h3>First workshop, first tools</h3>
-          <ul>
+          <ul class="check">
             <li>Workshop 1: &ldquo;AI for your shop in one hour.&rdquo;</li>
             <li>Build with the audited businesses: one listing cleanup, one reply system, one FAQ assistant.</li>
             <li>Second round of audits, guided by what the first ten showed.</li>
           </ul>
         </div>
-        <div class="day">
-          <div class="month">Days 61&ndash;90 &middot; Prove it</div>
+        <div class="phase">
+          <div class="when mono">Days 61&ndash;90 &middot; <span class="sig">Prove it</span></div>
           <h3>Working tools, kept tools</h3>
-          <ul>
+          <ul class="check">
             <li>Workshop 2: &ldquo;AI without the risk.&rdquo;</li>
             <li>Three businesses live with a working AI tool they keep using.</li>
             <li>A short playbook any Cherry Hill shop can follow, free.</li>
@@ -372,90 +396,110 @@
       </div>
     </section>
 
-    <!-- 05 SAMPLE AUDIT -->
+    <!-- 5.0 EXHIBIT A -->
     <section id="audit">
-      <div class="sec-head"><span class="sec-num">05</span><h2>Proof, before I&rsquo;m hired</h2></div>
+      <div class="sec-head"><span class="sec-num mono">5.0</span><h2>Exhibit A</h2></div>
       <p class="lede">One free sample audit, done already. This is what a Cherry Hill business gets on day one.</p>
-      <div class="audit-panel">
-        <div class="audit-head">
+      <div class="exhibit">
+        <div class="exhibit-head">
+          <div class="tag mono">Sample AI audit &middot; November 2026</div>
           <h3>Michaelangelo&rsquo;s Italian Restaurant</h3>
-          <span class="label">1334 Brace Rd, Cherry Hill, NJ &middot; Sample audit, November 2026</span>
+          <div class="meta mono">1334 Brace Rd, Cherry Hill, NJ 08034 &middot; Family-owned since 1989</div>
         </div>
-        <div class="audit-body">
-          <p>Family-owned since 1989. About 4.4 stars across roughly 480&ndash;500 Google reviews, and regulars who praise it by name. A well-loved restaurant whose online presence is split across two websites, two phone numbers, and conflicting hours.</p>
-          <ul class="findings">
-            <li><span class="n">F1</span><span><strong>Two phone numbers.</strong> The brand site lists (856) 428-3231. The ordering site&rsquo;s footer lists (856) 408-1574. Directory listings repeat both.</span></li>
-            <li><span class="n">F2</span><span><strong>Conflicting hours.</strong> The ordering site says 11am&ndash;8pm and omits Thursday entirely. Customers checking hours get the wrong answer.</span></li>
-            <li><span class="n">F3</span><span><strong>One menu, two prices.</strong> Fettuccine Alfredo is $23.95 in one section and $24.95 in another. The same for mozzarella sticks and eggplant parm.</span></li>
-          </ul>
-          <p><strong>Five fixes, all small, all built on information the restaurant already has:</strong></p>
+        <div class="exhibit-body">
+          <p>About 4.4 stars across roughly 480&ndash;500 Google reviews, and regulars who praise it by name. A well-loved restaurant whose online presence is split across two websites, two phone numbers, and conflicting hours.</p>
+
+          <div class="finding">
+            <div class="fname mono"><span class="fn">F1</span> &middot; Two phone numbers</div>
+            <div class="record">
+              <div class="record-row"><div class="rk mono">Brand site (.org) + Google</div><div class="rv mono">(856) 428-3231</div></div>
+              <div class="record-row"><div class="rk mono">Ordering site (.com) footer</div><div class="rv mono conflict">(856) 408-1574 &nbsp;&ne;</div></div>
+            </div>
+            <p style="font-size:14px;color:var(--mut);margin-top:8px">Directory listings repeat both numbers.</p>
+          </div>
+
+          <div class="finding">
+            <div class="fname mono"><span class="fn">F2</span> &middot; Conflicting hours</div>
+            <div class="record">
+              <div class="record-row"><div class="rk mono">Google</div><div class="rv mono">Mon&ndash;Thu 11am&ndash;9pm, Fri&ndash;Sat 11am&ndash;10pm, Sun 12&ndash;8:30pm</div></div>
+              <div class="record-row"><div class="rk mono">Ordering site footer</div><div class="rv mono conflict">11am&ndash;8pm every day, Thursday omitted &nbsp;&ne;</div></div>
+            </div>
+            <p style="font-size:14px;color:var(--mut);margin-top:8px">Customers checking hours get the wrong answer.</p>
+          </div>
+
+          <div class="finding">
+            <div class="fname mono"><span class="fn">F3</span> &middot; One menu, two prices</div>
+            <div class="record">
+              <div class="price-row head mono"><div>Dish</div><div>Popular items</div><div>Pasta entr&eacute;es</div><div>&Delta;</div></div>
+              <div class="price-row mono"><div>Fettuccine Alfredo</div><div>$23.95</div><div>$24.95</div><div class="delta">+$1.00</div></div>
+              <div class="price-row mono"><div>Fried Mozzarella Sticks</div><div>$11.95</div><div>$13.95</div><div class="delta">+$2.00</div></div>
+              <div class="price-row mono"><div>Eggplant Parmigiana</div><div>$21.95</div><div>$22.95</div><div class="delta">+$1.00</div></div>
+            </div>
+          </div>
+
+          <p style="margin-top:22px"><strong>Five fixes, all small, all built on information the restaurant already has:</strong></p>
           <ol class="fixes">
-            <li>One listing sweep to a single set of facts, then automated monthly drift checks.</li>
-            <li>An AI assistant for the questions the phone already answers: reservations, catering, and &ldquo;is this the Cherry Hill location?&rdquo;</li>
-            <li>Review-response drafts in the owner&rsquo;s voice, approved before anything posts.</li>
-            <li>The weekly specials and the 200-item menu, turned into varied social posts &mdash; and an Instagram presence, which the restaurant lacks entirely.</li>
-            <li>An automated menu-consistency check that flags every price mismatch and missing photo.</li>
+            <li data-n="FIX 01">One listing sweep to a single set of facts, then automated monthly drift checks.</li>
+            <li data-n="FIX 02">An AI assistant for the questions the phone already answers: reservations, catering, and &ldquo;is this the Cherry Hill location?&rdquo;</li>
+            <li data-n="FIX 03">Review-response drafts in the owner&rsquo;s voice, approved before anything posts.</li>
+            <li data-n="FIX 04">The weekly specials and the 200-item menu, turned into varied social posts. And an Instagram presence, which the restaurant lacks entirely.</li>
+            <li data-n="FIX 05">An automated menu-consistency check that flags every price mismatch and missing photo.</li>
           </ol>
           <a class="read-full" href="sample-audit.html">Read the full audit &rarr;</a>
-          <p class="audit-note">Prepared from public sources only. The business was not contacted.</p>
+          <p class="exhibit-note">Prepared from public sources only. The business was not contacted.</p>
         </div>
       </div>
     </section>
 
-    <!-- 06 WORKSHOPS -->
+    <!-- 6.0 WORKSHOPS -->
     <section id="workshops">
-      <div class="sec-head"><span class="sec-num">06</span><h2>The workshops</h2></div>
+      <div class="sec-head"><span class="sec-num mono">6.0</span><h2>The workshops</h2></div>
       <p class="lede">One a month, open to any local business. The first three are already planned.</p>
       <div class="workshops">
         <div class="workshop">
-          <div class="no">Workshop 1</div>
+          <div class="no mono">Workshop 1</div>
           <h3>AI for your shop in one hour</h3>
           <p>Three tools a business keeps using after the hour ends: answering common questions, drafting replies, and keeping listings accurate.</p>
         </div>
         <div class="workshop">
-          <div class="no">Workshop 2</div>
+          <div class="no mono">Workshop 2</div>
           <h3>AI without the risk</h3>
           <p>Scams, data leaks, and safe setup. What never goes into a prompt, how to spot AI-powered fraud, and how to protect customer data.</p>
         </div>
         <div class="workshop">
-          <div class="no">Workshop 3</div>
+          <div class="no mono">Workshop 3</div>
           <h3>Automate the boring parts</h3>
           <p>Replies, scheduling, inventory notes, and social posts. The repetitive work owners do at midnight, handed to a system that does it at noon.</p>
         </div>
       </div>
     </section>
 
-    <!-- CREDENTIALS -->
+    <!-- 7.0 SERVICE RECORD -->
     <section id="credentials">
-      <div class="sec-head"><span class="sec-num">07</span><h2>Credentials</h2></div>
-      <div class="creds">
-        <div>
-          <h3>Education</h3>
-          <ul>
-            <li><strong>B.S., Computer Science &mdash; Cybersecurity Focus</strong><br><span>Liberty University, Lynchburg, VA &middot; 2026</span></li>
-            <li><strong>A.A.S., Health Information Technology &amp; Services Management</strong><br><span>Community College of the Air Force &middot; 2021</span></li>
-          </ul>
-        </div>
-        <div>
-          <h3>Certifications &amp; clearance</h3>
-          <ul>
-            <li><strong>CompTIA Security+</strong> <span>(Active)</span></li>
-            <li><strong>CompTIA IT Fundamentals+</strong></li>
-            <li><strong>Microsoft Technology Associate (MTA)</strong></li>
-            <li><strong>Air Force Continuous Process Improvement &amp; Six Sigma Green Belt</strong></li>
-            <li><strong>Active DoD Secret Clearance</strong></li>
-          </ul>
-        </div>
-      </div>
+      <div class="sec-head"><span class="sec-num mono">7.0</span><h2>Service record</h2></div>
+
+      <table class="record-table">
+        <caption>Education</caption>
+        <tr><th scope="col">Credential</th><th scope="col">School</th><th scope="col">Year</th></tr>
+        <tr><td><strong>B.S., Computer Science, Cybersecurity Focus</strong></td><td>Liberty University, Lynchburg, VA</td><td>2026</td></tr>
+        <tr><td><strong>A.A.S., Health Information Technology &amp; Services Management</strong></td><td>Community College of the Air Force</td><td>2021</td></tr>
+      </table>
+
+      <table class="record-table">
+        <caption>Certifications &amp; clearance</caption>
+        <tr><th scope="col">Credential</th><th scope="col">Status</th></tr>
+        <tr><td><strong>CompTIA Security+</strong></td><td>Active</td></tr>
+        <tr><td><strong>CompTIA IT Fundamentals+</strong></td><td>&nbsp;</td></tr>
+        <tr><td><strong>Microsoft Technology Associate (MTA)</strong></td><td>&nbsp;</td></tr>
+        <tr><td><strong>Air Force Continuous Process Improvement &amp; Six Sigma Green Belt</strong></td><td>&nbsp;</td></tr>
+        <tr><td><strong>DoD Secret Clearance</strong></td><td>Active</td></tr>
+      </table>
     </section>
+  </main>
 
-  </div><!-- /wrap -->
-</main>
-
-<footer>
-  <div class="wrap">
+  <footer>
     <div class="foot-grid">
-      <div class="foot-links">
+      <div class="foot-links mono">
         <a href="https://builtbysai.com/">builtbysai.com</a><br>
         <a href="https://github.com/builtbysai">github.com/builtbysai</a><br>
         <a href="https://www.linkedin.com/in/8pairkie">linkedin.com/in/8pairkie</a>
@@ -468,8 +512,8 @@
       </div>
     </div>
     <p class="disclaimer">OpenWorks is a program of OpenAI. This page is Hans Sai&rsquo;s application portfolio and is not affiliated with or endorsed by OpenAI. All facts about Hans Sai&rsquo;s background are from his public r&eacute;sum&eacute; and public profiles. The sample audit was prepared from public sources only; the business was not contacted.</p>
-  </div>
-</footer>
+  </footer>
 
+</div>
 </body>
 </html>
