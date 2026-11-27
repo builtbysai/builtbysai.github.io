@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dot Weather</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #0d0b09;
+  }
+  canvas {
+    display: block;
+    touch-action: none;
+    cursor: crosshair;
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+(function () {
+  'use strict';
+
+  var canvas = document.getElementById('c');
+  var ctx = canvas.getContext('2d');
+
+  var GROUND = '#0d0b09';
+  var DOT = '#f3e9d2';
+  var GHOST_ALPHA = 0.05;
+
+  /* ---------- seeded random ---------- */
+
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function parseSeed() {
+    var q = null;
+    try { q = new URLSearchParams(window.location.search).get('seed'); } catch (e) { q = null; }
+    if (q !== null && q !== '' && /^-?\d+$/.test(q)) {
+      var n = parseInt(q, 10) | 0;
+      if (n !== 0) return n;
+    }
+    return (Math.floor(Math.random() * 999983) + 1) | 0;
+  }
+
+  var seed = parseSeed();
+
+  /* ---------- value noise, hashed per lattice point ---------- */
+
+  function hash2(ix, iy, s) {
+    var h = Math.sin(ix * 127.1 + iy * 311.7 + s * 74.7) * 43758.5453123;
+    return h - Math.floor(h);
+  }
+
+  function smooth(t) { return t * t * (3 - 2 * t); }
+
+  function vnoise(x, y, s) {
+    var ix = Math.floor(x), iy = Math.floor(y);
+    var fx = x - ix, fy = y - iy;
+    var a = hash2(ix, iy, s), b = hash2(ix + 1, iy, s);
+    var c = hash2(ix, iy + 1, s), d = hash2(ix + 1, iy + 1, s);
+    var ux = smooth(fx), uy = smooth(fy);
+    var ab = a + (b - a) * ux;
+    var cd = c + (d - c) * ux;
+    return (ab + (cd - ab) * uy) * 2 - 1; /* -1..1 */
+  }
+
+  /* Per-dot threshold offset, fixed for a given seed and dot position. */
+  function dotOffset(cx, cy, di) {
+    return (hash2(cx * 6 + di, cy * 6 + di * 3, seed + 101) - 0.5) * 0.90;
+  }
+
+  /* ---------- field ---------- */
+
+  var t = 0;                 /* active seconds */
+  var bumps = [];            /* {x, y, t0} in dot coordinates */
+  var DRAG_SIGMA = 3.0;      /* dot units */
+  var DRAG_STRENGTH = 0.95;
+  var DRAG_DECAY = 2.5;      /* seconds */
+
+  function fieldAt(dx, dy, now) {
+    var ox = now * 0.045, oy = now * 0.030;
+    var n1 = vnoise(dx * 0.20 + ox, dy * 0.20 + oy, seed);
+    var n2 = vnoise(dx * 0.45 - ox * 0.7, dy * 0.45 + oy * 0.5, seed + 7);
+    var wave = Math.sin((dx * 0.14 + dy * 0.075) - now * 0.14);
+    var f = 0.55 * n1 + 0.25 * n2 + 0.35 * wave;
+    for (var i = 0; i < bumps.length; i++) {
+      var b = bumps[i];
+      var age = now - b.t0;
+      if (age > 12) continue;
+      var ddx = dx - b.x, ddy = dy - b.y;
+      var g = Math.exp(-(ddx * ddx + ddy * ddy) / (2 * DRAG_SIGMA * DRAG_SIGMA));
+      f += DRAG_STRENGTH * g * Math.exp(-age / DRAG_DECAY);
+    }
+    return f;
+  }
+
+  function thresholdAt(now) {
+    return thr;
+  }
+
+  /* Adaptive threshold: a slow feedback loop that holds the lit fraction
+     near 0.35. The field's travelling wave would otherwise lift the whole
+     grid above (or below) threshold at once; the loop cancels only the
+     global swing, the spatial fronts still sweep. */
+  var thr = 0.12;
+  var LIT_TARGET = 0.35;
+
+  function adaptThreshold(dt) {
+    if (!dots.length) return;
+    var err = rawLitCount / dots.length - LIT_TARGET;
+    thr += err * 0.6 * dt;
+    if (thr < -0.4) thr = -0.4;
+    if (thr > 0.8) thr = 0.8;
+  }
+
+  function calibrateThreshold() {
+    for (var k = 0; k < 40; k++) {
+      var err = rawLitCount / dots.length - LIT_TARGET;
+      if (Math.abs(err) < 0.01) break;
+      thr += err * 0.5;
+      evaluateAll(true);
+    }
+  }
+
+  /* ---------- layout ---------- */
+
+  var dpr = 1, vw = 0, vh = 0;
+  var pitch = 30;            /* px between neighbouring dots */
+  var gapX = 0, gapY = 0;    /* px between cells */
+  var cols = 0, rows = 0;    /* braille cells */
+  var originX = 0, originY = 0;
+  var dotR = 5;
+
+  function layout() {
+    var m = Math.max(24, Math.min(vw, vh) * 0.06);
+    /* Landscape (desktop) uses a tighter pitch divisor so the grid gains
+       rows: 800/32 = 25 px pitch -> 16x7 cells at 1280x800. Portrait
+       (phone) keeps the old divisor, so its 6x11 layout is untouched.
+       (Divisor 32 with the first wave was tried and reverted: on the
+       32-wide grid the short wave's flat crest re-saturated cells and
+       diluted the centroid, displacement 5.82 < 8 and full cells 21-27%
+       at peaks. This attempt pairs 16x7 with the longer wave, lambda
+       ~40, which keeps the lit band on the wave's slope.) */
+    var pitchDiv = vw > vh ? 32 : 22;
+    pitch = Math.max(16, Math.min(40, Math.min(vw, vh) / pitchDiv));
+    gapX = pitch * 0.9;
+    gapY = pitch * 0.9;
+    var cellW = 2 * pitch + gapX;
+    var cellH = 3 * pitch + gapY;
+    var availW = vw - 2 * m, availH = vh - 2 * m;
+    cols = Math.max(2, Math.floor((availW + gapX) / cellW));
+    rows = Math.max(2, Math.floor((availH + gapY) / cellH));
+    var gridW = cols * cellW - gapX;
+    var gridH = rows * cellH - gapY;
+    originX = (vw - gridW) / 2;
+    originY = (vh - gridH) / 2;
+    dotR = pitch * 0.32;
+    rebuildState();
+  }
+
+  function sizeCanvas() {
+    var vv = window.visualViewport;
+    var w = vv ? vv.width : window.innerWidth;
+    var h = vv ? vv.height : window.innerHeight;
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    vw = w; vh = h;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    canvas.width = Math.max(1, Math.round(w * dpr));
+    canvas.height = Math.max(1, Math.round(h * dpr));
+    layout();
+  }
+
+  /* ---------- dot state ---------- */
+
+  var dots = [];             /* flat list: {cx, cy, di, dx, dy, lit, flippedAt} */
+  var litCount = 0;
+  var rawLitCount = 0;       /* dots above threshold BEFORE the cell penalty */
+  var flipsTotal = 0;
+  var regionFlips = [0, 0, 0, 0];
+  var centroid = { x: 0, y: 0 };
+  var patternHash = 0;
+
+  function rebuildState() {
+    dots = [];
+    litCount = 0;
+    for (var cy = 0; cy < rows; cy++) {
+      for (var cx = 0; cx < cols; cx++) {
+        for (var di = 0; di < 6; di++) {
+          var lx = di % 2, ly = (di / 2) | 0;
+          dots.push({
+            cx: cx, cy: cy, di: di,
+            dx: cx * 2 + lx, dy: cy * 3 + ly,
+            lit: false, flippedAt: -10
+          });
+        }
+      }
+    }
+    evaluateAll(true);
+    calibrateThreshold();
+  }
+
+  function quadrantOf(d) {
+    var qx = d.dx < cols ? 0 : 1;
+    var qy = d.dy < rows * 1.5 ? 0 : 2;
+    return qx + qy;
+  }
+
+  /* Lateral inhibition inside a braille cell (round 4): a dot's bar rises
+     when its cell would otherwise fill 6/6, so a cell almost never fills.
+     CELL_PENALTY is the new variable — the per-dot offsets were widened
+     three rounds running and the worst seed stayed parked at 14.9-15.6%.
+     Form note: the first attempt penalised every crowded cell
+     (bar thr + P*(k-1) for all k) and proved the suppression works
+     (worst seed 13.6% -> 7.4% on the fifth seed set) but thinned every
+     crowded cell and cost ~3.5 units of travel on 3 of 4 seeds
+     (6.17-6.64 < 8). This form triggers only at k=6, so cells with
+     5 or fewer raw passers are exactly as the baseline; P is set to
+     0.75 so the full-cell bar (thr + 0.75) is the same bar the first
+     attempt proved effective. The penalty is computed from raw scores
+     only, so evaluation order cannot change the result. */
+  var CELL_PENALTY = 0.75;
+
+  function evaluateAll(first) {
+    var thr = thresholdAt(t);
+    var sumX = 0, sumY = 0;
+    litCount = 0;
+    rawLitCount = 0;
+    patternHash = 0;
+    var i, d, cell;
+    /* Phase 1: raw score per dot. */
+    for (i = 0; i < dots.length; i++) {
+      d = dots[i];
+      d.score = fieldAt(d.dx, d.dy, t) + dotOffset(d.cx, d.cy, d.di);
+    }
+    /* Phase 2: raw passers per cell. */
+    var passers = new Array(cols * rows);
+    for (cell = 0; cell < passers.length; cell++) passers[cell] = 0;
+    for (i = 0; i < dots.length; i++) {
+      d = dots[i];
+      if (d.score > thr) { passers[d.cy * cols + d.cx]++; rawLitCount++; }
+    }
+    /* Phase 3: lit test with the crowding penalty, plus bookkeeping. */
+    for (i = 0; i < dots.length; i++) {
+      d = dots[i];
+      var lit = d.score > thr + (passers[d.cy * cols + d.cx] === 6 ? CELL_PENALTY : 0);
+      if (!first && lit !== d.lit) {
+        d.flippedAt = t;
+        flipsTotal++;
+        regionFlips[quadrantOf(d)]++;
+      }
+      d.lit = lit;
+      if (lit) {
+        litCount++; sumX += d.dx; sumY += d.dy;
+        patternHash = ((patternHash * 31) + i) >>> 0;
+      }
+    }
+    if (litCount > 0) {
+      centroid.x = sumX / litCount;
+      centroid.y = sumY / litCount;
+    }
+  }
+
+  /* ---------- render ---------- */
+
+  function dotXY(d) {
+    var cellX = originX + d.cx * (2 * pitch + gapX);
+    var cellY = originY + d.cy * (3 * pitch + gapY);
+    var lx = d.di % 2, ly = (d.di / 2) | 0;
+    return { x: cellX + lx * pitch, y: cellY + ly * pitch };
+  }
+
+  function render() {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.fillStyle = GROUND;
+    ctx.fillRect(0, 0, vw, vh);
+    for (var i = 0; i < dots.length; i++) {
+      var d = dots[i];
+      var p = dotXY(d);
+      if (d.lit) {
+        var age = t - d.flippedAt;
+        var a = age < 0.18 ? 0.35 + 0.65 * (age / 0.18) : 1;
+        ctx.globalAlpha = a;
+        ctx.fillStyle = DOT;
+      } else {
+        ctx.globalAlpha = GHOST_ALPHA;
+        ctx.fillStyle = DOT;
+      }
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, dotR, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  /* ---------- main loop ---------- */
+
+  var lastNow = null;
+  var rafId = 0;
+
+  function frame(now) {
+    rafId = requestAnimationFrame(frame);
+    if (document.hidden) { lastNow = now; return; }
+    if (lastNow === null) lastNow = now;
+    var dt = Math.min(0.1, (now - lastNow) / 1000);
+    lastNow = now;
+    t += dt;
+    evaluateAll(false);
+    adaptThreshold(dt);
+    render();
+  }
+
+  /* ---------- interaction ---------- */
+
+  function toDotCoords(clientX, clientY) {
+    var r = canvas.getBoundingClientRect();
+    var px = clientX - r.left, py = clientY - r.top;
+    /* invert layout: find nearest dot position in dot units */
+    var gx = (px - originX) / pitch;
+    var gy = (py - originY) / pitch;
+    return { x: gx, y: gy };
+  }
+
+  function addBump(clientX, clientY) {
+    var p = toDotCoords(clientX, clientY);
+    bumps.push({ x: p.x, y: p.y, t0: t });
+    if (bumps.length > 400) bumps.splice(0, bumps.length - 400);
+  }
+
+  var pointerDown = false;
+  var downX = 0, downY = 0, downT = 0, moved = 0;
+
+  function reseed() {
+    var rng = mulberry32((seed ^ 0x9E3779B9) >>> 0);
+    seed = (Math.floor(rng() * 999983) + 1) | 0;
+    bumps = [];
+    flipsTotal = 0;
+    regionFlips = [0, 0, 0, 0];
+    rebuildState();
+  }
+
+  canvas.addEventListener('pointerdown', function (e) {
+    pointerDown = true;
+    moved = 0;
+    downX = e.clientX; downY = e.clientY; downT = performance.now();
+    addBump(e.clientX, e.clientY);
+    e.preventDefault();
+  });
+
+  canvas.addEventListener('pointermove', function (e) {
+    if (!pointerDown) return;
+    moved += Math.abs(e.movementX || 0) + Math.abs(e.movementY || 0);
+    addBump(e.clientX, e.clientY);
+  });
+
+  function endPointer(e) {
+    if (!pointerDown) return;
+    pointerDown = false;
+    var dt = performance.now() - downT;
+    var dist = Math.hypot(e.clientX - downX, e.clientY - downY);
+    if (dist < 12 && dt < 450 && moved < 24) reseed();
+  }
+
+  canvas.addEventListener('pointerup', endPointer);
+  canvas.addEventListener('pointercancel', function () { pointerDown = false; });
+
+  /* ---------- harness hooks ---------- */
+
+  window.__dotWeather = {
+    get seed() { return seed; },
+    get litCount() { return litCount; },
+    get totalDots() { return dots.length; },
+    get litFraction() { return dots.length ? litCount / dots.length : 0; },
+    get flipsTotal() { return flipsTotal; },
+    get regionFlips() { return regionFlips.slice(); },
+    get centroid() { return { x: centroid.x, y: centroid.y }; },
+    get patternHash() { return patternHash; },
+    get threshold() { return thr; },
+    get cells() { return { cols: cols, rows: rows }; },
+    get time() { return t; },
+    toDot: function (clientX, clientY) {
+      var p = toDotCoords(clientX, clientY);
+      return { x: p.x, y: p.y };
+    },
+    resetFlips: function () {
+      flipsTotal = 0;
+      regionFlips = [0, 0, 0, 0];
+    },
+    sampleRegion: function (cx, cy, r) {
+      /* cx, cy, r in dot coordinates; returns lit/total near that point */
+      var lit = 0, tot = 0;
+      for (var i = 0; i < dots.length; i++) {
+        var d = dots[i];
+        var ddx = d.dx - cx, ddy = d.dy - cy;
+        if (ddx * ddx + ddy * ddy <= r * r) {
+          tot++;
+          if (d.lit) lit++;
+        }
+      }
+      return { lit: lit, total: tot, fraction: tot ? lit / tot : 0 };
+    },
+    cellStats: function () {
+      /* braille texture at cell level: how many lit cells are full (6/6) */
+      var counts = new Array(cols * rows);
+      for (var k = 0; k < counts.length; k++) counts[k] = 0;
+      for (var i = 0; i < dots.length; i++) {
+        if (dots[i].lit) counts[dots[i].cy * cols + dots[i].cx]++;
+      }
+      var litCells = 0, fullCells = 0;
+      for (var j = 0; j < counts.length; j++) {
+        if (counts[j] > 0) litCells++;
+        if (counts[j] === 6) fullCells++;
+      }
+      return {
+        litCells: litCells,
+        fullCells: fullCells,
+        totalCells: cols * rows,
+        fullOfLit: litCells ? fullCells / litCells : 0,
+        litFraction: dots.length ? litCount / dots.length : 0,
+      };
+    }
+  };
+
+  /* ---------- start ---------- */
+
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', sizeCanvas);
+    window.visualViewport.addEventListener('scroll', sizeCanvas);
+  }
+  window.addEventListener('resize', sizeCanvas);
+  sizeCanvas();
+  rafId = requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
