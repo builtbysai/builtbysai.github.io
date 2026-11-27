@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Meetings</title>
+<style>
+  html, body {
+    margin: 0; padding: 0; height: 100%; overflow: hidden;
+    background: #0a0908;
+  }
+  canvas { display: block; position: fixed; inset: 0; touch-action: none; }
+  .label {
+    position: fixed; left: 18px; bottom: 14px; z-index: 2;
+    font-family: Georgia, "Times New Roman", serif;
+    color: rgba(242, 234, 216, 0.55);
+    font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
+    user-select: none; pointer-events: none;
+  }
+  .label small {
+    display: block; margin-top: 4px;
+    font-family: Georgia, serif; font-size: 11px;
+    letter-spacing: 0.04em; text-transform: none;
+    color: rgba(242, 234, 216, 0.32);
+  }
+</style>
+</head>
+<body>
+<canvas id="stage"></canvas>
+<div class="label">Meetings<small>drag to disturb the walkers &middot; tap for a new set of meetings</small></div>
+<script>
+"use strict";
+/* Meetings: a network accumulated out of pure wandering.
+   N random walkers move inside a hexagonal boundary with fading trails.
+   When two walkers come close, a straight chord is drawn between them
+   and kept while it is among the newest 250. The chords are the record
+   of the meetings. */
+
+var params = new URLSearchParams(location.search);
+var seed = parseInt(params.get("seed") || "", 10);
+if (!isFinite(seed)) seed = (Math.random() * 1000000000) | 0;
+
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    var t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+var canvas = document.getElementById("stage");
+var ctx = canvas.getContext("2d");
+var trail = document.createElement("canvas");
+var tctx = trail.getContext("2d");
+
+var W = 0, H = 0, DPR = 1;
+var CX = 0, CY = 0, R = 0;      /* hexagon centre and radius */
+var HEX = [];                   /* hexagon vertices, CSS px */
+var walkers = [];
+var chords = [];                /* {x1,y1,x2,y2,born} */
+var flares = [];                /* {x,y,born} */
+var activePairs = {};           /* "i-j" -> true while the pair is within range */
+var frame = 0;
+var repelHits = 0;
+var startTime = performance.now();
+var rng = mulberry32(seed);
+
+var N_WALKERS = 14;
+var CHORD_CAP = 250;            /* chords are the record of meetings, but the record must stay legible: keep the newest 250, drop the oldest first */
+var SPEED = 1.5;
+var TURN = 0.22;                /* max heading change per frame, radians */
+var MEET_DIST = 100;            /* chord is born inside this distance; set from R in resize() */
+var PART_DIST = 145;            /* pair may meet again past this distance; set from R in resize() */
+var REPEL_RADIUS = 150;
+var REPEL_FORCE = 1.0;          /* per-frame push; was 2.6, which flung walkers across the hexagon */
+var DRAG_PUSH_CAP = 25;         /* max total repel displacement per walker per pointer hold */
+
+function hexVertices(cx, cy, r) {
+  var v = [];
+  for (var i = 0; i < 6; i++) {
+    var a = Math.PI / 3 * i + Math.PI / 6; /* pointy-top hexagon */
+    v.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+  }
+  return v;
+}
+
+function insideHex(x, y) {
+  /* point-in-polygon, convex hexagon */
+  var inside = false;
+  for (var i = 0, j = HEX.length - 1; i < HEX.length; j = i++) {
+    var xi = HEX[i][0], yi = HEX[i][1], xj = HEX[j][0], yj = HEX[j][1];
+    if (((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi)) inside = !inside;
+  }
+  return inside;
+}
+
+function reflect(w) {
+  /* reflect heading off the nearest hexagon edge */
+  var best = null, bestD = -Infinity;
+  for (var i = 0; i < 6; i++) {
+    var a = HEX[i], b = HEX[(i + 1) % 6];
+    var ex = b[0] - a[0], ey = b[1] - a[1];
+    var len = Math.hypot(ex, ey);
+    var nx = ey / len, ny = -ex / len; /* outward normal: vertices wind clockwise on screen, so the left normal points inward and the right normal points out */
+    var d = (w.x - a[0]) * nx + (w.y - a[1]) * ny;
+    if (d > bestD) { bestD = d; best = [nx, ny]; }
+  }
+  if (best) {
+    var dot = Math.cos(w.heading) * best[0] + Math.sin(w.heading) * best[1];
+    if (dot > 0) {
+      var hx = Math.cos(w.heading) - 2 * dot * best[0];
+      var hy = Math.sin(w.heading) - 2 * dot * best[1];
+      w.heading = Math.atan2(hy, hx);
+    }
+    /* nudge back inside so the walker does not stick to the wall */
+    w.x -= best[0] * (bestD + 1);
+    w.y -= best[1] * (bestD + 1);
+  }
+}
+
+function init() {
+  rng = mulberry32(seed);
+  walkers = [];
+  chords = [];
+  flares = [];
+  activePairs = {};
+  frame = 0;
+  repelHits = 0;
+  startTime = performance.now();
+  /* walkers start spread across the hexagon, so the first meetings
+     happen in different places and the network grows outward
+     instead of knotting at the centre */
+  for (var i = 0; i < N_WALKERS; i++) {
+    var x = CX, y = CY, tries = 0;
+    do {
+      var a = rng() * Math.PI * 2;
+      var d = Math.sqrt(rng()) * R * 0.85;
+      x = CX + Math.cos(a) * d;
+      y = CY + Math.sin(a) * d;
+      tries++;
+    } while (!insideHex(x, y) && tries < 20);
+    walkers.push({
+      x: x,
+      y: y,
+      heading: rng() * Math.PI * 2,
+      speed: SPEED * (0.85 + rng() * 0.3),
+      px: 0, py: 0,
+      push: 0                   /* repel displacement accumulated in the current pointer hold */
+    });
+    walkers[i].px = walkers[i].x;
+    walkers[i].py = walkers[i].y;
+  }
+  tctx.clearRect(0, 0, trail.width, trail.height);
+}
+
+function resize() {
+  var vv = window.visualViewport || { width: window.innerWidth, height: window.innerHeight };
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = vv.width; H = vv.height;
+  canvas.width = Math.round(W * DPR);
+  canvas.height = Math.round(H * DPR);
+  canvas.style.width = W + "px";
+  canvas.style.height = H + "px";
+  trail.width = canvas.width;
+  trail.height = canvas.height;
+  CX = W / 2; CY = H / 2;
+  R = Math.min(W, H) * 0.44;
+  HEX = hexVertices(CX, CY, R);
+  /* meeting distance is a fraction of the hexagon radius, not a fixed
+     pixel count: a fixed 100 px reads as a web on the small phone
+     hexagon and as scattered sticks on desktop. 0.5R matches the phone
+     frame's density on both viewports; PART_DIST keeps its 1.45x ratio. */
+  MEET_DIST = R * 0.5;
+  PART_DIST = R * 0.725;
+  /* a resize clears the trail layer; keep chords and walkers, clamped inside */
+  tctx.clearRect(0, 0, trail.width, trail.height);
+  for (var i = 0; i < walkers.length; i++) {
+    if (!insideHex(walkers[i].x, walkers[i].y)) {
+      walkers[i].x = CX; walkers[i].y = CY;
+      walkers[i].px = CX; walkers[i].py = CY;
+    }
+  }
+}
+
+if (window.visualViewport) {
+  window.visualViewport.addEventListener("resize", resize);
+  window.visualViewport.addEventListener("scroll", resize);
+}
+window.addEventListener("resize", resize);
+window.addEventListener("orientationchange", resize);
+resize();
+init();
+
+var pointer = { down: false, x: 0, y: 0, startX: 0, startY: 0, startT: 0, dragged: false };
+
+function pointerPos(e) {
+  var r = canvas.getBoundingClientRect();
+  return { x: e.clientX - r.left, y: e.clientY - r.top };
+}
+
+canvas.addEventListener("pointerdown", function (e) {
+  var p = pointerPos(e);
+  pointer.down = true; pointer.x = p.x; pointer.y = p.y;
+  pointer.startX = p.x; pointer.startY = p.y;
+  pointer.startT = performance.now(); pointer.dragged = false;
+  for (var i = 0; i < walkers.length; i++) walkers[i].push = 0;
+  canvas.setPointerCapture(e.pointerId);
+});
+canvas.addEventListener("pointermove", function (e) {
+  if (!pointer.down) return;
+  var p = pointerPos(e);
+  pointer.x = p.x; pointer.y = p.y;
+  if (Math.hypot(p.x - pointer.startX, p.y - pointer.startY) > 6) pointer.dragged = true;
+});
+canvas.addEventListener("pointerup", function (e) {
+  pointer.down = false;
+  if (!pointer.dragged && performance.now() - pointer.startT < 500) {
+    reseed();
+  }
+});
+canvas.addEventListener("pointercancel", function () { pointer.down = false; });
+
+function reseed() {
+  seed = (Math.random() * 1000000000) | 0;
+  var url = new URL(location.href);
+  url.searchParams.set("seed", String(seed));
+  history.replaceState(null, "", url.toString());
+  init();
+}
+
+function step() {
+  frame++;
+  /* fade trails: a destination-out wash dissolves old marks instead of
+     letting them smear permanently. The wash runs every 15 frames at a
+     strength the 8-bit alpha channel can actually resolve: a small
+     per-frame wash stalls, because a one-frame change below half a
+     quantisation step rounds back to the same value forever. */
+  if (frame % 15 === 0) {
+    tctx.globalCompositeOperation = "destination-out";
+    tctx.fillStyle = "rgba(0,0,0,0.06)";
+    tctx.fillRect(0, 0, trail.width, trail.height);
+    tctx.globalCompositeOperation = "source-over";
+  }
+
+  for (var i = 0; i < walkers.length; i++) {
+    var w = walkers[i];
+    w.heading += (rng() - 0.5) * 2 * TURN;
+    w.px = w.x; w.py = w.y;
+    w.x += Math.cos(w.heading) * w.speed;
+    w.y += Math.sin(w.heading) * w.speed;
+
+    /* drag gently repels nearby walkers: it changes future meetings.
+       The push per walker is capped per hold, so a long hold can nudge
+       a walker but never fling it across the hexagon. */
+    if (pointer.down) {
+      var dx = w.x - pointer.x, dy = w.y - pointer.y;
+      var dist = Math.hypot(dx, dy);
+      if (dist < REPEL_RADIUS && dist > 0.01) {
+        var f = REPEL_FORCE * (1 - dist / REPEL_RADIUS);
+        if (w.push + f > DRAG_PUSH_CAP) f = Math.max(0, DRAG_PUSH_CAP - w.push);
+        if (f > 0) {
+          w.x += (dx / dist) * f;
+          w.y += (dy / dist) * f;
+          w.push += f;
+          repelHits++;
+        }
+      }
+    }
+
+    if (!insideHex(w.x, w.y)) reflect(w);
+
+    /* hairline trail segment */
+    tctx.strokeStyle = "rgba(242,234,216,0.55)";
+    tctx.lineWidth = 1 * DPR;
+    tctx.beginPath();
+    tctx.moveTo(w.px * DPR, w.py * DPR);
+    tctx.lineTo(w.x * DPR, w.y * DPR);
+    tctx.stroke();
+  }
+
+  /* meeting detection: a chord is born when two walkers come close.
+     No chords in the first ~2 s (frame 120): walkers start spread across
+     the hexagon, so early meetings would be spawn artifacts, not
+     meetings earned by wandering. */
+  if (frame > 120) for (var a = 0; a < walkers.length; a++) {
+    for (var b = a + 1; b < walkers.length; b++) {
+      var key = a + "-" + b;
+      var ddx = walkers[a].x - walkers[b].x;
+      var ddy = walkers[a].y - walkers[b].y;
+      var dd = Math.hypot(ddx, ddy);
+      if (dd < MEET_DIST && !activePairs[key]) {
+        activePairs[key] = true;
+        chords.push({ x1: walkers[a].x, y1: walkers[a].y, x2: walkers[b].x, y2: walkers[b].y, born: frame });
+        if (chords.length > CHORD_CAP) chords.shift(); /* oldest first */
+        flares.push({ x: (walkers[a].x + walkers[b].x) / 2, y: (walkers[a].y + walkers[b].y) / 2, born: frame });
+      } else if (dd > PART_DIST && activePairs[key]) {
+        delete activePairs[key];
+      }
+    }
+  }
+
+  /* draw */
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.fillStyle = "#0a0908";
+  ctx.fillRect(0, 0, W, H);
+
+  /* hexagon boundary, faint */
+  ctx.strokeStyle = "rgba(242,234,216,0.14)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(HEX[0][0], HEX[0][1]);
+  for (var h = 1; h < 6; h++) ctx.lineTo(HEX[h][0], HEX[h][1]);
+  ctx.closePath();
+  ctx.stroke();
+
+  ctx.drawImage(trail, 0, 0, W, H);
+
+  /* chords: slightly brighter than trails, newest 250 kept */
+  ctx.strokeStyle = "rgba(247,241,222,0.8)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  for (var c = 0; c < chords.length; c++) {
+    ctx.moveTo(chords[c].x1, chords[c].y1);
+    ctx.lineTo(chords[c].x2, chords[c].y2);
+  }
+  ctx.stroke();
+
+  /* node flares: a brief hard dot where a chord was born, gone in
+     about 1.5 seconds. No radial glow: the soft blobs fought the
+     hairline language, and the dot is all the mark a meeting needs. */
+  var now = frame;
+  flares = flares.filter(function (f) { return now - f.born < 90; });
+  for (var f2 = 0; f2 < flares.length; f2++) {
+    var age = (now - flares[f2].born) / 90;
+    var alpha = 0.95 * (1 - age);
+    ctx.fillStyle = "rgba(255,250,230," + alpha.toFixed(3) + ")";
+    ctx.beginPath();
+    ctx.arc(flares[f2].x, flares[f2].y, 1.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  /* walkers: small warm dots */
+  ctx.fillStyle = "rgba(242,234,216,0.9)";
+  for (var w2 = 0; w2 < walkers.length; w2++) {
+    ctx.beginPath();
+    ctx.arc(walkers[w2].x, walkers[w2].y, 1.8, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  requestAnimationFrame(step);
+}
+requestAnimationFrame(step);
+
+/* harness hooks: read-only state for scripted checks */
+window.__meetings = {
+  getState: function () {
+    return {
+      seed: seed,
+      frame: frame,
+      elapsed: (performance.now() - startTime) / 1000,
+      chordCount: chords.length,
+      walkerCount: walkers.length,
+      repelHits: repelHits,
+      walkers: walkers.map(function (w) { return { x: +w.x.toFixed(2), y: +w.y.toFixed(2) }; }),
+      chords: chords.map(function (c) { return { x1: c.x1, y1: c.y1, x2: c.x2, y2: c.y2 }; }),
+      flares: flares.length
+    };
+  },
+  trailAlphaAt: function (x, y) {
+    var d = tctx.getImageData(Math.round(x * DPR), Math.round(y * DPR), 1, 1).data;
+    return d[3];
+  },
+  meanTrailAlpha: function () {
+    var d = tctx.getImageData(0, 0, trail.width, trail.height).data;
+    var sum = 0, n = 0;
+    for (var i = 3; i < d.length; i += 400) { sum += d[i]; n++; }
+    return sum / n;
+  }
+};
+</script>
+</body>
+</html>
