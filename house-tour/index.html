@@ -7,82 +7,31 @@
 <meta name="description" content="9 Harvest Lane, Sicklerville and 329 Brookdale Blvd, Williamstown. Prices, taxes, HOA, photos, and what to ask.">
 <link rel="preload" as="image" href="images/harvest-exterior.jpg">
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#fff;color:#141414;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.5;-webkit-text-size-adjust:100%}
-a{color:#14532d}
-.wrap{max-width:860px;margin:0 auto;padding:0 18px 56px}
-header{padding:30px 0 0}
-h1{font-size:23px;font-weight:700;margin:0;letter-spacing:-.01em}
-header p{color:#666;font-size:14px;margin:6px 0 0}
-nav{display:flex;gap:26px;border-bottom:1px solid #e5e5e5;margin-top:22px}
-nav button{font:inherit;font-size:15px;padding:10px 0;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer;color:#666}
-nav button.active{color:#141414;border-bottom-color:#14532d;font-weight:600}
-.view{display:none}
-.view.active{display:block}
-.house{padding-top:26px}
-h2{font-size:21px;font-weight:700;margin:0;letter-spacing:-.01em}
-.addr{color:#666;font-size:14px;margin:4px 0 16px}
-.price{font-size:32px;font-weight:700;letter-spacing:-.02em}
-.price-meta{color:#666;font-size:14px;margin:2px 0 20px}
-.gallery .main{position:relative;border-radius:8px;overflow:hidden;background:#f0f0f0}
-.gallery .main img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;cursor:zoom-in}
-.gallery .main img.portrait{aspect-ratio:3/4;object-fit:contain;background:#111}
-.navbtn{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.9);font-size:18px;cursor:pointer}
-.navbtn.prev{left:10px}
-.navbtn.next{right:10px}
-.counter{position:absolute;right:10px;bottom:10px;background:rgba(0,0,0,.6);color:#fff;font-size:12px;padding:3px 9px;border-radius:99px}
-.cap{font-size:13px;color:#666;padding:8px 0 0}
-.thumbs{display:flex;gap:6px;overflow-x:auto;padding:10px 0 0;-webkit-overflow-scrolling:touch}
-.thumbs img{width:72px;height:50px;object-fit:cover;border-radius:5px;cursor:pointer;opacity:.75;flex:0 0 auto}
-.thumbs img.sel{opacity:1;outline:2px solid #14532d;outline-offset:1px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0 24px;margin:26px 0 6px}
-.stats div{border-top:1px solid #e5e5e5;padding:10px 0}
-.stats .k{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:#888}
-.stats .v{font-size:17px;font-weight:650;margin-top:1px}
-.stats .n{font-size:12px;color:#888}
-h3{font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:#888;margin:28px 0 10px;font-weight:600}
-ul{margin:0;padding:0;list-style:none}
-ul li{padding:7px 0;border-top:1px solid #f0f0f0;font-size:15px}
-ul li:first-child{border-top:0}
-.flags li{color:#7c4a03}
-.flags li b{color:#7c4a03}
-table{width:100%;border-collapse:collapse;font-size:15px}
-table th,table td{text-align:left;padding:8px 0;border-top:1px solid #f0f0f0;vertical-align:top}
-table tr:first-child th,table tr:first-child td{border-top:0}
-table th{color:#888;font-weight:500;width:38%}
-.note{font-size:14px;color:#555}
-.note b{color:#141414}
-.agent{font-size:14px;color:#666;border-top:1px solid #e5e5e5;margin-top:28px;padding-top:14px}
-.agent a{color:#14532d}
-.compare{overflow-x:auto}
-.compare table{min-width:560px}
-.compare th:first-child{width:30%}
-.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:50;cursor:zoom-out}
-.lightbox.open{display:flex}
-.lightbox img{max-width:96vw;max-height:92vh;object-fit:contain}
-.lightbox .cap{position:absolute;left:0;right:0;bottom:16px;text-align:center;color:#fff;font-size:13px}
-footer{border-top:1px solid #e5e5e5;margin-top:36px;padding-top:14px;color:#999;font-size:12px}
-@media (max-width:560px){
-  .stats{grid-template-columns:repeat(2,1fr)}
-  .price{font-size:28px}
-  nav{gap:20px}
-}
+
+:root{color-scheme:light;--paper:#f7f6f2;--white:#fff;--ink:#202923;--muted:#616b63;--line:#dfe3db;--green:#244b3b;--soft:#e8eee7;--gold:#885b26}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%}button,input,textarea{font:inherit}button,a{-webkit-tap-highlight-color:transparent}button{cursor:pointer}a{color:var(--green);text-underline-offset:3px}button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid #8a9f7b;outline-offset:3px}button{color:inherit}img{display:block;max-width:100%}.wrap{max-width:1280px;margin:auto;padding:0 40px 48px}header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:25px 0 18px}header h1{font-family:Georgia,serif;font-size:28px;font-weight:400;letter-spacing:-.04em;margin:0}header p{font-size:13px;color:var(--muted);margin:0;text-align:right}header p a{white-space:nowrap}.eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}nav{position:sticky;top:0;z-index:20;display:flex;gap:6px;align-items:center;padding:9px 0;background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:auto;scrollbar-width:none}nav::-webkit-scrollbar{display:none}nav button,.filter button{border:0;border-radius:6px;background:transparent;padding:9px 13px;white-space:nowrap;font-size:13px;font-weight:600;color:var(--muted)}nav button.active{background:var(--green);color:#fff}nav button:not(.active):hover,.filter button:hover{background:var(--soft);color:var(--ink)}.view{display:none}.view.active{display:block}.house{padding-top:32px}.intro{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:25px}.intro h2,.house>h2{font-family:Georgia,serif;font-weight:400;font-size:clamp(32px,4.6vw,57px);line-height:1.07;letter-spacing:-.045em;margin:0}.intro p:last-child{color:var(--muted);max-width:440px;margin:0}.property-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}.property{border:1px solid var(--line);background:var(--white);border-radius:12px;overflow:hidden;min-width:0}.cover{width:100%;border:0;padding:0;position:relative;display:block;background:#e0e4dc;text-align:left}.cover img{width:100%;height:clamp(200px,31vw,360px);object-fit:cover;object-position:center 48%}.cover .count{position:absolute;bottom:12px;right:12px;border-radius:5px;background:#19231ddd;color:white;font-size:12px;padding:5px 9px}.property-body{padding:21px 23px}.property-body h3{font:400 27px/1.16 Georgia,serif;letter-spacing:-.025em;margin:7px 0 3px;color:var(--ink);text-transform:none}.property-body .city{color:var(--muted);margin:0}.property-body .price{font-size:25px;margin:15px 0 2px}.property-body .quick{font-size:14px;color:var(--muted);margin:0 0 16px}.property-body .summary{border-top:1px solid var(--line);padding-top:13px;color:var(--muted);font-size:14px;margin:0 0 17px}.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.primary,.secondary{border:1px solid var(--green);border-radius:7px;display:inline-flex;align-items:center;justify-content:center;padding:10px 15px;font-size:13px;font-weight:650;text-decoration:none;min-height:42px}.primary{background:var(--green);color:#fff}.secondary{border-color:var(--line);background:var(--white);color:var(--green)}.primary:hover{background:#18392c}.secondary:hover{background:var(--soft)}.overview-note{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:23px;border-top:1px solid var(--line);padding-top:20px}.overview-note p{margin:0;color:var(--muted)}.house-head{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:22px}.house-head h2{font:400 clamp(31px,4vw,48px)/1.08 Georgia,serif;letter-spacing:-.04em;margin:0}.addr{color:var(--muted);font-size:13px;margin:8px 0 0}.price{font-size:32px;font-weight:650;line-height:1.15;letter-spacing:-.035em;font-variant-numeric:tabular-nums}.price-meta{color:var(--muted);font-size:13px;margin:6px 0 0}.pricing{text-align:right;max-width:360px;flex:0 0 auto}.tour-layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(280px,1fr);gap:28px;align-items:start}.gallery{min-width:0}.gallery .main{position:relative;overflow:hidden;border-radius:11px;background:#e5e8e1;aspect-ratio: 4/3;display:flex;align-items:center;justify-content:center;touch-action:pan-y}.gallery .main img{width:100%;height:100%;object-fit:contain;cursor:zoom-in}.navbtn,.expand{position:absolute;display:grid;place-items:center;border:0;background:#fff;color:#23342a;box-shadow:0 2px 12px #0002;border-radius:50%;width:42px;height:42px;font-size:26px;line-height:1}.navbtn{top:50%;transform:translateY(-50%)}.navbtn.prev{left:12px}.navbtn.next{right:12px}.expand{top:12px;right:12px;font-size:19px}.counter{position:absolute;right:12px;bottom:12px;background:#202923d9;color:#fff;padding:5px 9px;border-radius:5px;font-size:12px;font-variant-numeric:tabular-nums;pointer-events:none}.cap{font-size:13px;color:var(--muted);padding:10px 0 4px;min-height:34px}.filter{display:flex;gap:3px;overflow:auto;scrollbar-width:thin;padding:7px 0}.filter button{padding:6px 10px;font-size:12px}.filter button.selected{background:var(--soft);color:var(--green)}.thumbs{display:flex;gap:8px;overflow:auto;padding:5px 3px 10px;scrollbar-width:thin}.thumbs button{flex:0 0 79px;width:79px;height:57px;border:0;background:none;padding:0;border-radius:5px;overflow:hidden;opacity:.72}.thumbs button.sel{outline:2px solid var(--green);outline-offset:2px;opacity:1}.thumbs img{width:100%;height:100%;object-fit:cover}.gallery-tools{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 8px}.gallery-tools .secondary{min-height:34px;padding:5px 10px}.photo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:10px}.photo-grid[hidden]{display:none}.photo-grid button{border:0;background:var(--white);padding:0;border-radius:6px;overflow:hidden;text-align:left}.photo-grid img{aspect-ratio:4/3;width:100%;object-fit:cover}.photo-grid span{display:block;padding:5px 7px;font-size:11px;color:var(--muted)}.facts{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:20px;min-width:0}.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px;margin:0}.stats>div{padding:13px 0;border-bottom:1px solid var(--line)}.stats .k{font-size:11px;color:var(--muted)}.stats .v{font-size:20px;font-weight:650;letter-spacing:-.025em;margin:2px 0;font-variant-numeric:tabular-nums}.stats .n{font-size:11px;color:var(--muted);line-height:1.4}.facts .actions{margin-top:16px}.facts h3{margin-top:20px}.note{font-size:14px;color:var(--muted)}.note b{color:var(--ink)}h3{font-size:16px;letter-spacing:-.02em;margin:26px 0 10px;font-weight:650}.detail-layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(280px,1fr);gap:28px;margin-top:28px}.detail-layout>div{min-width:0}.detail-section{border-top:1px solid var(--line);padding:4px 0 14px}.detail-section h3{margin:15px 0 8px}.detail-section ul{margin:0;padding:0;list-style:none}.detail-section li{padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}.detail-section li:last-child{border:0}.flags li{color:var(--gold)}.review{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:18px 20px;margin-bottom:17px}.review h3{margin:0 0 5px}.review p{margin:0 0 12px;color:var(--muted);font-size:13px}.review label.check{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-top:1px solid var(--line);font-size:13px;cursor:pointer}.review input[type=checkbox]{width:17px;height:17px;accent-color:var(--green);flex:none;margin-top:3px}.review label.check:has(input:checked) span{text-decoration:line-through;color:var(--muted)}.review textarea{display:block;width:100%;resize:vertical;min-height:95px;border:1px solid var(--line);border-radius:6px;background:var(--paper);padding:10px;margin:7px 0 4px;color:var(--ink)}.review small{display:block;color:var(--muted);font-size:11px}.review .notes-label{display:block;margin-top:13px;font-size:13px;font-weight:650}.agent{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}.compare{overflow:auto;border:1px solid var(--line);border-radius:10px;background:var(--white);margin-top:18px}table{border-collapse:collapse;width:100%;font-size:14px}table th,table td{text-align:left;padding:9px 0;border-bottom:1px solid var(--line);vertical-align:top}table th{font-weight:500;color:var(--muted);width:35%}.compare table{table-layout:fixed;min-width:0}.compare td,.compare th{padding:12px 15px;overflow-wrap:anywhere}.compare tr:first-child th{color:var(--ink);font-weight:650;background:var(--soft)}.compare th:first-child{width:32%}.compare tr:last-child>*{border:0}.compare .highlight td{background:#eff4ed;font-weight:650;color:var(--green)}.compare-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}.compare-cards>div{border:1px solid var(--line);background:var(--white);border-radius:9px;padding:17px}.compare-cards strong{font:400 27px/1.1 Georgia,serif;display:block;color:var(--green);margin:4px 0}.compare-cards p{font-size:13px;color:var(--muted);margin:0}.lightbox{border:0;background:#121713;color:#fff;max-width:none;max-height:none;width:100%;height:100%;margin:0;padding:0;overflow:hidden}.lightbox::backdrop{background:#111}.lightbox[open]{display:grid;grid-template-rows:auto minmax(0,1fr) auto}.lightbox-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;gap:10px}.lightbox button{background:#ffffff16;color:white;border:1px solid #ffffff30;border-radius:7px;min-width:44px;min-height:44px;font-size:22px}.lightbox-stage{position:relative;min-height:0;display:grid;place-items:center;touch-action:pan-y}.lightbox-stage img{width:100%;height:100%;min-height:0;object-fit:contain}.lightbox-stage button{position:absolute;top:50%;transform:translateY(-50%)}#lb-prev{left:15px}#lb-next{right:15px}.lightbox .cap{padding:12px 18px 20px;color:#e1e4dc;text-align:center}.lightbox .cap:empty{display:none}footer{border-top:1px solid var(--line);margin-top:35px;padding-top:12px;font-size:12px;color:var(--muted)}
+@media(max-width:850px){.wrap{padding:0 22px 35px}.tour-layout,.detail-layout{grid-template-columns:1fr;gap:18px}.facts{padding:15px 18px}.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.detail-layout{margin-top:22px}.house-head{align-items:flex-start}.intro{align-items:flex-start}.intro p:last-child{max-width:290px}}@media(max-width:600px){.wrap{padding:0 15px 30px}header{padding:17px 0 12px;align-items:flex-start}header h1{font-size:25px}header p{font-size:11px;max-width:180px}nav{margin:0 -15px;padding:8px 15px;gap:2px}nav button{font-size:12px;padding:9px 10px}.house{padding-top:24px}.intro,.house-head{display:block}.intro p:last-child{max-width:none;margin-top:10px}.intro{margin-bottom:18px}.property-grid{grid-template-columns:1fr;gap:14px}.cover img{height:230px}.property-body{padding:17px}.property-body h3{font-size:25px}.overview-note{align-items:flex-start;flex-direction:column}.pricing{text-align:left;margin-top:15px}.price{font-size:29px}.house-head{margin-bottom:16px}.gallery .main{aspect-ratio:4/3}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.photo-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.compare td,.compare th{font-size:12px;padding:9px 6px}.compare-cards{gap:8px}.compare-cards>div{padding:12px}.compare-cards strong{font-size:23px}.lightbox-bar{padding:10px}.lightbox-stage button{background:#101713b0}#lb-prev{left:8px}#lb-next{right:8px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
 </style>
 </head>
 <body>
 <div class="wrap">
-<header>
-<h1>House Tour</h1>
-<p>Friday, November 27, 2026. With Nekesha Lewis, RE/MAX Preferred, (856) 390-9464.</p>
-</header>
-<nav id="tabs">
-<button class="active" data-view="harvest">Harvest Lane</button>
-<button data-view="brookdale">Brookdale Blvd</button>
+<header><h1>House tour</h1><p>November 27, 2026<br><a href="tel:8563909464">Nekesha Lewis · RE/MAX Preferred</a></p></header>
+<nav id="tabs" aria-label="Tour navigation">
+<button class="active" data-view="overview" aria-current="page">Overview</button>
+<button data-view="brookdale">Brookdale</button>
+<button data-view="harvest">Harvest</button>
 <button data-view="compare">Compare</button>
 </nav>
+<article class="view active" id="view-overview"><div class="house">
+<div class="intro"><div><p class="eyebrow">November 27 · Two featured homes</p><h2>Find the right home.</h2></div><p>Explore the rooms, review the numbers, and keep track of what you want to ask before making a decision.</p></div>
+<div class="property-grid">
+<article class="property"><button class="cover" data-go="brookdale" aria-label="Tour 329 Brookdale Boulevard"><img src="images/brookdale-02-exterior.jpg" alt="Front exterior of Brookdale Boulevard" fetchpriority="high"><span class="count">17 photos</span></button><div class="property-body"><p class="eyebrow">Stop 02 · 11:30–11:45 AM</p><h3>329 Brookdale Blvd</h3><p class="city">Williamstown, NJ</p><div class="price">$299,900</div><p class="quick">3 beds · 2 baths · 1,314 sq ft</p><p class="summary">Two full bathrooms, $39 monthly HOA and lower listed property taxes.</p><div class="actions"><button class="primary" data-go="brookdale">Explore home <span aria-hidden="true">→</span></button><a class="secondary" href="https://www.google.com/maps/search/?api=1&amp;query=329+Brookdale+Blvd+Williamstown+NJ" target="_blank" rel="noopener">Map</a></div></div></article>
+<article class="property"><button class="cover" data-go="harvest" aria-label="Tour 9 Harvest Lane"><img src="images/harvest-exterior.jpg" alt="Front exterior of Harvest Lane"><span class="count">10 photos</span></button><div class="property-body"><p class="eyebrow">Stop 03 · 12:00–12:15 PM</p><h3>9 Harvest Lane</h3><p class="city">Sicklerville, NJ</p><div class="price">$299,900</div><p class="quick">3 beds · 1.5 baths · 1,608 sq ft</p><p class="summary">More living space, a larger lot and no listed HOA. Garage conversion and solar to verify.</p><div class="actions"><button class="primary" data-go="harvest">Explore home <span aria-hidden="true">→</span></button><a class="secondary" href="https://www.google.com/maps/search/?api=1&amp;query=9+Harvest+Lane+Sicklerville+NJ" target="_blank" rel="noopener">Map</a></div></div></article>
+</div><div class="overview-note"><p>Same asking price, different trade-offs. Compare the details side by side.</p><button class="secondary" data-go="compare">Compare both homes →</button></div></div></article>
 
 <!-- HARVEST LANE -->
-<article class="view active" id="view-harvest">
+<article class="view" id="view-harvest">
 <div class="house">
 <h2>9 Harvest Lane, Sicklerville</h2>
 <p class="addr">Cobblers Cove, Winslow Township, Camden County. Tour stop 3, 12:00 to 12:15pm.</p>
@@ -161,7 +110,7 @@ footer{border-top:1px solid #e5e5e5;margin-top:36px;padding-top:14px;color:#999;
 <p class="price-meta">$228 per sq ft &middot; $39 a month HOA &middot; 17 days on market, listed Nov 10, 2026</p>
 
 <div class="gallery" id="gal-brookdale">
-<div class="main"><img id="brookdale-main" src="" alt="Front exterior of 329 Brookdale Blvd"><button class="navbtn prev" data-gal="brookdale" data-dir="-1" aria-label="Previous photo">&#8249;</button><button class="navbtn next" data-gal="brookdale" data-dir="1" aria-label="Next photo">&#8250;</button><span class="counter" id="brookdale-counter">1 / 17</span></div>
+<div class="main"><img id="brookdale-main" src="images/brookdale-02-exterior.jpg" loading="lazy" alt="Front exterior of 329 Brookdale Blvd"><button class="navbtn prev" data-gal="brookdale" data-dir="-1" aria-label="Previous photo">&#8249;</button><button class="navbtn next" data-gal="brookdale" data-dir="1" aria-label="Next photo">&#8250;</button><span class="counter" id="brookdale-counter">1 / 17</span></div>
 <div class="cap" id="brookdale-caption">Front exterior. Zillow listing photos.</div>
 <div class="thumbs" id="brookdale-thumbs"></div>
 </div>
@@ -226,7 +175,7 @@ footer{border-top:1px solid #e5e5e5;margin-top:36px;padding-top:14px;color:#999;
 <article class="view" id="view-compare">
 <div class="house">
 <h2>Compare</h2>
-<p class="addr">Harvest Lane first, Brookdale Blvd second.</p>
+<p class="addr">Both homes are listed at $299,900. Here is what changes between them.</p><div class="compare-cards"><div><p>Harvest Lane · more space</p><strong>294 sq ft more</strong><p>Also 2,701 sq ft more lot area; conversion square footage is unverified.</p></div><div><p>Brookdale · lower fixed charges</p><strong>About $91/mo less</strong><p>Using MLS taxes plus listed HOA; excludes mortgage and insurance.</p></div></div>
 <div class="compare">
 <table>
 <tr><th></th><th>Harvest Lane</th><th>Brookdale Blvd</th></tr>
@@ -255,11 +204,11 @@ footer{border-top:1px solid #e5e5e5;margin-top:36px;padding-top:14px;color:#999;
 </article>
 
 <footer>
-<p>Photos from the listings. Estimates are estimates. Research checked Nov 27, 2026.</p>
+<p>Listing photos and agent-supplied interiors. Prices, estimates and property facts are from the original tour research, checked Nov 27, 2026; verify before relying on them.</p>
 </footer>
 </div>
 
-<div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt=""><div class="cap" id="lightbox-cap"></div></div>
+<dialog class="lightbox" id="lightbox" aria-label="Fullscreen property photos"><div class="lightbox-bar"><span id="lb-title"></span><span id="lb-count"></span><button id="lb-close" aria-label="Close fullscreen">×</button></div><div class="lightbox-stage" id="lb-stage"><img id="lightbox-img" alt=""><button id="lb-prev" aria-label="Previous photo">‹</button><button id="lb-next" aria-label="Next photo">›</button></div><div class="cap" id="lightbox-cap"></div></dialog>
 
 <script>
 var GALLERIES = {
@@ -295,66 +244,43 @@ var GALLERIES = {
     {src:"images/brookdale-17-backyard.jpg", cap:"Backyard. Zillow listing photos."}
   ]
 };
-var current = {harvest:0, brookdale:0};
-var inited = {harvest:false, brookdale:false};
-function thumbSrc(full){ return "images/thumbs/" + full.split("/").pop(); }
-function showPhoto(gal, idx){
-  var g = GALLERIES[gal];
-  idx = (idx + g.length) % g.length;
-  current[gal] = idx;
-  var img = document.getElementById(gal + "-main");
-  img.src = g[idx].src;
-  img.classList.toggle("portrait", !!g[idx].portrait);
-  document.getElementById(gal + "-counter").textContent = (idx+1) + " / " + g.length;
-  document.getElementById(gal + "-caption").textContent = g[idx].cap;
-  var thumbs = document.getElementById(gal + "-thumbs").children;
-  for (var i=0;i<thumbs.length;i++){ thumbs[i].classList.toggle("sel", i===idx); }
+
+const $=(q,root=document)=>root.querySelector(q), $=(q,root=document)=>Array.from(root.querySelectorAll(q));
+const info={harvest:{name:"9 Harvest Lane",address:"9 Harvest Lane Sicklerville NJ",checks:["Garage conversion permits and legal living area","Solar ownership, lease or financing terms","Confirm current property tax bill","Roof, HVAC and water heater records","Inspect moisture, drainage and slab"]},brookdale:{name:"329 Brookdale Blvd",address:"329 Brookdale Blvd Williamstown NJ",checks:["Roof and HVAC age and service records","HOA coverage, rules and special assessments","Confirm current property tax bill","Verify parking and cooling fuel","Inspect moisture, drainage and slab"]}};
+const states={harvest:{idx:0,group:"All",grid:false},brookdale:{idx:0,group:"All",grid:false}};
+let active="overview",lightGal=null,returnFocus=null;
+const dialog=$("#lightbox");
+function category(p){const n=p.src;return /exterior|backyard/.test(n)?"Outside":/kitchen|dining/.test(n)?"Kitchen & dining":/bedroom|office/.test(n)?"Bedrooms":/bathroom|laundry/.test(n)?"Bath & utility":"Living";}
+function photoName(p){return p.cap.split(".")[0];}
+function ids(g){return GALLERIES[g].map((p,i)=>i).filter(i=>states[g].group==="All"||category(GALLERIES[g][i])===states[g].group);}
+function thumbSrc(full){return "images/thumbs/"+full.split("/").pop();}
+function element(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
+function btn(cls,txt,fn){const e=element("button",cls,txt);e.type="button";e.addEventListener("click",fn);return e;}
+function image(p,thumb){const e=element("img");e.src=thumb?thumbSrc(p.src):p.src;e.alt=photoName(p);e.loading="lazy";e.decoding="async";if(thumb)e.addEventListener("error",()=>{if(!e.dataset.fallback){e.dataset.fallback="1";e.src=p.src;}});return e;}
+function showPhoto(g,i,scroll=false){const st=states[g],p=GALLERIES[g][i];st.idx=i;const el=$("#"+g+"-main");el.src=p.src;el.alt=photoName(p);$("#"+g+"-counter").textContent=(i+1)+" / "+GALLERIES[g].length;$("#"+g+"-caption").textContent=p.cap;$("button",$("#"+g+"-thumbs")).forEach(b=>{const yes=Number(b.dataset.idx)===i;b.classList.toggle("sel",yes);b.setAttribute("aria-pressed",String(yes));if(yes&&scroll){const box=b.parentElement;box.scrollLeft=Math.max(0,b.offsetLeft-box.offsetLeft-box.clientWidth/2+b.clientWidth/2);}});if(dialog.open&&lightGal===g)updateLight();}
+function step(g,dir){const a=ids(g);const pos=a.indexOf(states[g].idx);showPhoto(g,a[(pos+dir+a.length)%a.length],true);}
+function renderGallery(g){const st=states[g],box=$("#"+g+"-thumbs"),grid=$("#grid-"+g),a=ids(g);box.replaceChildren();grid.replaceChildren();$("button",$("#filter-"+g)).forEach(b=>{const selected=b.textContent===st.group;b.classList.toggle("selected",selected);b.setAttribute("aria-pressed",String(selected));});a.forEach(i=>{const p=GALLERIES[g][i];const b=btn("",null,()=>showPhoto(g,i,true));b.dataset.idx=i;b.setAttribute("aria-label","View "+photoName(p)+", photo "+(i+1));b.append(image(p,true));box.append(b);const tile=btn("",null,()=>{showPhoto(g,i);openLight(g,tile);});tile.append(image(p,true),element("span","",photoName(p)));grid.append(tile);});if(!a.includes(st.idx))st.idx=a[0];showPhoto(g,st.idx);grid.hidden=!st.grid;$("#grid-toggle-"+g).textContent=st.grid?"Hide photo grid":"View photo grid";$("#grid-toggle-"+g).setAttribute("aria-expanded",String(st.grid));}
+function updateLight(){const g=lightGal,i=states[g].idx,p=GALLERIES[g][i];$("#lb-title").textContent=info[g].name;$("#lb-count").textContent=(i+1)+" / "+GALLERIES[g].length;$("#lightbox-img").src=p.src;$("#lightbox-img").alt=photoName(p);$("#lightbox-cap").textContent=p.cap;}
+function openLight(g,trigger){lightGal=g;returnFocus=trigger||document.activeElement;if(!dialog.open)dialog.showModal();document.body.style.overflow="hidden";updateLight();$("#lb-close").focus();}
+dialog.addEventListener("close",()=>{document.body.style.overflow="";if(returnFocus&&returnFocus.isConnected)returnFocus.focus();lightGal=null;});
+$("#lb-close").addEventListener("click",()=>dialog.close());$("#lb-prev").addEventListener("click",()=>step(lightGal,-1));$("#lb-next").addEventListener("click",()=>step(lightGal,1));
+document.addEventListener("keydown",e=>{if(dialog.open&&["ArrowLeft","ArrowRight"].includes(e.key)){e.preventDefault();step(lightGal,e.key==="ArrowLeft"?-1:1);}});
+function swipe(el,fn){let start=null;el.addEventListener("touchstart",e=>{start=e.touches.length===1?[e.touches[0].clientX,e.touches[0].clientY]:null;},{passive:true});el.addEventListener("touchend",e=>{if(!start)return;const t=e.changedTouches[0],dx=t.clientX-start[0],dy=t.clientY-start[1];if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.5)fn(dx<0?1:-1);start=null;},{passive:true});}
+swipe($("#lb-stage"),d=>{if(lightGal)step(lightGal,d);});
+function read(key,fallback){try{return JSON.parse(localStorage.getItem("house-tour-2026-11-27-"+key))??fallback;}catch{return fallback;}}
+function write(key,val){try{localStorage.setItem("house-tour-2026-11-27-"+key,JSON.stringify(val));return true;}catch{return false;}}
+function review(g){const panel=element("section","review");panel.append(element("h3","","Tour checklist"));const status=element("p");panel.append(status);const checked=read(g+"-checks",{});function refresh(){status.textContent=info[g].checks.filter((_,i)=>checked[i]).length+" of "+info[g].checks.length+" reviewed";}info[g].checks.forEach((q,i)=>{const label=element("label","check"),input=element("input");input.type="checkbox";input.checked=!!checked[i];input.addEventListener("change",()=>{checked[i]=input.checked;write(g+"-checks",checked);refresh();});label.append(input,element("span","",q));panel.append(label);});refresh();const label=element("label","notes-label","Your notes");label.htmlFor="notes-"+g;const area=element("textarea");area.id="notes-"+g;area.placeholder="What stood out? What needs a closer look?";area.value=read(g+"-notes","");const msg=element("small","","Notes stay in this browser; they are not uploaded.");area.addEventListener("input",()=>{msg.textContent=write(g+"-notes",area.value)?"Saved on this browser. Not uploaded.":"Storage unavailable; notes will not persist.";});panel.append(label,area,msg);return panel;}
+function build(g){const house=$("#view-"+g+" .house"),gal=$("#gal-"+g),stats=$(".stats",house),heading=$("h2",house),addr=$(".addr",house),price=$(".price",house),meta=$(".price-meta",house);
+const head=element("div","house-head"),left=element("div"),pricing=element("div","pricing");left.append(element("p","eyebrow",g==="harvest"?"Stop 03 · Sicklerville":"Stop 02 · Williamstown"),heading,addr);pricing.append(price,meta);head.append(left,pricing);house.prepend(head);
+const sections={};let section=null;Array.from(house.children).forEach(el=>{if(el.tagName==="H3"){section=element("section","detail-section");sections[el.textContent]=section;section.append(el);}else if(section&&el.classList.contains("agent")){sections.Agent=el;section=null;}else if(section&&el!==stats&&el!==gal&&el!==head){section.append(el);}});
+const facts=element("aside","facts"),layout=element("div","tour-layout");facts.append(stats);if(sections.Monthly){facts.append(...Array.from(sections.Monthly.children));}const actions=element("div","actions");const map=element("a","secondary","Directions");map.href="https://www.google.com/maps/dir/?api=1&destination="+encodeURIComponent(info[g].address);map.target="_blank";map.rel="noopener";actions.append(map,btn("secondary","Compare homes",()=>navigate("compare")));facts.append(actions);layout.append(gal,facts);house.append(layout);
+const detail=element("div","detail-layout"),main=element("div"),side=element("div");["The house","Watch out","History","Schools","Nearby"].forEach(k=>{if(sections[k])main.append(sections[k]);});side.append(review(g));if(sections["Ask at the tour"])side.append(sections["Ask at the tour"]);if(sections.Agent)side.append(sections.Agent);detail.append(main,side);house.append(detail);
+const stage=$(".main",gal),mainImg=$("#"+g+"-main");const expand=btn("expand","⤢",()=>openLight(g,expand));expand.setAttribute("aria-label","Open fullscreen photos");stage.append(expand);mainImg.tabIndex=0;mainImg.setAttribute("role","button");mainImg.setAttribute("aria-label","Open photo fullscreen");mainImg.addEventListener("click",()=>openLight(g,mainImg));mainImg.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openLight(g,mainImg);}});$(".navbtn",gal).forEach(b=>b.addEventListener("click",()=>step(g,Number(b.dataset.dir))));swipe(stage,d=>step(g,d));
+const filter=element("div","filter");filter.id="filter-"+g;filter.setAttribute("aria-label","Filter photos by room");["All",...new Set(GALLERIES[g].map(category))].forEach(c=>filter.append(btn("",c,()=>{states[g].group=c;renderGallery(g);})));const thumbs=$("#"+g+"-thumbs");gal.insertBefore(filter,thumbs);const tools=element("div","gallery-tools");const hint=element("span","cap","Tap any photo to enlarge");const toggle=btn("secondary","View photo grid",()=>{states[g].grid=!states[g].grid;renderGallery(g);});toggle.id="grid-toggle-"+g;toggle.setAttribute("aria-controls","grid-"+g);tools.append(hint,toggle);gal.append(tools);const grid=element("div","photo-grid");grid.id="grid-"+g;grid.hidden=true;gal.append(grid);
 }
-function initGallery(gal){
-  if (inited[gal]) return;
-  inited[gal] = true;
-  var box = document.getElementById(gal + "-thumbs");
-  GALLERIES[gal].forEach(function(p, i){
-    var t = document.createElement("img");
-    t.src = thumbSrc(p.src); t.alt = p.cap; t.loading = "lazy"; t.decoding = "async";
-    if (i===0) t.classList.add("sel");
-    t.addEventListener("click", function(){ showPhoto(gal, i); });
-    box.appendChild(t);
-  });
-  showPhoto(gal, 0);
-}
-initGallery("harvest");
-document.querySelectorAll(".navbtn").forEach(function(b){
-  b.addEventListener("click", function(e){
-    e.stopPropagation();
-    var gal = b.getAttribute("data-gal");
-    showPhoto(gal, current[gal] + parseInt(b.getAttribute("data-dir"), 10));
-  });
-});
-document.querySelectorAll(".gallery .main img").forEach(function(img){
-  img.addEventListener("click", function(){
-    var gal = img.id.replace("-main", "");
-    var p = GALLERIES[gal][current[gal]];
-    var lb = document.getElementById("lightbox");
-    document.getElementById("lightbox-img").src = p.src;
-    document.getElementById("lightbox-cap").textContent = p.cap;
-    lb.classList.add("open");
-  });
-});
-document.getElementById("lightbox").addEventListener("click", function(){
-  this.classList.remove("open");
-});
-document.querySelectorAll("#tabs button").forEach(function(btn){
-  btn.addEventListener("click", function(){
-    document.querySelectorAll("#tabs button").forEach(function(b){ b.classList.remove("active"); });
-    btn.classList.add("active");
-    document.querySelectorAll(".view").forEach(function(v){ v.classList.remove("active"); });
-    var view = btn.getAttribute("data-view");
-    document.getElementById("view-" + view).classList.add("active");
-    if (view === "brookdale") initGallery("brookdale");
-    window.scrollTo({top:0, behavior:"smooth"});
-  });
-});
+function navigate(v,scroll=true){if(!["overview","brookdale","harvest","compare"].includes(v))v="overview";active=v;$(".view").forEach(el=>el.classList.toggle("active",el.id==="view-"+v));$("#tabs button").forEach(b=>{const on=b.dataset.view===v;b.classList.toggle("active",on);if(on)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});if(states[v]&&!states[v].ready){states[v].ready=true;renderGallery(v);}try{history.replaceState(null,"",v==="overview"?location.pathname+location.search:"#"+v);}catch{}if(scroll)window.scrollTo({top:0,behavior:"instant"});}
+Object.keys(states).forEach(build);$("[data-view],[data-go]").forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.view||b.dataset.go)));$(".compare tr").forEach(r=>{if(["Living area","Lot","Taxes + HOA / mo","Beds / baths"].includes(r.cells[0].textContent))r.classList.add("highlight");});navigate(location.hash.slice(1)||"overview",false);window.addEventListener("hashchange",()=>navigate(location.hash.slice(1),false));
+
 </script>
 <!-- house-tour-2026-11-27 -->
 </body>
