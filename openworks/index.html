@@ -117,7 +117,6 @@
   }
   .route-head span:last-child{color:var(--mut);font-weight:400}
   .route-box svg{display:block;width:100%;height:auto}
-  .route-cap{border-top:1px solid var(--ink);padding:10px 16px;font-size:12.5px;color:var(--mut);line-height:1.5}
   .phases{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
   .phase{border-top:3px solid var(--ink);padding-top:14px}
   .phase .when{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
@@ -151,7 +150,7 @@
   .finding .fname{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-bottom:10px}
   .finding .fname .fn{color:var(--sig)}
   .record{border:1px solid var(--ink)}
-  .record-row{display:grid;grid-template-columns:200px 1fr;border-bottom:1px solid var(--line-soft)}
+  .record-row{display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid var(--line-soft)}
   .record-row:last-child{border-bottom:none}
   .record-row .rk{
     padding:9px 12px;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;
@@ -167,7 +166,7 @@
   .price-row .delta{color:var(--sig);font-weight:600}
   .fixes{margin:22px 0 0;padding:0;list-style:none}
   .fixes li{
-    padding:9px 0 9px 44px;position:relative;
+    padding:9px 0 9px 68px;position:relative;
     font-size:15.5px;line-height:1.55;border-bottom:1px solid var(--line-soft);
   }
   .fixes li:last-child{border-bottom:none}
@@ -216,6 +215,65 @@
   .foot-meta{font-size:13px;color:var(--mut);line-height:1.7;max-width:44ch}
   .disclaimer{font-size:12.5px;color:var(--mut);line-height:1.6;margin-top:28px;max-width:72ch}
 
+  /* ---- v3: contents strip ---- */
+  .contents{
+    border-bottom:1px solid var(--ink);padding:9px 0 10px;
+    font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    line-height:2;color:var(--mut);
+  }
+  .contents b{color:var(--ink);font-weight:600}
+  .contents a{color:var(--mut);text-decoration:none}
+  .contents a:hover{color:var(--sig)}
+
+  /* ---- v3: promoted statement ---- */
+  .statement{
+    font-family:"Barlow Condensed","Arial Narrow","Helvetica Neue",Arial,sans-serif;
+    font-size:1.7rem;line-height:1.15;text-transform:uppercase;font-weight:700;
+    max-width:22ch;margin:0 0 34px;padding-left:16px;border-left:4px solid var(--sig);
+  }
+
+  /* ---- v3: field record as log ---- */
+  .log-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+  .log-no{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--sig)}
+  .result-strip{margin:16px 0 0;padding:0;list-style:none;border-top:1px dotted var(--mut)}
+  .result-strip li{
+    display:flex;align-items:baseline;gap:10px;
+    padding:8px 0;border-bottom:1px dotted var(--mut);
+    font-size:13px;line-height:1.45;
+  }
+  .result-strip .k{flex:none;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:11.5px}
+  .result-strip .v{text-align:right;margin-left:auto}
+
+  /* ---- v3: method sub-numbers + evidence ---- */
+  .sub-num{font-size:12px;letter-spacing:.1em;font-weight:600;color:var(--sig);margin-bottom:4px}
+  .evidence{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);line-height:1.6;margin-top:14px}
+
+  /* ---- v3: figure caption ---- */
+  .figcap{border-top:1px solid var(--ink);padding:10px 16px;font-size:12.5px;color:var(--mut);line-height:1.5}
+  .figcap b{color:var(--ink);font-weight:600}
+
+  /* ---- v3: workshops ---- */
+  .workshop .when{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+  .workshop .when .sig{color:var(--sig)}
+  .take-home{font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--mut);line-height:1.6;margin-top:12px}
+  .take-home b{color:var(--ink);font-weight:600}
+
+  /* ---- v3: certifications list (no empty cells) ---- */
+  .cert-list{margin:0;padding:0;list-style:none;border-top:1px solid var(--ink)}
+  .cert-list li{
+    display:flex;align-items:baseline;gap:12px;justify-content:space-between;
+    padding:11px 0;border-bottom:1px solid var(--ink);
+    font-size:15px;line-height:1.5;
+  }
+  .cert-list .tag{
+    flex:none;font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--sig);
+  }
+
+  /* ---- v3: change log ---- */
+  .changelog{margin-top:28px;border-top:1px solid var(--ink);padding-top:12px;font-size:12px;color:var(--mut);line-height:1.8}
+  .changelog b{color:var(--ink);font-weight:600}
+
   /* ---- responsive ---- */
   @media (max-width:860px){
     .two-col{grid-template-columns:1fr;gap:28px}
@@ -235,11 +293,16 @@
     body{font-size:16px}
     .sheet{padding:0 18px}
     .hero{padding:32px 0 32px}
-    h1{font-size:clamp(2.6rem,12vw,3.1rem);overflow-wrap:break-word}
+    h1{font-size:clamp(2.5rem,11.5vw,3.1rem);overflow-wrap:break-word}
+    .cover-strip{display:grid;grid-template-columns:1fr auto;row-gap:4px}
+    .cover-strip span:nth-child(2){grid-column:1 / -1;order:3}
+    .statement{font-size:1.4rem}
     .sec-head h2{font-size:2rem}
     section{padding:36px 0 40px}
-    .data li{flex-wrap:wrap;gap:2px}
+    .data li{flex-direction:column;align-items:flex-start;gap:1px;padding:10px 0}
     .data .v{text-align:left;margin-left:0}
+    .result-strip li{flex-direction:column;align-items:flex-start;gap:1px;padding:10px 0}
+    .result-strip .v{text-align:left;margin-left:0}
     .exhibit-body{padding:16px}
     .exhibit-head{padding:14px 16px}
     .price-row{grid-template-columns:1.3fr 1fr 1fr .5fr;font-size:13px}
@@ -252,14 +315,19 @@
 <div class="sheet">
 
   <div class="cover-strip mono">
-    <span><b>TM-OW-2026</b></span>
+    <span><b>TM-OW-2026 &middot; Rev 3</b></span>
     <span>OpenAI OpenWorks &middot; Partner application</span>
-    <span>November 2026</span>
+    <span>28 November 2026</span>
   </div>
 
+  <nav class="contents mono" aria-label="Contents">
+    <b>Contents</b> &nbsp;&middot;&nbsp; <a href="#gap">1.0 The gap</a> &nbsp;&middot;&nbsp; <a href="#work">2.0 Field record</a> &nbsp;&middot;&nbsp; <a href="#how">3.0 Method</a> &nbsp;&middot;&nbsp; <a href="#plan">4.0 Operation</a> &nbsp;&middot;&nbsp; <a href="#audit">5.0 Exhibit A</a> &nbsp;&middot;&nbsp; <a href="#workshops">6.0 Workshops</a> &nbsp;&middot;&nbsp; <a href="#credentials">7.0 Service record</a>
+  </nav>
+
   <div class="hero">
-    <h1>Bring OpenWorks to <span class="oj">South&nbsp;Jersey.</span></h1>
+    <h1>Bring OpenWorks to <span class="oj">South Jersey.</span></h1>
     <p class="standfirst">OpenWorks is live in 20 pilot communities, and none of them is in New Jersey. I&rsquo;m <strong>Hans Sai</strong>, an IT specialist, Air Force Reservist, and builder from Lindenwold. I&rsquo;m applying to be the person who brings it here, starting in Cherry Hill.</p>
+    <p class="statement">I&rsquo;m not applying to join a community. I&rsquo;m applying to open one.</p>
     <div class="cover-grid">
       <ul class="data mono">
         <li><span class="k">Applicant</span><span class="v">Hans Sai</span></li>
@@ -289,7 +357,7 @@
         </div>
         <div>
           <p class="lede">Cherry Hill has about <strong>3,970 businesses</strong>, the third most of any town in New Jersey. It is Camden County&rsquo;s business hub, and the county&rsquo;s regional chamber of commerce is headquartered here.</p>
-          <p>That is thousands of restaurants, retailers, salons, garages, and family firms within a fifteen-minute drive of my front door, and none of them has an OpenWorks partner. I&rsquo;m not applying to join a community. I&rsquo;m applying to open one.</p>
+          <p>That is thousands of restaurants, retailers, salons, garages, and family firms within a fifteen-minute drive of my front door, and none of them has an OpenWorks partner.</p>
           <p class="footnote mono">Business count: DealFlow OS, State of Main Street Ownership, New Jersey, Q4 2026. Pilot communities: openai.com/openworks, November 2026.</p>
         </div>
       </div>
@@ -300,27 +368,36 @@
       <div class="sec-head"><span class="sec-num mono">2.0</span><h2>Field record</h2></div>
 
       <div class="log-entry">
-        <div class="where mono">Local business &middot; Lindenwold, NJ</div>
+        <div class="log-head mono"><span class="log-no">Log 01</span><span class="where">Local business &middot; Lindenwold, NJ</span></div>
         <h3>Cifelli&rsquo;s Pizza</h3>
         <div class="body">
           <p>I built the online ordering website for Cifelli&rsquo;s, a family pizza shop in my hometown, using AI-assisted development: customers browse the real menu and order online, with payment integration underway. It is the same kind of work I would do for a Cherry Hill shop on day one: a working tool, not a slide deck.</p>
         </div>
+        <ul class="result-strip mono">
+          <li><span class="k">Result</span><span class="v">Ordering live; payment integration underway</span></li>
+        </ul>
       </div>
 
       <div class="log-entry">
-        <div class="where mono">U.S. Air Force Reserve &middot; 87 MDG / 514 AMDS &middot; Joint Base McGuire-Dix-Lakehurst &middot; since 2021</div>
+        <div class="log-head mono"><span class="log-no">Log 02</span><span class="where">U.S. Air Force Reserve &middot; 87 MDG / 514 AMDS &middot; Joint Base McGuire-Dix-Lakehurst &middot; since 2021</span></div>
         <h3>Workflows that hold up under pressure</h3>
         <div class="body">
           <p>As an IT Systems Administrator in a military medical unit, I built a QR-code clinic tracking system and an encrypted records workflow that improved patient check-in while protecting sensitive data. I reimaged and deployed 150+ computers, resolve 1,000+ support tickets a year, and trained 80+ personnel on readiness procedures. I hold the Air Force Continuous Process Improvement &amp; Six Sigma Green Belt: restructure a process, measure it, then automate what&rsquo;s left.</p>
         </div>
+        <ul class="result-strip mono">
+          <li><span class="k">Result</span><span class="v">150+ machines deployed &middot; 1,000+ tickets a year &middot; 80+ trained</span></li>
+        </ul>
       </div>
 
       <div class="log-entry">
-        <div class="where mono">Amazon, South Jersey &middot; Shoppers World &amp; Forman Mills &middot; McDonald&rsquo;s</div>
+        <div class="log-head mono"><span class="log-no">Log 03</span><span class="where">Amazon, South Jersey &middot; Shoppers World &amp; Forman Mills &middot; McDonald&rsquo;s</span></div>
         <h3>I know what a shop floor looks like</h3>
         <div class="body">
           <p>At Amazon I support 300+ operations technology endpoints across multiple buildings, where downtime costs real money in real time. Before that I ran IT across multiple retail locations, and spent five years running restaurant technology at McDonald&rsquo;s. POS, kiosks, printers, mobile payments. I cut technology downtime 25% and managed a crew of 15+. I&rsquo;ve stood where a small business owner stands. I know which problems are annoying and which ones cost money.</p>
         </div>
+        <ul class="result-strip mono">
+          <li><span class="k">Result</span><span class="v">Downtime cut 25% &middot; crew of 15+ &middot; 300+ endpoints</span></li>
+        </ul>
       </div>
     </section>
 
@@ -329,12 +406,16 @@
       <div class="sec-head"><span class="sec-num mono">3.0</span><h2>Method</h2></div>
       <div class="two-col">
         <div>
+          <div class="sub-num mono">3.1</div>
           <h3>AI agents, every day</h3>
           <p>I don&rsquo;t just use AI tools. I run AI agents that build software, do research, and ship finished work every day. This page, my tools, and dozens of projects exist because agents do the work while I direct it. Most people can prompt a chatbot. I can show a business owner AI that works while they sleep: an assistant that answers customers, drafts replies, and keeps listings accurate.</p>
+          <p class="evidence mono">Evidence: this page, built the same way &middot; 49 public repositories</p>
         </div>
         <div>
+          <div class="sub-num mono">3.2</div>
           <h3>Safe AI</h3>
           <p>Small businesses are right to worry about scams and data leaks. I hold CompTIA Security+, an active DoD Secret clearance, and I handle HIPAA- and Privacy Act-aligned records in the Air Force. I teach AI adoption that doesn&rsquo;t put a business at risk: what never goes into a prompt, how to spot an AI-powered scam, and how to set tools up so customer data stays private.</p>
+          <p class="evidence mono">Evidence: CompTIA Security+ &middot; DoD Secret clearance, active</p>
         </div>
       </div>
     </section>
@@ -345,8 +426,14 @@
       <p class="lede">A plan, not a promise. Here is what the first three months look like.</p>
 
       <div class="route-box">
-        <div class="route-head mono"><span>Area of operations</span><span>Schematic, not to scale</span></div>
-        <svg viewBox="0 0 760 230" role="img" aria-label="Schematic map of the four Cherry Hill corridors: Route 38, Route 70, Brace Road, and Haddonfield Road, with Michaelangelo's Italian Restaurant marked on Brace Road.">
+        <div class="route-head mono"><span>Area of operations &middot; Fig. 4-1</span><span>Schematic, not to scale</span></div>
+        <svg viewBox="0 0 760 230" role="img" aria-label="Figure 4-1: schematic map of the four Cherry Hill corridors in walk order: 1 Brace Road, 2 Route 70, 3 Route 38, 4 Haddonfield Road, with Michaelangelo's Italian Restaurant marked on Brace Road.">
+          <defs>
+            <pattern id="figgrid" width="38" height="38" patternUnits="userSpaceOnUse">
+              <path d="M38 0H0V38" fill="none" stroke="#E8E8E8" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect x="0" y="0" width="760" height="230" fill="url(#figgrid)"/>
           <line x1="130" y1="52" x2="730" y2="52" stroke="#111" stroke-width="2"/>
           <text x="12" y="57" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="600" fill="#111">ROUTE 38</text>
           <line x1="130" y1="112" x2="730" y2="112" stroke="#111" stroke-width="2"/>
@@ -355,27 +442,39 @@
           <text x="12" y="177" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="600" fill="#111">BRACE RD</text>
           <line x1="400" y1="22" x2="400" y2="202" stroke="#111" stroke-width="2"/>
           <text x="412" y="30" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="600" fill="#111">HADDONFIELD RD</text>
+          <path d="M560 172 H400 V112 H250 V52 H180" fill="none" stroke="#FF4D00" stroke-width="2" stroke-dasharray="6 5"/>
+          <g font-family="IBM Plex Mono, monospace" font-size="11" font-weight="600" fill="#111" text-anchor="middle">
+            <rect x="551" y="146" width="18" height="18" fill="#fff" stroke="#111" stroke-width="1.5"/>
+            <text x="560" y="159">1</text>
+            <rect x="391" y="86" width="18" height="18" fill="#fff" stroke="#111" stroke-width="1.5"/>
+            <text x="400" y="99">2</text>
+            <rect x="241" y="43" width="18" height="18" fill="#fff" stroke="#111" stroke-width="1.5"/>
+            <text x="250" y="56">3</text>
+            <rect x="391" y="178" width="18" height="18" fill="#fff" stroke="#111" stroke-width="1.5"/>
+            <text x="400" y="191">4</text>
+          </g>
           <circle cx="560" cy="172" r="7" fill="#FF4D00" stroke="#111" stroke-width="2"/>
-          <text x="560" y="152" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="600" fill="#111">MICHAELANGELO&rsquo;S</text>
+          <text x="560" y="140" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" font-weight="600" fill="#111">AUDIT 01 &mdash; DONE NOV 2026</text>
+          <text x="560" y="125" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="600" fill="#111">MICHAELANGELO&rsquo;S</text>
           <text x="560" y="196" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#6B6B6B">1334 BRACE RD</text>
           <text x="12" y="220" font-family="IBM Plex Mono, monospace" font-size="11" fill="#6B6B6B">WALK ROUTE: BRACE RD, ROUTE 70, ROUTE 38, HADDONFIELD RD</text>
         </svg>
-        <div class="route-cap">The four corridors I will walk in the first 30 days. The orange dot is the first audit, already done.</div>
+        <div class="figcap"><b>Fig. 4-1 &mdash; Area of operations.</b> Schematic, not to scale. Walk order 1&ndash;4: Brace Rd, Route 70, Route 38, Haddonfield Rd. The orange dot is Audit 01, already done.</div>
       </div>
 
       <div class="phases">
         <div class="phase">
-          <div class="when mono">Days 1&ndash;30 &middot; <span class="sig">Listen</span></div>
+          <div class="when mono">Day 001&ndash;030 &middot; <span class="sig">Listen</span></div>
           <h3>Walk the corridors</h3>
           <ul class="check">
             <li>Walk Brace Rd, Route 70, Route 38, and Haddonfield Rd, and meet owners in person.</li>
             <li>Meet the Camden County Regional Chamber of Commerce, headquartered in Cherry Hill.</li>
-            <li class="done">Audit 1 of 10 complete: Michaelangelo&rsquo;s Italian Restaurant (Exhibit A, below).</li>
+            <li class="done">Audit 1 of 10 complete: Michaelangelo&rsquo;s Italian Restaurant (Exhibit A, below). Done Nov 2026.</li>
             <li>Audits 2&ndash;10 of Cherry Hill shops, published as samples like the one below.</li>
           </ul>
         </div>
         <div class="phase">
-          <div class="when mono">Days 31&ndash;60 &middot; <span class="sig">Build</span></div>
+          <div class="when mono">Day 031&ndash;060 &middot; <span class="sig">Build</span></div>
           <h3>First workshop, first tools</h3>
           <ul class="check">
             <li>Workshop 1: &ldquo;AI for your shop in one hour.&rdquo;</li>
@@ -384,7 +483,7 @@
           </ul>
         </div>
         <div class="phase">
-          <div class="when mono">Days 61&ndash;90 &middot; <span class="sig">Prove it</span></div>
+          <div class="when mono">Day 061&ndash;090 &middot; <span class="sig">Prove it</span></div>
           <h3>Working tools, kept tools</h3>
           <ul class="check">
             <li>Workshop 2: &ldquo;AI without the risk.&rdquo;</li>
@@ -401,9 +500,9 @@
       <p class="lede">One free sample audit, done already. This is what a Cherry Hill business gets on day one.</p>
       <div class="exhibit">
         <div class="exhibit-head">
-          <div class="tag mono">Sample AI audit &middot; November 2026</div>
+          <div class="tag mono">Sample AI audit &middot; November 2026 &middot; Filed from public sources only</div>
           <h3>Michaelangelo&rsquo;s Italian Restaurant</h3>
-          <div class="meta mono">1334 Brace Rd, Cherry Hill, NJ 08034 &middot; Family-owned since 1989</div>
+          <div class="meta mono">1334 Brace Rd, Cherry Hill, NJ 08034 &middot; Family-owned since 1989 &middot; Findings: 3 &middot; Fixes: 5</div>
         </div>
         <div class="exhibit-body">
           <p>About 4.4 stars across roughly 480&ndash;500 Google reviews, and regulars who praise it by name. A well-loved restaurant whose online presence is split across two websites, two phone numbers, and conflicting hours.</p>
@@ -434,6 +533,7 @@
               <div class="price-row mono"><div>Fried Mozzarella Sticks</div><div>$11.95</div><div>$13.95</div><div class="delta">+$2.00</div></div>
               <div class="price-row mono"><div>Eggplant Parmigiana</div><div>$21.95</div><div>$22.95</div><div class="delta">+$1.00</div></div>
             </div>
+            <p style="font-size:14px;color:var(--mut);margin-top:8px">The same three dishes, two menus: $4.00 apart.</p>
           </div>
 
           <p style="margin-top:22px"><strong>Five fixes, all small, all built on information the restaurant already has:</strong></p>
@@ -457,18 +557,24 @@
       <div class="workshops">
         <div class="workshop">
           <div class="no mono">Workshop 1</div>
+          <div class="when mono">Month 2 &middot; Day 031&ndash;060</div>
           <h3>AI for your shop in one hour</h3>
           <p>Three tools a business keeps using after the hour ends: answering common questions, drafting replies, and keeping listings accurate.</p>
+          <p class="take-home mono"><b>Take-home:</b> three working tools</p>
         </div>
         <div class="workshop">
           <div class="no mono">Workshop 2</div>
+          <div class="when mono">Month 3 &middot; Day 061&ndash;090</div>
           <h3>AI without the risk</h3>
           <p>Scams, data leaks, and safe setup. What never goes into a prompt, how to spot AI-powered fraud, and how to protect customer data.</p>
+          <p class="take-home mono"><b>Take-home:</b> a safe setup, checked</p>
         </div>
         <div class="workshop">
           <div class="no mono">Workshop 3</div>
+          <div class="when mono">Month 4 &middot; Day 091+</div>
           <h3>Automate the boring parts</h3>
           <p>Replies, scheduling, inventory notes, and social posts. The repetitive work owners do at midnight, handed to a system that does it at noon.</p>
+          <p class="take-home mono"><b>Take-home:</b> one system that runs itself</p>
         </div>
       </div>
     </section>
@@ -484,15 +590,14 @@
         <tr><td><strong>A.A.S., Health Information Technology &amp; Services Management</strong></td><td>Community College of the Air Force</td><td>2021</td></tr>
       </table>
 
-      <table class="record-table">
-        <caption>Certifications &amp; clearance</caption>
-        <tr><th scope="col">Credential</th><th scope="col">Status</th></tr>
-        <tr><td><strong>CompTIA Security+</strong></td><td>Active</td></tr>
-        <tr><td><strong>CompTIA IT Fundamentals+</strong></td><td>&nbsp;</td></tr>
-        <tr><td><strong>Microsoft Technology Associate (MTA)</strong></td><td>&nbsp;</td></tr>
-        <tr><td><strong>Air Force Continuous Process Improvement &amp; Six Sigma Green Belt</strong></td><td>&nbsp;</td></tr>
-        <tr><td><strong>DoD Secret Clearance</strong></td><td>Active</td></tr>
-      </table>
+      <h3 style="margin-top:28px">Certifications &amp; clearance</h3>
+      <ul class="cert-list">
+        <li><strong>CompTIA Security+</strong><span class="tag">Active</span></li>
+        <li><strong>CompTIA IT Fundamentals+</strong></li>
+        <li><strong>Microsoft Technology Associate (MTA)</strong></li>
+        <li><strong>Air Force Continuous Process Improvement &amp; Six Sigma Green Belt</strong></li>
+        <li><strong>DoD Secret Clearance</strong><span class="tag">Active</span></li>
+      </ul>
     </section>
   </main>
 
@@ -501,16 +606,22 @@
       <div class="foot-links mono">
         <a href="https://builtbysai.com/">builtbysai.com</a><br>
         <a href="https://github.com/builtbysai">github.com/builtbysai</a><br>
-        <a href="https://www.linkedin.com/in/8pairkie">linkedin.com/in/8pairkie</a>
+        <a href="https://www.linkedin.com/in/8pairkie">linkedin.com/in/8pairkie</a><br>
+        <a href="https://openai.com/openworks/">openai.com/openworks</a>
       </div>
       <div class="foot-meta">
         <strong>Hans Sai</strong><br>
         Lindenwold, New Jersey<br>
         <a href="mailto:saihanswissle@gmail.com">saihanswissle@gmail.com</a><br>
-        Built by Hans Sai &middot; November 2026
+        Built by Hans Sai &middot; November 2026<br>
+        OpenWorks applications close 1 January 2027.
       </div>
     </div>
     <p class="disclaimer">OpenWorks is a program of OpenAI. This page is Hans Sai&rsquo;s application portfolio and is not affiliated with or endorsed by OpenAI. All facts about Hans Sai&rsquo;s background are from his public r&eacute;sum&eacute; and public profiles. The sample audit was prepared from public sources only; the business was not contacted.</p>
+    <div class="changelog mono">
+      <b>Changes</b> &middot; Rev 3, 28 Nov 2026: field record rebuilt as numbered log entries with results; route diagram redrawn as Fig. 4-1 with walk order; exhibit head filed with findings and fixes; price table footed at $4.00; workshops dated by month; empty credential cells removed; phone headline and data rows fixed.<br>
+      Rev 2, 24 Nov 2026: field-manual rebuild. Rev 1, 24 Nov 2026: first issue. Document TM-OW-2026.
+    </div>
   </footer>
 
 </div>
