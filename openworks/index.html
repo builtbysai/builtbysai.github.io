@@ -39,6 +39,7 @@
     font-size:11px;letter-spacing:.12em;text-transform:uppercase;
   }
   .cover-strip b{font-weight:600}
+  .cover-strip .sig{color:var(--sig)}
 
   /* ---- hero ---- */
   .hero{padding:44px 0 40px}
@@ -218,7 +219,7 @@
   /* ---- v3: contents strip ---- */
   .contents{
     border-bottom:1px solid var(--ink);padding:9px 0 10px;
-    font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    font-size:10px;letter-spacing:.04em;text-transform:uppercase;
     line-height:2;color:var(--mut);
   }
   .contents b{color:var(--ink);font-weight:600}
@@ -274,9 +275,16 @@
   .changelog{margin-top:28px;border-top:1px solid var(--ink);padding-top:12px;font-size:12px;color:var(--mut);line-height:1.8}
   .changelog b{color:var(--ink);font-weight:600}
 
+  /* ---- v4: method in four moves ---- */
+  .moves{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;border-top:3px solid var(--ink);margin-top:36px;padding-top:16px}
+  .move .mno{font-size:12px;letter-spacing:.1em;font-weight:600;color:var(--sig);margin-bottom:6px}
+  .move h3{font-size:1.35rem;margin-bottom:6px}
+  .move p{font-size:14.5px;line-height:1.55;margin:0}
+
   /* ---- responsive ---- */
   @media (max-width:860px){
     .two-col{grid-template-columns:1fr;gap:28px}
+    .moves{grid-template-columns:1fr 1fr}
     .phases{grid-template-columns:1fr;gap:28px}
     .workshops{grid-template-columns:1fr;gap:24px}
   }
@@ -296,7 +304,9 @@
     h1{font-size:clamp(2.5rem,11.5vw,3.1rem);overflow-wrap:break-word}
     .cover-strip{display:grid;grid-template-columns:1fr auto;row-gap:4px}
     .cover-strip span:nth-child(2){grid-column:1 / -1;order:3}
+    .cover-strip span:nth-child(4){grid-column:1 / -1;order:4}
     .statement{font-size:1.4rem}
+    .moves{grid-template-columns:1fr}
     .sec-head h2{font-size:2rem}
     section{padding:36px 0 40px}
     .data li{flex-direction:column;align-items:flex-start;gap:1px;padding:10px 0}
@@ -315,13 +325,14 @@
 <div class="sheet">
 
   <div class="cover-strip mono">
-    <span><b>TM-OW-2026 &middot; Rev 3</b></span>
+    <span><b>TM-OW-2026 &middot; Rev 4</b></span>
     <span>OpenAI OpenWorks &middot; Partner application</span>
     <span>28 November 2026</span>
+    <span><b class="sig">Due 1 January 2027</b></span>
   </div>
 
   <nav class="contents mono" aria-label="Contents">
-    <b>Contents</b> &nbsp;&middot;&nbsp; <a href="#gap">1.0 The gap</a> &nbsp;&middot;&nbsp; <a href="#work">2.0 Field record</a> &nbsp;&middot;&nbsp; <a href="#how">3.0 Method</a> &nbsp;&middot;&nbsp; <a href="#plan">4.0 Operation</a> &nbsp;&middot;&nbsp; <a href="#audit">5.0 Exhibit A</a> &nbsp;&middot;&nbsp; <a href="#workshops">6.0 Workshops</a> &nbsp;&middot;&nbsp; <a href="#credentials">7.0 Service record</a>
+    <a href="#gap">1.0 The gap</a> &nbsp;&middot;&nbsp; <a href="#work">2.0 Field record</a> &nbsp;&middot;&nbsp; <a href="#how">3.0 Method</a> &nbsp;&middot;&nbsp; <a href="#plan">4.0 Operation</a> &nbsp;&middot;&nbsp; <a href="#audit">5.0 Exhibit A</a> &nbsp;&middot;&nbsp; <a href="#workshops">6.0 Workshops</a> &nbsp;&middot;&nbsp; <a href="#credentials">7.0 Service record</a>
   </nav>
 
   <div class="hero">
@@ -336,7 +347,7 @@
         <li><span class="k">Home base</span><span class="v">Lindenwold, NJ, 15 min from Cherry Hill</span></li>
         <li><span class="k">Area of operations</span><span class="v">Cherry Hill, NJ &middot; Camden County</span></li>
         <li><span class="k">Commitment</span><span class="v">Four full days a month, in person, free for local businesses</span></li>
-        <li><span class="k">Plus</span><span class="v">One workshop a month, open to any local business</span></li>
+        <li><span class="k">Workshops</span><span class="v">One workshop a month, open to any local business</span></li>
       </ul>
       <figure class="idphoto">
         <img src="../headshot-web.webp" alt="Hans Sai in U.S. Air Force dress uniform" width="640" height="800">
@@ -418,6 +429,12 @@
           <p class="evidence mono">Evidence: CompTIA Security+ &middot; DoD Secret clearance, active</p>
         </div>
       </div>
+      <div class="moves">
+        <div class="move"><div class="mno mono">1</div><h3>Walk in</h3><p>Meet owners in person, on their street.</p></div>
+        <div class="move"><div class="mno mono">2</div><h3>Audit</h3><p>A free audit of orders, replies, and listings.</p></div>
+        <div class="move"><div class="mno mono">3</div><h3>Build</h3><p>One practical tool they keep using.</p></div>
+        <div class="move"><div class="mno mono">4</div><h3>Teach</h3><p>A monthly workshop, open to any business.</p></div>
+      </div>
     </section>
 
     <!-- 4.0 OPERATION -->
@@ -441,8 +458,8 @@
           <line x1="130" y1="172" x2="730" y2="172" stroke="#111" stroke-width="2"/>
           <text x="12" y="177" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="600" fill="#111">BRACE RD</text>
           <line x1="400" y1="22" x2="400" y2="202" stroke="#111" stroke-width="2"/>
-          <text x="412" y="30" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="600" fill="#111">HADDONFIELD RD</text>
-          <path d="M560 172 H400 V112 H250 V52 H180" fill="none" stroke="#FF4D00" stroke-width="2" stroke-dasharray="6 5"/>
+          <text x="388" y="30" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="600" fill="#111">HADDONFIELD RD</text>
+          <path d="M560 172 H400 V112 H250 V52 H400 V34" fill="none" stroke="#FF4D00" stroke-width="2" stroke-dasharray="6 5"/>
           <g font-family="IBM Plex Mono, monospace" font-size="11" font-weight="600" fill="#111" text-anchor="middle">
             <rect x="551" y="146" width="18" height="18" fill="#fff" stroke="#111" stroke-width="1.5"/>
             <text x="560" y="159">1</text>
@@ -450,8 +467,8 @@
             <text x="400" y="99">2</text>
             <rect x="241" y="43" width="18" height="18" fill="#fff" stroke="#111" stroke-width="1.5"/>
             <text x="250" y="56">3</text>
-            <rect x="391" y="178" width="18" height="18" fill="#fff" stroke="#111" stroke-width="1.5"/>
-            <text x="400" y="191">4</text>
+            <rect x="391" y="16" width="18" height="18" fill="#fff" stroke="#111" stroke-width="1.5"/>
+            <text x="400" y="29">4</text>
           </g>
           <circle cx="560" cy="172" r="7" fill="#FF4D00" stroke="#111" stroke-width="2"/>
           <text x="560" y="140" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" font-weight="600" fill="#111">AUDIT 01 &middot; DONE NOV 2026</text>
@@ -619,7 +636,8 @@
     </div>
     <p class="disclaimer">OpenWorks is a program of OpenAI. This page is Hans Sai&rsquo;s application portfolio and is not affiliated with or endorsed by OpenAI. All facts about Hans Sai&rsquo;s background are from his public r&eacute;sum&eacute; and public profiles. The sample audit was prepared from public sources only; the business was not contacted.</p>
     <div class="changelog mono">
-      <b>Changes</b> &middot; Rev 3, 28 Nov 2026: field record rebuilt as numbered log entries with results; route diagram redrawn as Fig. 4-1 with walk order; exhibit head filed with findings and fixes; price table footed at $4.00; workshops dated by month; empty credential cells removed; phone headline and data rows fixed.<br>
+      <b>Changes</b> &middot; Rev 4, 28 Nov 2026: walk route in Fig. 4-1 completed to stop 4; application deadline added to the cover strip; "Plus" renamed "Workshops"; method given a four-move strip; contents strip tightened to one line.<br>
+      Rev 3, 28 Nov 2026: field record rebuilt as numbered log entries with results; route diagram redrawn as Fig. 4-1 with walk order; exhibit head filed with findings and fixes; price table footed at $4.00; workshops dated by month; empty credential cells removed; phone headline and data rows fixed.<br>
       Rev 2, 24 Nov 2026: field-manual rebuild. Rev 1, 24 Nov 2026: first issue. Document TM-OW-2026.
     </div>
   </footer>
