@@ -149,7 +149,7 @@ const DB = {
     const d = this.load();
     e.id = "E-" + (d.seq.email++);
     e.sentAt = new Date().toLocaleString("en-US", {month:"short", day:"numeric", year:"numeric", hour:"numeric", minute:"2-digit"});
-    e.status = CONFIG.DEMO_MODE ? "sent (demo — shown in the Email demo, not actually sent)" : "sent";
+    e.status = CONFIG.DEMO_MODE ? "sent (preview — shown under Emails, not actually sent)" : "sent";
     d.emails.unshift(e); this.save(); return e;
   },
 
@@ -521,7 +521,7 @@ route("apply", (el, params) => {
         <p class="hint">${hint}${a.docs[key] ? ` <b style="color:var(--green)">Attached: ${esc(a.docs[key].name)} (${Math.round(a.docs[key].size/1024)} KB)</b>` : ""}</p>
         <div class="err">Please attach this document.</div></div>`;
     body = `
-    <p>All four documents are required — the board cannot approve an application without them. In the live system these upload to secure club storage; in this demo we record the file name only.</p>
+    <p>All four documents are required — the board cannot approve an application without them. In the live system these upload to secure club storage; this preview records the file name only.</p>
     <div class="field-row">
       <div class="field"><label>NRA member # <span class="req">*</span></label><input type="text" id="f-nranum" value="${esc(a.nraNumber)}" placeholder="e.g. NRA-1234567"><div class="err">Required — or apply for NRA membership below.</div></div>
       <div class="field"><label>NRA expiration date <span class="req">*</span></label><input type="date" id="f-nraexp" value="${esc(a.nraExpiry)}"><div class="err">Required.</div></div>
@@ -581,7 +581,7 @@ route("apply", (el, params) => {
     <h3>What you will owe at orientation</h3>
     <div class="lines">${rows}<div class="row total"><span>Total due at orientation</span><span>${money(dues.total)}</span></div></div>
     <div class="notice"><h3>Payment — check or cash, at orientation</h3><p style="margin-bottom:0">Bring <b>${money(dues.total)}</b> by check or cash to your orientation, along with the originals of your documents. Nothing is charged now. If your application is not approved, you owe nothing.</p></div>
-    <p class="small muted">Submitting sends your application to the board and emails you a confirmation. In the live system this is stored in the club's Supabase database; in this demo it is stored in your browser only.</p>`;
+    <p class="small muted">Submitting sends your application to the board and emails you a confirmation. This preview stores it in your browser only; the live system stores it in the club's Supabase database.</p>`;
   }
   el.innerHTML = `
   <section class="block"><div class="wrap" style="max-width:820px">
@@ -597,7 +597,7 @@ route("apply", (el, params) => {
       ${step < 4 ? `<button class="btn" id="btn-next">Continue →</button>` : `<button class="btn" id="btn-submit">Submit application</button>`}
       <button class="btn ghost" id="btn-reset" type="button">Start over</button>
     </div>
-    <p class="small muted">Demo note: this form writes to a demo store in your browser. <a href="#/admin">See the application appear in the admin queue →</a></p>
+    <p class="small muted">Preview note: this form stores the application in your browser only. <a href="#/admin">See it appear in the admin queue →</a></p>
   </div></section>`;
 
   /* ---- wire up ---- */
@@ -719,7 +719,7 @@ route("apply", (el, params) => {
     el.innerHTML = `
     <section class="block"><div class="wrap" style="max-width:720px">
       <div class="notice green"><h3>Application submitted — ${esc(app.id)}</h3>
-      <p style="margin-bottom:0">Thank you, ${esc(a.firstName)}. Your application is with the board. A confirmation email is on its way to <b>${esc(a.email)}</b> (in this demo, find it in the <a href="#/emails">email preview</a>).</p></div>
+      <p style="margin-bottom:0">Thank you, ${esc(a.firstName)}. Your application is with the board. A confirmation email is on its way to <b>${esc(a.email)}</b> (in this preview, find it under <a href="#/emails">Emails</a>).</p></div>
       <h2>What happens next</h2>
       <div class="cards">
         <div class="card"><h3>1 · Board review</h3><p>Usually within a week. You will get an email with the decision.</p></div>
@@ -766,7 +766,7 @@ route("admin", (el, params) => {
         <td>Badge: ${esc(m.badge)} · Gate: ${esc(m.gateCard)}</td>
         <td><span class="pill ${m.duesStatus}">${m.duesStatus === "paid" ? "Paid " + m.duesYear : m.duesStatus === "due" ? "Dues due" : "Overdue"}</span></td>
       </tr>`).join("");
-    body = `<p class="muted">One row per member: dues status, NRA expiry, badge and gate card. Renewal reminders go out automatically (see the Email demo).</p>
+    body = `<p class="muted">One row per member: dues status, NRA expiry, badge and gate card. Renewal reminders go out automatically (see Emails).</p>
     <table><tr><th>Member</th><th>Type</th><th>NRA</th><th>Credentials</th><th>Dues ${new Date().getFullYear()}</th></tr>${rows}</table>
     <div id="member-detail"></div>`;
   }
@@ -786,27 +786,27 @@ route("admin", (el, params) => {
   }
   el.innerHTML = `
   <section class="block"><div class="wrap">
-    <p class="kicker">Admin demo · board &amp; membership chair only</p>
+    <p class="kicker">Board &amp; membership chair only</p>
     <h1>Membership admin</h1>
-    <p class="muted">Demo data is labelled as such. In the live system this page is login-protected (board members only) and every action is written to the Supabase database.</p>
+    <p class="muted">Sample data is labelled as such. In the live system this page is login-protected (board members only) and every action is written to the Supabase database.</p>
     <div class="stat-grid">
       <div class="stat"><b>${pending}</b><span>applications waiting</span></div>
       <div class="stat"><b>${d.members.length}</b><span>members</span></div>
       <div class="stat"><b>${dueSoon + overdue}</b><span>dues due / overdue</span></div>
-      <div class="stat"><b>${money(paid2026)}</b><span>dues collected 2026 (demo)</span></div>
+      <div class="stat"><b>${money(paid2026)}</b><span>dues collected 2026 (sample)</span></div>
     </div>
     <div class="tabs">
       <button data-tab="apps" class="${ADMIN_TAB==="apps"?"on":""}">Applications (${pending} waiting)</button>
       <button data-tab="members" class="${ADMIN_TAB==="members"?"on":""}">Members</button>
       <button data-tab="dues" class="${ADMIN_TAB==="dues"?"on":""}">Dues &amp; payments</button>
       <button data-tab="emails" class="${ADMIN_TAB==="emails"?"on":""}">Email log</button>
-      <button id="btn-reset-demo" style="margin-left:auto;color:var(--red)">Reset demo data</button>
+      <button id="btn-reset-demo" style="margin-left:auto;color:var(--red)">Reset sample data</button>
     </div>
     ${body}
   </div></section>`;
 
   $$(".tabs button[data-tab]").forEach(b => b.addEventListener("click", () => { ADMIN_TAB = b.dataset.tab; ADMIN_SEL = null; render(); }));
-  $("#btn-reset-demo").addEventListener("click", () => { if (confirm("Reset all demo data to the original seed?")){ DB.reset(); ADMIN_SEL = null; render(); } });
+  $("#btn-reset-demo").addEventListener("click", () => { if (confirm("Reset all sample data to the original?")){ DB.reset(); ADMIN_SEL = null; render(); } });
   if (ADMIN_TAB === "dues"){
     $("#btn-remind").addEventListener("click", () => {
       const year = new Date().getFullYear() + 1;
@@ -993,7 +993,7 @@ route("pay", (el, params) => {
 
     <div class="detail mt">
       <h3>Optional add-on — online card payments <span class="pill due">OFF BY DEFAULT · OWNER'S DECISION</span></h3>
-      <p>The club's rules say check or cash, and this demo keeps it that way. <b>Card payments are not part of this proposal.</b> If the owner ever wants them, that is a separate decision, because:</p>
+      <p>The club's rules say check or cash, and this site keeps it that way. <b>Card payments are not part of this system.</b> If the owner ever wants them, that is a separate decision, because:</p>
       <ul>
         <li>Card processors charge roughly 2.9% + 30¢ per transaction — on $225 dues that's about $6.80 the club (or the member) absorbs.</li>
         <li>Major processors restrict firearms-related businesses. A gun club's dues are not a firearms sale, but accounts have been frozen or closed over category disputes — the club would need its bank/processor to confirm in writing before taking cards.</li>
@@ -1055,9 +1055,9 @@ route("emails", (el) => {
   const sel = list.find(e => e.id === MAIL_SEL) || list[0];
   el.innerHTML = `
   <section class="block"><div class="wrap">
-    <p class="kicker">Email demo</p>
+    <p class="kicker">Member emails</p>
     <h1>The emails members would get</h1>
-    <p class="muted">In the live system these go out automatically through Resend, from the club's own domain. In this demo they are written to the email log and previewed here — nothing is actually sent.</p>
+    <p class="muted">In the live system these go out automatically through Resend, from the club's own domain. In this preview they are written to the email log and shown here — nothing is actually sent.</p>
     <div class="mail">
       <div class="mail-list">
         ${list.map(e => `<div class="mail-item ${sel && e.id === sel.id ? "on" : ""}" data-mail="${e.id}"><b>${esc(e.subject)}</b><span>To ${esc(e.to)} · ${esc(e.sentAt)}</span></div>`).join("") || "<p class='muted' style='padding:14px'>No emails yet.</p>"}
@@ -1079,3 +1079,17 @@ route("emails", (el) => {
 
 /* ---------- init ---------- */
 render();
+
+/* ---------- mobile menu ---------- */
+(function(){
+  const btn = document.getElementById("menu-btn");
+  const nav = document.getElementById("nav");
+  if (!btn || !nav) return;
+  const close = () => { nav.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); };
+  btn.addEventListener("click", () => {
+    const open = nav.classList.toggle("open");
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  nav.addEventListener("click", (e) => { if (e.target.closest("a")) close(); });
+  window.addEventListener("hashchange", close);
+})();

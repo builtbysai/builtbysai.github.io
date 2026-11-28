@@ -1,4 +1,4 @@
-/* Iron Horse Gun & Archery Club — redesign proposal.
+/* Iron Horse Gun & Archery Club.
    Minimal, fast, black + gold (the club's own badge colors). No frameworks. */
 :root{
   --black:#141414; --ink:#1c1c1c; --gold:#c9a227; --gold-dark:#a8841c;
@@ -16,14 +16,9 @@ img{max-width:100%;height:auto;display:block}
 .wrap{max-width:var(--max);margin:0 auto;padding:0 18px}
 .muted{color:var(--muted)} .small{font-size:13px} .nowrap{white-space:nowrap}
 
-/* demo banner */
-.demo-bar{background:var(--gold);color:#141414;font-size:13px;padding:7px 0;text-align:center}
-.demo-bar b{font-weight:700}
-.demo-bar a{color:#141414;text-decoration:underline}
-
 /* header */
 header.site{background:var(--black);color:#fff;position:sticky;top:0;z-index:50}
-header.site .bar{display:flex;align-items:center;gap:14px;padding:10px 0}
+header.site .bar{display:flex;align-items:center;gap:14px;padding:10px 18px}
 header.site .logo img{height:52px;width:auto}
 header.site .name{font-family:"Archivo Black","Arial Black",Arial,sans-serif;font-size:17px;line-height:1.1;color:#fff;text-decoration:none}
 header.site .name span{display:block;font:11px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
@@ -32,11 +27,18 @@ nav.main a{color:#ddd;text-decoration:none;font-size:14px;padding:8px 10px;borde
 nav.main a:hover,nav.main a.active{color:#fff;background:#262626}
 nav.main a.cta{background:var(--gold);color:#141414;font-weight:700}
 nav.main a.cta:hover{background:#d9b43a;color:#141414}
-nav.main a.demo-link{border:1px solid #555;color:#bbb}
+.menu-btn{display:none}
 @media(max-width:760px){
-  header.site .bar{flex-wrap:wrap}
-  nav.main{margin-left:0;gap:0}
-  nav.main a{padding:7px 8px;font-size:13px}
+  header.site .bar{flex-wrap:wrap;gap:10px;padding:8px 18px}
+  header.site .logo img{height:44px}
+  header.site .name{font-size:15px;min-width:0;flex:1}
+  header.site .name span{font-size:10px;letter-spacing:.12em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .menu-btn{display:flex;align-items:center;justify-content:center;width:44px;height:44px;background:none;border:1px solid #555;border-radius:6px;cursor:pointer;flex:none;padding:0}
+  .menu-btn svg{stroke:#fff}
+  nav.main{display:none;margin-left:0;flex-basis:100%;flex-direction:column;gap:0;padding-bottom:4px}
+  nav.main.open{display:flex}
+  nav.main a{padding:12px 10px;font-size:15px;border-top:1px solid #262626}
+  nav.main a.cta{margin-top:8px;text-align:center}
 }
 
 /* hero */
@@ -47,7 +49,7 @@ nav.main a.demo-link{border:1px solid #555;color:#bbb}
 .hero p.lede{font-size:18px;color:#d8d5cc;max-width:56ch}
 .hero .badge-img{background:#000;border:1px solid #333;border-radius:8px;padding:14px}
 .hero .badge-img img{width:100%}
-@media(max-width:760px){.hero .grid{grid-template-columns:1fr}.hero .badge-img{max-width:280px}}
+@media(max-width:760px){.hero{padding:32px 0 30px}.hero .grid{grid-template-columns:1fr}.hero .badge-img{max-width:280px}.hero .btn-row{flex-direction:column}.hero .btn-row .btn{width:100%}}
 
 /* sections */
 section.block{padding:34px 0;border-bottom:1px solid var(--line)}
@@ -183,5 +185,5 @@ footer.site .fine{border-top:1px solid #333;margin-top:24px;padding-top:14px;fon
 iframe.cal{width:100%;height:620px;border:1px solid var(--line);border-radius:var(--radius)}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 @media(max-width:760px){.two-col{grid-template-columns:1fr}}
-@media(max-width:760px){table{display:block;overflow-x:auto;white-space:nowrap}th,td{white-space:normal;min-width:110px}}
+@media(max-width:760px){table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap}th,td{white-space:normal;min-width:110px}iframe.cal{height:480px}}
 img.nra{max-width:220px}
