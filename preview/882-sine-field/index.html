@@ -16,10 +16,9 @@
     display: block;
     position: fixed;
     inset: 0;
-    touch-action: none;
-    cursor: grab;
+    touch-action: manipulation;
+    cursor: pointer;
   }
-  canvas:active { cursor: grabbing; }
   .hint {
     position: fixed;
     left: 50%;
@@ -42,7 +41,7 @@
 </head>
 <body>
 <canvas id="c"></canvas>
-<div class="hint">Sine Field &middot; drag to move the wave</div>
+<div class="hint">Sine Field &middot; tap for a new still</div>
 <script>
 (function () {
   "use strict";
@@ -76,12 +75,12 @@
   var params = new URLSearchParams(window.location.search);
   var seedText = params.get("seed") || String(Math.floor(Math.random() * 1e9));
   var rng = mulberry32(hashSeed(seedText));
+  phase = rng() * Math.PI * 2; // fresh still on every load
 
   var dpr = 1, W = 0, H = 0;
-  var t = 0;
-  var phase = 0; // field phase: drag moves it, time drifts it slowly
-  var dragging = false;
-  var lastX = 0;
+  // Static still: one frozen frame, no animation loop, no drag.
+  // The phase is fixed per still; tap draws a new one.
+  var phase = 0;
   var dashCount = 0;
 
   // The field: a vertical sine wave, two cycles top to bottom, with a
@@ -167,38 +166,19 @@
     }
   }
 
-  function step(dt) {
-    t += dt;
-    if (!dragging) phase += dt * 0.05; // slow drift so the field lives
+  // Tap draws a NEW still: fresh seed and phase, shown at once.
+  // No motion, no drag.
+  function reseed() {
+    seedText = String(Math.floor(Math.random() * 1e9));
+    rng = mulberry32(hashSeed(seedText));
+    phase = rng() * Math.PI * 2;
     draw();
   }
 
-  var lastNow = 0;
-  function frame(now) {
-    var dt = lastNow ? Math.min(0.05, (now - lastNow) / 1000) : 0.016;
-    lastNow = now;
-    step(dt);
-    requestAnimationFrame(frame);
-  }
-
-  function onDown(e) {
-    dragging = true;
-    lastX = e.clientX;
-    canvas.setPointerCapture(e.pointerId);
-  }
-  function onMove(e) {
-    if (!dragging) return;
-    var dx = e.clientX - lastX;
-    lastX = e.clientX;
-    phase += dx * 0.006; // drag shifts the field; the moire crawls
-    draw();
-  }
-  function onUp() { dragging = false; }
-
-  canvas.addEventListener("pointerdown", onDown);
-  canvas.addEventListener("pointermove", onMove);
-  canvas.addEventListener("pointerup", onUp);
-  canvas.addEventListener("pointercancel", onUp);
+  canvas.addEventListener("pointerdown", function (e) {
+    e.preventDefault();
+    reseed();
+  });
 
   if (window.visualViewport) {
     window.visualViewport.addEventListener("resize", sizeCanvas);
@@ -208,15 +188,13 @@
   window.addEventListener("orientationchange", sizeCanvas);
 
   sizeCanvas();
-  requestAnimationFrame(frame);
 
   // Diagnostics for the harness. Not visible on the page.
   window.__sinefield = {
     seed: function () { return seedText; },
     phase: function () { return phase; },
     dashCount: function () { return dashCount; },
-    dragging: function () { return dragging; },
-    step: function (dt) { step(dt); },
+    reseed: reseed,
     setPhase: function (p) { phase = p; draw(); },
     size: function () { return { w: W, h: H }; },
     // Ink coverage (0..1) of three vertical strips: on the wave's
