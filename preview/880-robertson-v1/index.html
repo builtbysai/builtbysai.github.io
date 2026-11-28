@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Summoning Sky</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: #f6f2e8;
+    overflow: hidden;
+  }
+  canvas {
+    display: block;
+    position: fixed;
+    inset: 0;
+    touch-action: manipulation;
+    cursor: pointer;
+  }
+  .hint {
+    position: fixed;
+    left: 50%;
+    bottom: max(18px, env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(40, 38, 32, 0.45);
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+  }
+</style>
+<!-- ig-preview-880-robertson 2026-11-28 -->
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="hint" id="hint">The Summoning Sky &middot; tap to see the birds</div>
+<script>
+(function () {
+  "use strict";
+
+  // Driver: a flock as a density field on a moving spine. Each bird is one
+  // fixed-size ink dot; local density is a function of distance to the
+  // spine, so the flock reads as a solid mass where the spine passes and
+  // dissolves where it leaves. The spine itself is never drawn.
+  // After Tim Robertson, "The summoning sky" (ink and brush, silkscreen).
+
+  var canvas = document.getElementById("c");
+  var ctx = canvas.getContext("2d");
+  var hint = document.getElementById("hint");
+
+  var PAPER = "#f6f2e8";
+  var INK = "22, 21, 19";
+
+  function hashSeed(str) {
+    var h = 2166136261 >>> 0;
+    for (var i = 0; i < str.length; i++) {
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return h >>> 0;
+  }
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  var params = new URLSearchParams(window.location.search);
+  var seedText = params.get("seed") || String(Math.floor(Math.random() * 1e9));
+  var rng = mulberry32(hashSeed(seedText));
+
+  var dpr = 1, W = 0, H = 0;
+  var t = 0; // simulation seconds
+  var mode = "field"; // "field" (dots merge into a mass) or "bird" (dots crisp)
+
+  // Spine geometry. The spine is a sweeping band from top-left down to
+  // mid-right, with a vortex core that periodically tightens into a
+  // spiral hook near s = 0.7. Everything is expressed in fractions of W/H
+  // so the composition holds at any size.
+  var HOOK_S = 0.70;
+  var HOOK_PERIOD = 48; // seconds per tighten/dissolve cycle
+
+  function vortexTightness(time) {
+    // 0..1. Above 0.75 the hook is formed.
+    return 0.5 + 0.5 * Math.sin((time / HOOK_PERIOD) * Math.PI * 2 - Math.PI / 2);
+  }
+
+  function vortexCenter(time) {
+    // Slow wander of the hook's centre, upper-right of the sheet.
+    return {
+      x: W * (0.62 + 0.05 * Math.sin(time * 0.021 + 1.3)),
+      y: H * (0.30 + 0.05 * Math.sin(time * 0.017 + 0.4))
+    };
+  }
+
+  function spinePoint(s, time) {
+    // Base sweep: dense head top-left, band descending to the right.
+    var sway = Math.sin(time * 0.05 + s * 2.2) * 0.02;
+    var x = W * (0.10 + 0.62 * s + sway);
+    var y = H * (0.10 + 0.34 * s + 0.05 * Math.sin(s * Math.PI * 2.2 + time * 0.03));
+    // The hook: near s = HOOK_S the spine curls into a spiral around the
+    // vortex centre. Strength follows the tightness cycle.
+    var tight = vortexTightness(time);
+    var vc = vortexCenter(time);
+    var hookW = Math.exp(-Math.pow((s - HOOK_S) / 0.13, 2)) * tight;
+    var ang = (s - HOOK_S) * 22 * tight;
+    var hx = vc.x + Math.cos(ang) * W * 0.055 * (1 - (s - HOOK_S) * 2.2);
+    var hy = vc.y + Math.sin(ang) * H * 0.055 * (1 - (s - HOOK_S) * 2.2);
+    x = x * (1 - hookW) + hx * hookW;
+    y = y * (1 - hookW) + hy * hookW;
+    return { x: x, y: y };
+  }
+
+  function spineTangent(s, time) {
+    var a = spinePoint(Math.max(0, s - 0.01), time);
+    var b = spinePoint(Math.min(1, s + 0.01), time);
+    var dx = b.x - a.x, dy = b.y - a.y;
+    var len = Math.hypot(dx, dy) || 1;
+    return { x: dx / len, y: dy / len };
+  }
+
+  // Density profile along the spine: dense head, sweeping band, second
+  // concentration at the hook, sparse tail. This is the Robertson print
+  // structure: dense -> thin -> dense again -> sparse.
+  function densityAt(s) {
+    var head = 1.0 * Math.exp(-Math.pow((s - 0.10) / 0.16, 2));
+    var band = 0.55 * Math.exp(-Math.pow((s - 0.42) / 0.20, 2));
+    var hook = 0.85 * Math.exp(-Math.pow((s - HOOK_S) / 0.10, 2));
+    var tail = 0.16 * Math.exp(-Math.pow((s - 0.92) / 0.10, 2));
+    return head + band + hook + tail;
+  }
+
+  // Spread of dots perpendicular to the spine: a uniform band, wide where
+  // the flock dissolves, narrow where it is dense. Uniform, not Gaussian,
+  // so no dark line forms along the spine itself.
+  function spreadAt(s) {
+    var base = 0.05 + 0.09 * (1 - Math.min(1, densityAt(s)));
+    return base * Math.min(W, H);
+  }
+
+  var N = 6000;
+  var birds = [];
+  // NOTE: birds are spawned after the first sizeCanvas() call at the
+  // bottom of this file. spreadAt() depends on W/H; spawning before the
+  // canvas is sized puts every bird exactly on the spine (off = 0),
+  // which draws as a solid black line instead of a cloud.
+  function gauss() {
+    // Box-Muller, seeded.
+    var u = Math.max(rng(), 1e-9), v = rng();
+    return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+  }
+  function spawnBird(i) {
+    // Sample s by rejection against the density profile.
+    var s = 0;
+    for (var tries = 0; tries < 12; tries++) {
+      var cand = rng();
+      if (rng() < densityAt(cand) / 1.15) { s = cand; break; }
+      s = cand;
+    }
+    birds[i] = {
+      s: s,
+      off: (rng() * 2 - 1) * spreadAt(s),
+      drift: 0.004 + rng() * 0.010, // slow advection along the spine
+      wob: rng() * Math.PI * 2,     // individual shimmer phase
+      wobAmp: 1.5 + rng() * 3.5
+    };
+  }
+  // (initial spawn happens after the first sizeCanvas() at the bottom)
+
+  // The flock breathes: it forms, holds, and partly dissolves on a slow
+  // cycle, but never below 70% density, so any still frame still reads
+  // as the print.
+  function envelope(time) {
+    return 0.85 + 0.15 * Math.sin((time / 50) * Math.PI * 2);
+  }
+
+  function sizeCanvas() {
+    var vp = window.visualViewport;
+    var w = vp ? vp.width : window.innerWidth;
+    var h = vp ? vp.height : window.innerHeight;
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = Math.max(1, Math.round(w));
+    H = Math.max(1, Math.round(h));
+    canvas.width = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    canvas.style.width = W + "px";
+    canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.fillStyle = PAPER;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  function draw() {
+    ctx.fillStyle = PAPER;
+    ctx.fillRect(0, 0, W, H);
+    var env = envelope(t);
+    var fieldMode = mode === "field";
+    var r = fieldMode ? 2.0 : 1.3;
+    var alpha = fieldMode ? 0.5 : 0.95;
+    ctx.fillStyle = "rgba(" + INK + ", " + alpha + ")";
+    for (var i = 0; i < N; i++) {
+      var b = birds[i];
+      if ((i % 100) / 100 > env) continue; // breathing: a stable subset rests
+      var p = spinePoint(b.s, t);
+      var tan = spineTangent(b.s, t);
+      var nx = -tan.y, ny = tan.x;
+      var shimmer = Math.sin(t * 1.7 + b.wob) * b.wobAmp * (fieldMode ? 0.4 : 1);
+      var x = p.x + nx * b.off + tan.x * shimmer;
+      var y = p.y + ny * b.off + tan.y * shimmer;
+      // Keep the lower half of the sheet white: the flock lives above.
+      if (y > H * 0.74) continue;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  function step(dt) {
+    t += dt;
+    for (var i = 0; i < N; i++) {
+      var b = birds[i];
+      b.s += b.drift * dt;
+      if (b.s > 1) spawnBird(i);
+    }
+  }
+
+  var lastNow = 0;
+  function frame(now) {
+    var dt = lastNow ? Math.min(0.05, (now - lastNow) / 1000) : 0.016;
+    lastNow = now;
+    step(dt);
+    draw();
+    requestAnimationFrame(frame);
+  }
+
+  function toggleMode() {
+    mode = mode === "field" ? "bird" : "field";
+    hint.textContent = mode === "field"
+      ? "The Summoning Sky \u00b7 tap to see the birds"
+      : "The Summoning Sky \u00b7 tap to see the flock";
+    draw();
+  }
+
+  canvas.addEventListener("pointerdown", function (e) {
+    e.preventDefault();
+    toggleMode();
+  });
+
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", sizeCanvas);
+    window.visualViewport.addEventListener("scroll", sizeCanvas);
+  }
+  window.addEventListener("resize", sizeCanvas);
+  window.addEventListener("orientationchange", sizeCanvas);
+
+  sizeCanvas();
+  for (var i = 0; i < N; i++) spawnBird(i);
+  draw();
+  requestAnimationFrame(frame);
+
+  // Diagnostics for the harness. Not visible on the page.
+  window.__murmuration = {
+    seed: function () { return seedText; },
+    time: function () { return t; },
+    mode: function () { return mode; },
+    tightness: function () { return vortexTightness(t); },
+    hookFormed: function () { return vortexTightness(t) > 0.75; },
+    birdCount: function () { return N; },
+    step: function (dt) { step(dt); draw(); },
+    toggle: toggleMode,
+    size: function () { return { w: W, h: H }; },
+    // Ink coverage (0..1) of five zones, read back from the canvas.
+    coverage: function () {
+      var img = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+      var zones = {
+        head: [0, 0, 0.35, 0.30],
+        band: [0.30, 0.15, 0.40, 0.35],
+        tail: [0.70, 0.30, 0.30, 0.30],
+        bottomLeft: [0, 0.75, 0.40, 0.25],
+        bottomRight: [0.60, 0.75, 0.40, 0.25]
+      };
+      var out = {};
+      var stride = 4; // sample every 4th pixel
+      for (var key in zones) {
+        var z = zones[key];
+        var x0 = Math.floor(z[0] * canvas.width), y0 = Math.floor(z[1] * canvas.height);
+        var x1 = Math.floor((z[0] + z[2]) * canvas.width), y1 = Math.floor((z[1] + z[3]) * canvas.height);
+        var dark = 0, total = 0;
+        for (var y = y0; y < y1; y += stride) {
+          for (var x = x0; x < x1; x += stride) {
+            var idx = (y * canvas.width + x) * 4;
+            var lum = (img[idx] + img[idx + 1] + img[idx + 2]) / 3;
+            if (lum < 170) dark++;
+            total++;
+          }
+        }
+        out[key] = total ? dark / total : 0;
+      }
+      return out;
+    }
+  };
+})();
+</script>
+</body>
+</html>
