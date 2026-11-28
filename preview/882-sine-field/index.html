@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sine Field</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: #f8f7f2;
+    overflow: hidden;
+  }
+  canvas {
+    display: block;
+    position: fixed;
+    inset: 0;
+    touch-action: none;
+    cursor: grab;
+  }
+  canvas:active { cursor: grabbing; }
+  .hint {
+    position: fixed;
+    left: 50%;
+    bottom: max(18px, env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(40, 40, 38, 0.55);
+    background: rgba(248, 247, 242, 0.88);
+    padding: 4px 12px;
+    border-radius: 2px;
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+  }
+</style>
+<!-- ig-preview-882-sine-field 2026-11-28 -->
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="hint">Sine Field &middot; drag to move the wave</div>
+<script>
+(function () {
+  "use strict";
+
+  // Driver: a sine field rendered ONLY as short dashes. At each grid cell
+  // one dash is drawn whose angle is a function of the field gradient and
+  // whose presence is a function of the field magnitude. The wave curve
+  // itself is never stroked; the eye assembles it from the dashes.
+  // After Adam Fuhrer, "sine waves / pen plot, may 2023".
+
+  var canvas = document.getElementById("c");
+  var ctx = canvas.getContext("2d");
+
+  function hashSeed(str) {
+    var h = 2166136261 >>> 0;
+    for (var i = 0; i < str.length; i++) {
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return h >>> 0;
+  }
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  var params = new URLSearchParams(window.location.search);
+  var seedText = params.get("seed") || String(Math.floor(Math.random() * 1e9));
+  var rng = mulberry32(hashSeed(seedText));
+
+  var dpr = 1, W = 0, H = 0;
+  var t = 0;
+  var phase = 0; // field phase: drag moves it, time drifts it slowly
+  var dragging = false;
+  var lastX = 0;
+  var dashCount = 0;
+
+  // The field: a vertical sine wave, two cycles top to bottom, with a
+  // second harmonic. x_c(y) is the wave's centreline; the scalar field
+  // is f(x, y) = x - x_c(y). Its gradient is (1, -x_c'(y)).
+  var CYCLES = 2;
+  function centerline(y) {
+    var u = (y / H) * Math.PI * 2 * CYCLES + phase;
+    var amp = Math.min(W, H) * 0.16;
+    return W / 2 + amp * Math.sin(u) + amp * 0.28 * Math.sin(2 * u + 1.1);
+  }
+  function centerlineSlope(y) {
+    var u = (y / H) * Math.PI * 2 * CYCLES + phase;
+    var amp = Math.min(W, H) * 0.16;
+    var du = (Math.PI * 2 * CYCLES) / H;
+    return (amp * Math.cos(u) + amp * 0.28 * 2 * Math.cos(2 * u + 1.1)) * du;
+  }
+  function crestFactor(y) {
+    // 1 at the wave's extremes (the dense crests), 0 where it crosses.
+    var u = (y / H) * Math.PI * 2 * CYCLES + phase;
+    return Math.abs(Math.sin(u));
+  }
+
+  // Stable per-cell hash so the dash pattern does not shimmer.
+  function cellHash(ix, iy) {
+    var h = (ix * 374761393 + iy * 668265263) ^ hashSeed(seedText);
+    h = Math.imul(h ^ (h >>> 13), 1274126177);
+    return (((h ^ (h >>> 16)) >>> 0) / 4294967296);
+  }
+
+  function sizeCanvas() {
+    var vp = window.visualViewport;
+    var w = vp ? vp.width : window.innerWidth;
+    var h = vp ? vp.height : window.innerHeight;
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = Math.max(1, Math.round(w));
+    H = Math.max(1, Math.round(h));
+    canvas.width = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    canvas.style.width = W + "px";
+    canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    draw();
+  }
+
+  function draw() {
+    ctx.fillStyle = "#f8f7f2";
+    ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = "rgba(17, 17, 15, 0.88)";
+    ctx.lineCap = "round";
+    dashCount = 0;
+
+    var step = Math.max(8, Math.round(Math.min(W, H) / 88));
+    var band = Math.min(W, H) * 0.13; // half-width of the dense band
+    var dashLen = step * 0.95;
+
+    for (var y = step / 2; y < H; y += step) {
+      var xc = centerline(y);
+      var slope = centerlineSlope(y);
+      var crest = crestFactor(y);
+      // Dash angle: perpendicular to the field gradient, fanning with
+      // distance from the centreline. Vertical where the wave is steep
+      // (crest), rotating away on the flanks.
+      for (var x = step / 2; x < W; x += step) {
+        var d = x - xc;
+        var ad = Math.abs(d);
+        if (ad > band * 2.0) continue;
+        // Density: highest at the centreline and at the crests, falling
+        // to isolated strokes at the band's edge.
+        var p = (1 - ad / (band * 2.0)) * (0.6 + 0.4 * crest);
+        if (cellHash(Math.round(x / step), Math.round(y / step)) > p) continue;
+        var ang = Math.atan2(-slope, 1) + Math.PI / 2 + (d / band) * 0.55;
+        var hl = dashLen / 2;
+        var dx = Math.cos(ang) * hl, dy = Math.sin(ang) * hl;
+        // Crowding at the crests: overlapping dashes merge into solid caps.
+        ctx.lineWidth = crest > 0.8 ? 2.0 : 1.5;
+        ctx.beginPath();
+        ctx.moveTo(x - dx, y - dy);
+        ctx.lineTo(x + dx, y + dy);
+        ctx.stroke();
+        dashCount++;
+      }
+    }
+  }
+
+  function step(dt) {
+    t += dt;
+    if (!dragging) phase += dt * 0.05; // slow drift so the field lives
+    draw();
+  }
+
+  var lastNow = 0;
+  function frame(now) {
+    var dt = lastNow ? Math.min(0.05, (now - lastNow) / 1000) : 0.016;
+    lastNow = now;
+    step(dt);
+    requestAnimationFrame(frame);
+  }
+
+  function onDown(e) {
+    dragging = true;
+    lastX = e.clientX;
+    canvas.setPointerCapture(e.pointerId);
+  }
+  function onMove(e) {
+    if (!dragging) return;
+    var dx = e.clientX - lastX;
+    lastX = e.clientX;
+    phase += dx * 0.006; // drag shifts the field; the moire crawls
+    draw();
+  }
+  function onUp() { dragging = false; }
+
+  canvas.addEventListener("pointerdown", onDown);
+  canvas.addEventListener("pointermove", onMove);
+  canvas.addEventListener("pointerup", onUp);
+  canvas.addEventListener("pointercancel", onUp);
+
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", sizeCanvas);
+    window.visualViewport.addEventListener("scroll", sizeCanvas);
+  }
+  window.addEventListener("resize", sizeCanvas);
+  window.addEventListener("orientationchange", sizeCanvas);
+
+  sizeCanvas();
+  requestAnimationFrame(frame);
+
+  // Diagnostics for the harness. Not visible on the page.
+  window.__sinefield = {
+    seed: function () { return seedText; },
+    phase: function () { return phase; },
+    dashCount: function () { return dashCount; },
+    dragging: function () { return dragging; },
+    step: function (dt) { step(dt); },
+    setPhase: function (p) { phase = p; draw(); },
+    size: function () { return { w: W, h: H }; },
+    // Ink coverage (0..1) of three vertical strips: on the wave's
+    // centreline at mid-height, and two strips far from it.
+    coverage: function () {
+      var img = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+      var yMid = Math.floor(canvas.height * 0.5);
+      var xc = centerline(H * 0.5) / W;
+      var strips = {
+        onWave: [Math.max(0, xc - 0.06), 0.35, 0.12, 0.30],
+        farLeft: [0.02, 0.35, 0.10, 0.30],
+        farRight: [0.88, 0.35, 0.10, 0.30]
+      };
+      var out = {};
+      var stride = 3;
+      for (var key in strips) {
+        var s = strips[key];
+        var x0 = Math.floor(s[0] * canvas.width), y0 = Math.floor(s[1] * canvas.height);
+        var x1 = Math.floor((s[0] + s[2]) * canvas.width), y1 = Math.floor((s[1] + s[3]) * canvas.height);
+        var dark = 0, total = 0;
+        for (var y = y0; y < y1; y += stride) {
+          for (var x = x0; x < x1; x += stride) {
+            var idx = (y * canvas.width + x) * 4;
+            var lum = (img[idx] + img[idx + 1] + img[idx + 2]) / 3;
+            if (lum < 170) dark++;
+            total++;
+          }
+        }
+        out[key] = total ? dark / total : 0;
+      }
+      return out;
+    }
+  };
+})();
+</script>
+</body>
+</html>
